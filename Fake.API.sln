@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fake.API", "Fake.API\Fake.API.csproj", "{D90E4494-2B1E-4EEB-B52C-054632F8F7D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fake.API", "Fake.API\Fake.API.csproj", "{D90E4494-2B1E-4EEB-B52C-054632F8F7D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fake.DataAccess", "Fake.DataAccess\Fake.DataAccess.csproj", "{48C13813-E3FB-4CFA-B4E8-6B9CB2234853}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D90E4494-2B1E-4EEB-B52C-054632F8F7D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D90E4494-2B1E-4EEB-B52C-054632F8F7D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D90E4494-2B1E-4EEB-B52C-054632F8F7D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48C13813-E3FB-4CFA-B4E8-6B9CB2234853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48C13813-E3FB-4CFA-B4E8-6B9CB2234853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48C13813-E3FB-4CFA-B4E8-6B9CB2234853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C13813-E3FB-4CFA-B4E8-6B9CB2234853}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
