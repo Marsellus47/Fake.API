@@ -3,22 +3,22 @@ using System.Collections.Generic;
 
 namespace Fake.DataAccess.Interfaces.Random
 {
-    public interface IRandomProvider
+    public interface IRandomScalarProvider
     {
         long Number(long min = long.MinValue, long max = long.MaxValue);
         IEnumerable<long> Numbers(int count, long min = long.MinValue, long max = long.MaxValue);
 
-        byte Digit(byte min = byte.MinValue, byte max = byte.MaxValue);
-        IEnumerable<byte> Digits(int count, byte min = byte.MinValue, byte max = byte.MaxValue);
+        byte Digit(byte min = 0, byte max = 9);
+        IEnumerable<byte> Digits(int count, byte min = 0, byte max = 9);
 
         long Even(long min = long.MinValue, long max = long.MaxValue);
-        IEnumerable<long> Even(int count, long min = long.MinValue, long max = long.MaxValue);
+        IEnumerable<long> Evens(int count, long min = long.MinValue, long max = long.MaxValue);
 
         long Odd(long min = long.MinValue, long max = long.MaxValue);
-        IEnumerable<long> Odd(int count, long min = long.MinValue, long max = long.MaxValue);
+        IEnumerable<long> Odds(int count, long min = long.MinValue, long max = long.MaxValue);
 
-        double Decimal(double min = double.MinValue, double max = double.MaxValue);
-        IEnumerable<double> Decimals(int count, double min = double.MinValue, double max = double.MaxValue);
+        double Double(double min = double.MinValue, double max = double.MaxValue);
+        IEnumerable<double> Doubles(int count, double min = double.MinValue, double max = double.MaxValue);
 
         char Char(char min = char.MinValue, char max = char.MaxValue);
         IEnumerable<char> Chars(int count, char min = char.MinValue, char max = char.MaxValue);
