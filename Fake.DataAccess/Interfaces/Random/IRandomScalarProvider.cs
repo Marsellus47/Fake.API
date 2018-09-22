@@ -23,24 +23,22 @@ namespace Fake.DataAccess.Interfaces.Random
         char Char(char min = char.MinValue, char max = char.MaxValue);
         IEnumerable<char> Chars(int count, char min = char.MinValue, char max = char.MaxValue);
 
-        string String(int minLength = 1, int maxLength = int.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue);
-        IEnumerable<string> Strings(int count, int minLength = 1, int maxLength = int.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue);
+        string String(short minLength = 1, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue);
+        IEnumerable<string> Strings(int count, short minLength = 1, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue);
 
-        string Hash(int length = 40, bool upperCase = false);
-        IEnumerable<string> Hashes(int count, int length = 40, bool upperCase = false);
+        string Hash(short length = 40, bool upperCase = false);
+        IEnumerable<string> Hashes(int count, short length = 40, bool upperCase = false);
 
-        bool Boolean();
-        bool Boolean(float weight = 0);
-        IEnumerable<bool> Booleans(int count);
-        IEnumerable<bool> Booleans(int count, float weight = 0);
+        bool Boolean(float? weight = null);
+        IEnumerable<bool> Booleans(int count, float? weight = null);
 
         T EnumerationElement<T>(IEnumerable<T> enumeration);
         IEnumerable<T> EnumerationElements<T>(int count, IEnumerable<T> enumeration);
 
-        IEnumerable<T> Shuffle<T>(IEnumerable<T> enumerable);
+        IEnumerable<T> Shuffle<T>(IEnumerable<T> enumeration);
 
         string Word();
-        IEnumerable<string> Words(int minCount = int.MinValue, int maxCount = int.MaxValue);
+        IEnumerable<string> Words(int count);
 
         Guid Uuid();
         IEnumerable<Guid> Uuids(int count);
