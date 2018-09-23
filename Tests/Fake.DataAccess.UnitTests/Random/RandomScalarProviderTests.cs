@@ -590,125 +590,125 @@ namespace Fake.DataAccess.UnitTests.Random
 
         #endregion Odds
 
-        #region Double
+        #region Decimal
 
         [Fact]
-        public void Double_ShouldReturnBetweenDefaultMinAndMax()
+        public void Decimal_ShouldReturnBetweenDefaultMinAndMax()
         {
             // Arrange
             const double minValue = double.MinValue;
             const double maxValue = double.MaxValue;
 
             // Act
-            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Double());
+            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal());
 
             // Assert
             Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
         }
 
         [Fact]
-        public void Double_ShouldReturnlHigherThanMin()
+        public void Decimal_ShouldReturnlHigherThanMin()
         {
             // Arrange
             var rand = new System.Random();
             double minValue = rand.Next(double.MinValue, double.MaxValue);
 
             // Act
-            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Double(min: minValue));
+            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(min: minValue));
 
             // Assert
             Assert.All(values, value => Assert.True(value >= minValue));
         }
 
         [Fact]
-        public void Double_ShouldReturnLowerThanMax()
+        public void Decimal_ShouldReturnLowerThanMax()
         {
             // Arrange
             var rand = new System.Random();
             double maxValue = rand.Next(double.MinValue, double.MaxValue);
 
             // Act
-            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Double(max: maxValue));
+            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(max: maxValue));
 
             // Assert
             Assert.All(values, value => Assert.True(value <= maxValue));
         }
 
         [Fact]
-        public void Double_ShouldFailForInvertedMinMax()
+        public void Decimal_ShouldFailForInvertedMinMax()
         {
             // Arrange
             const double minValue = double.MaxValue;
             const double maxValue = double.MinValue;
 
             // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Double(min: minValue, max: maxValue));
+            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Decimal(min: minValue, max: maxValue));
         }
 
-        #endregion Double
+        #endregion Decimal
 
-        #region Doubles
+        #region Decimals
 
         [Fact]
-        public void Doubles_ShouldReturnCorrectCount()
+        public void Decimals_ShouldReturnCorrectCount()
         {
             // Act
-            IEnumerable<double> values = SUT.Doubles(TestingSetSize);
+            IEnumerable<double> values = SUT.Decimals(TestingSetSize);
 
             // Assert
             Assert.Equal(TestingSetSize, values.Count());
         }
 
         [Fact]
-        public void Doubles_ShouldReturnBetweenDefaultMinAndMax()
+        public void Decimals_ShouldReturnBetweenDefaultMinAndMax()
         {
             // Arrange
             const double minValue = double.MinValue;
             const double maxValue = double.MaxValue;
 
             // Act
-            IEnumerable<double> values = SUT.Doubles(TestingSetSize);
+            IEnumerable<double> values = SUT.Decimals(TestingSetSize);
 
             // Assert
             Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
         }
 
         [Fact]
-        public void Doubles_ShouldReturnHigherThanMin()
+        public void Decimals_ShouldReturnHigherThanMin()
         {
             // Arrange
             var rand = new System.Random();
             double minValue = rand.Next(double.MinValue, double.MaxValue);
 
             // Act
-            IEnumerable<double> values = SUT.Doubles(TestingSetSize, min: minValue);
+            IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: minValue);
 
             // Assert
             Assert.All(values, value => Assert.True(value >= minValue));
         }
 
         [Fact]
-        public void Doubles_ShouldReturnLowerThanMax()
+        public void Decimals_ShouldReturnLowerThanMax()
         {
             // Arrange
             var rand = new System.Random();
             double maxValue = rand.Next(double.MinValue, double.MaxValue);
 
             // Act
-            IEnumerable<double> values = SUT.Doubles(TestingSetSize, max: maxValue);
+            IEnumerable<double> values = SUT.Decimals(TestingSetSize, max: maxValue);
 
             // Assert
             Assert.All(values, value => Assert.True(value <= maxValue));
         }
 
         [Fact]
-        public void Doubles_ShouldReturnEmptyEnumerationForNegativeCount()
+        public void Decimals_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
             int count = (int)RandomNumber(int.MinValue, 0);
 
             // Act
-            IEnumerable<double> values = SUT.Doubles(count);
+            IEnumerable<double> values = SUT.Decimals(count);
 
             // Assert
             Assert.NotNull(values);
@@ -716,21 +716,21 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Doubles_ShouldReturnEmptyEnumerationForInvertedMinMax()
+        public void Decimals_ShouldReturnEmptyEnumerationForInvertedMinMax()
         {
             // Arrange
             const double minValue = double.MaxValue;
             const double maxValue = double.MinValue;
 
             // Act
-            IEnumerable<double> values = SUT.Doubles(TestingSetSize, min: minValue, max: maxValue);
+            IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
         }
 
-        #endregion Doubles
+        #endregion Decimals
 
         #region Char
 
@@ -953,6 +953,19 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
+        public void String_ShouldReturnZeroLength()
+        {
+            // Arrange
+            const short length = 0;
+
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(minLength: length, maxLength: length));
+
+            // Assert
+            Assert.All(values, Assert.Empty);
+        }
+
+        [Fact]
         public void String_ShouldFailForInvertedMinMaxLength()
         {
             // Arrange
@@ -972,6 +985,16 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.String(minChar: minValue, maxChar: maxValue));
+        }
+
+        [Fact]
+        public void String_ShouldFailForNegativeLength()
+        {
+            // Arrange
+            short minValue = (short)RandomNumber(short.MinValue, -1);
+
+            // Act/Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.String(minLength: minValue));
         }
 
         #endregion String
@@ -1069,6 +1092,19 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
+        public void Strings_ShouldReturnZeroLength()
+        {
+            // Arrange
+            const short length = 0;
+
+            // Act
+            IEnumerable<string> values = SUT.Strings(1, minLength: length, maxLength: length);
+
+            // Assert
+            Assert.All(values, Assert.Empty);
+        }
+
+        [Fact]
         public void Strings_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
@@ -1106,6 +1142,20 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minChar: minValue, maxChar: maxValue);
+
+            // Assert
+            Assert.NotNull(values);
+            Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Strings_ShouldReturnEmptyEnumerationForNegativeMinLength()
+        {
+            // Arrange
+            short minValue = (short)RandomNumber(short.MinValue, -1);
+
+            // Act
+            IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: minValue);
 
             // Assert
             Assert.NotNull(values);
@@ -1698,5 +1748,369 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         #endregion Locales
+
+        #region Alphanumeric
+
+        [Fact]
+        public void Alphanumeric_ShouldReturnBetweenDefaultMinAndMaxLength()
+        {
+            // Arrange
+            const short minValue = 1;
+            const short maxValue = short.MaxValue;
+
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric());
+
+            // Assert
+            Assert.All(values, value => Assert.InRange(value.Length, minValue, maxValue));
+        }
+
+        [Fact]
+        public void Alphanumeric_ShouldReturnHigherThanMinLength()
+        {
+            // Arrange
+            short minValue = (short)RandomNumber(1, short.MaxValue);
+
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric(minLength: minValue));
+
+            // Assert
+            Assert.All(values, value => Assert.True(value.Length >= minValue));
+        }
+
+        [Fact]
+        public void Alphanumeric_ShouldReturnLowerThanMaxLength()
+        {
+            // Arrange
+            short maxValue = (short)RandomNumber(1, short.MaxValue);
+
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric(maxLength: maxValue));
+
+            // Assert
+            Assert.All(values, value => Assert.True(value.Length <= maxValue));
+        }
+
+        [Fact]
+        public void Alphanumeric_ShouldFailForInvertedMinMax()
+        {
+            // Arrange
+            const short minValue = short.MaxValue;
+            const short maxValue = 1;
+
+            // Act/Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.AlphaNumeric(minLength: minValue, maxLength: maxValue));
+        }
+
+        [Fact]
+        public void Alphanumeric_ShouldFailForNegativeLength()
+        {
+            // Arrange
+            const short minValue = short.MinValue;
+            const short maxValue = 0;
+
+            // Act/Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.AlphaNumeric(minLength: minValue, maxLength: maxValue));
+        }
+
+        #endregion AlphaNumeric
+
+        #region Alphanumerics
+
+        [Fact]
+        public void Alphanumerics_ShouldReturnCorrectCount()
+        {
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize);
+
+            // Assert
+            Assert.Equal(TestingSetSize, values.Count());
+        }
+
+        [Fact]
+        public void Alphanumerics_ShouldReturnBetweenDefaultMinAndMaxLength()
+        {
+            // Arrange
+            const short minValue = 1;
+            const short maxValue = short.MaxValue;
+
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize);
+
+            // Assert
+            Assert.All(values, value => Assert.InRange(value.Length, minValue, maxValue));
+        }
+
+        [Fact]
+        public void Alphanumerics_ShouldReturnHigherThanMinLength()
+        {
+            // Arrange
+            short minValue = (short)RandomNumber(1, short.MaxValue);
+
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: minValue);
+
+            // Assert
+            Assert.All(values, value => Assert.True(value.Length >= minValue));
+        }
+
+        [Fact]
+        public void Alphanumerics_ShouldReturnLowerThanMaxLength()
+        {
+            // Arrange
+            short maxValue = (short)RandomNumber(1, short.MaxValue);
+
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, maxLength: maxValue);
+
+            // Assert
+            Assert.All(values, value => Assert.True(value.Length <= maxValue));
+        }
+
+        [Fact]
+        public void Alphanumerics_ShouldReturnEmptyEnumerationForInvertedMinMax()
+        {
+            // Arrange
+            const short minValue = short.MaxValue;
+            const short maxValue = 1;
+
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: minValue, maxLength: maxValue);
+
+            // Assert
+            Assert.NotNull(values);
+            Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Alphanumerics_ShouldReturnEmptyEnumerationForNegativeCount()
+        {
+            // Arrange
+            int count = (int)RandomNumber(int.MinValue, 1);
+
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(count);
+
+            // Assert
+            Assert.NotNull(values);
+            Assert.Empty(values);
+        }
+
+        #endregion AlphaNumeric
+
+        #region Hexadecimal
+
+        [Fact]
+        public void Hexadecimal_ShouldReturnValidHexadecimal()
+        {
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal());
+
+            // Assert
+            Assert.All(values, value => Assert.True(long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long number)));
+        }
+
+        [Fact]
+        public void Hexadecimal_ShouldReturnBetweenDefaultMinAndMax()
+        {
+            // Arrange
+            const long minValue = long.MinValue;
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal()).Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+        }
+
+        [Fact]
+        public void Hexadecimal_ShouldReturnHigherThanMin()
+        {
+            // Arrange
+            long minValue = RandomNumber(0, long.MaxValue);
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal(min: minValue)).Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.All(values, value => Assert.True(value >= minValue));
+        }
+
+        [Fact]
+        public void Hexadecimal_ShouldReturnLowerThanMax()
+        {
+            // Arrange
+            long maxValue = RandomNumber(0, long.MaxValue);
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal(max: maxValue)).Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.All(values, value => Assert.True(value <= maxValue));
+        }
+
+        [Fact]
+        public void Hexadecimal_ShouldFailForInvertedMinMax()
+        {
+            // Arrange
+            const long minValue = long.MaxValue;
+            const long maxValue = 0;
+
+            // Act/Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Hexadecimal(min: minValue, max: maxValue));
+        }
+
+        [Fact]
+        public void Hexadecimal_ShouldFailForNegativeMin()
+        {
+            // Arrange
+            long minValue = RandomNumber(long.MinValue, -1);
+
+            // Act/Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Hexadecimal(min: minValue));
+        }
+
+        #endregion Hexadecimal
+
+        #region Hexadecimals
+
+        [Fact]
+        public void Hexadecimals_ShouldReturnValidHexadecimal()
+        {
+            // Act
+            IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize);
+
+            // Assert
+            Assert.All(values, value => Assert.True(long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long number)));
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldReturnBetweenDefaultMinAndMax()
+        {
+            // Arrange
+            const long minValue = long.MinValue;
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize).Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldReturnHigherThanMin()
+        {
+            // Arrange
+            long minValue = RandomNumber(0, long.MaxValue);
+
+            // Act
+            IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, min: minValue).Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.All(values, value => Assert.True(value >= minValue));
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldReturnLowerThanMax()
+        {
+            // Arrange
+            long maxValue = RandomNumber(0, long.MaxValue);
+
+            // Act
+            IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, max: maxValue).Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.All(values, value => Assert.True(value <= maxValue));
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldReturnEmptyEnumerationForNegativeCount()
+        {
+            // Arrange
+            int count = (int)RandomNumber(int.MinValue, 1);
+
+            // Act
+            IEnumerable<string> values = SUT.Hexadecimals(count);
+
+            // Assert
+            Assert.NotNull(values);
+            Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldReturnEmptyEnumerationInvertedMinMax()
+        {
+            // Arrange
+            const long minValue = long.MaxValue;
+            const long maxValue = 0;
+
+            // Act
+            IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize, min: minValue, max: maxValue);
+
+            // Assert
+            Assert.NotNull(values);
+            Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldReturnEmptyEnumerationNegativeMin()
+        {
+            // Arrange
+            long minValue = RandomNumber(long.MinValue, -1);
+
+            // Act
+            IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize, min: minValue);
+
+            // Assert
+            Assert.NotNull(values);
+            Assert.Empty(values);
+        }
+
+        #endregion Hexadecimals
+
+        #region Weighted
+
+        [Fact]
+        public void Weighted_ShouldReturnItemFromEnumeration()
+        {
+            // Arrange
+            IEnumerable<int> enumeration = Enumerable.Range(1, 5);
+            float[] weights = { 0.1F, 0.6F, 0.1F, 0.1F, 0.1F };
+
+            // Act
+            IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Weighted(enumeration, weights));
+
+            // Assert
+            Assert.All(values, value => Assert.Contains(value, enumeration));
+        }
+
+        [Fact]
+        public void Weighted_ShouldReturnDefaultItemForNullEnumration()
+        {
+            // Arrange
+            const IEnumerable<int> enumeration = null;
+            const float[] weights = null;
+
+            // Act
+            IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Weighted(enumeration, weights));
+
+            // Assert
+            Assert.All(values, value => Assert.Equal(default(int), value));
+        }
+
+        [Fact]
+        public void Weighted_ShouldFailForDifferentCounts()
+        {
+            // Arrange
+            IEnumerable<int> enumeration = Enumerable.Range(1, 5);
+            float[] weights = { 0.1F };
+
+            // Act/Assert
+            Assert.ThrowsAny<Exception>(() => SUT.Weighted(enumeration, weights));
+        }
+
+        #endregion Weighted
     }
 }

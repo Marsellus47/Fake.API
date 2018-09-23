@@ -14,13 +14,19 @@ namespace Fake.DataAccess.Random
 
         public string AlphaNumeric(short minLength = 1, short maxLength = short.MaxValue)
         {
-            throw new NotImplementedException();
+            ThrowIfValueHigherThan(nameof(minLength), minLength, maxLength);
+            ThrowIfValueLowerThan(nameof(minLength), minLength, 1);
+
+            var rand = new System.Random();
+            var length = (short)rand.Next(minLength, maxLength);
+
+            return faker.Random.AlphaNumeric(length);
         }
 
         public IEnumerable<string> AlphaNumerics(int count, short minLength = 1, short maxLength = short.MaxValue)
-        {
-            throw new NotImplementedException();
-        }
+            => count <= 0 || minLength > maxLength
+            ? new List<string>()
+            : Enumerable.Range(1, count).Select(_ => AlphaNumeric(minLength, maxLength)).ToList();
 
         public bool Boolean(float? weight = null)
             => weight.HasValue
@@ -34,7 +40,6 @@ namespace Fake.DataAccess.Random
 
         public char Char(char min = char.MinValue, char max = char.MaxValue)
         {
-            ThrowIfValueLowerThan(nameof(max), max, min);
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             return faker.Random.Char(min, max);
@@ -45,23 +50,21 @@ namespace Fake.DataAccess.Random
             ? new List<char>()
             : Enumerable.Range(1, count).Select(_ => Char(min, max)).ToList();
 
-        public double Double(double min = double.MinValue, double max = double.MaxValue)
+        public double Decimal(double min = double.MinValue, double max = double.MaxValue)
         {
-            ThrowIfValueLowerThan(nameof(max), max, min);
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
             return rand.Next(min, max);
         }
 
-        public IEnumerable<double> Doubles(int count, double min = double.MinValue, double max = double.MaxValue)
+        public IEnumerable<double> Decimals(int count, double min = double.MinValue, double max = double.MaxValue)
             => count <= 0 || min > max
             ? new List<double>()
-            : Enumerable.Range(1, count).Select(_ => Double(min, max)).ToList();
+            : Enumerable.Range(1, count).Select(_ => Decimal(min, max)).ToList();
 
         public byte Digit(byte min = 0, byte max = 9)
         {
-            ThrowIfValueLowerThan(nameof(max), max, min);
             ThrowIfValueHigherThan(nameof(min), min, max);
             ThrowIfValueHigherThan(nameof(min), max, 9);
 
@@ -85,7 +88,6 @@ namespace Fake.DataAccess.Random
 
         public long Even(long min = long.MinValue, long max = long.MaxValue)
         {
-            ThrowIfValueLowerThan(nameof(max), max, min);
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
@@ -113,15 +115,21 @@ namespace Fake.DataAccess.Random
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hash(length, upperCase)).ToList();
 
-        public string Hexadecimal(int length = 1)
+        public string Hexadecimal(long min = 0, long max = long.MaxValue)
         {
-            throw new NotImplementedException();
+            ThrowIfValueHigherThan(nameof(min), min, max);
+            ThrowIfValueLowerThan(nameof(min), min, 0);
+
+            var rand = new System.Random();
+            var randomValue = rand.Next(min, max);
+
+            return randomValue.ToString("X2");
         }
 
-        public IEnumerable<string> Hexadecimals(int count, short minLength = 1, short maxLength = short.MaxValue)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<string> Hexadecimals(int count, long min = 0, long max = long.MaxValue)
+            => count <= 0 || min > max || min < 0
+            ? new List<string>()
+            : Enumerable.Range(1, count).Select(_ => Hexadecimal(min, max)).ToList();
 
         public string Locale() => AllLocales[faker.Random.Number(AllLocales.Length - 1)];
 
@@ -138,7 +146,6 @@ namespace Fake.DataAccess.Random
 
         public long Number(long min = long.MinValue, long max = long.MaxValue)
         {
-            ThrowIfValueLowerThan(nameof(max), max, min);
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
@@ -152,7 +159,6 @@ namespace Fake.DataAccess.Random
 
         public long Odd(long min = long.MinValue, long max = long.MaxValue)
         {
-            ThrowIfValueLowerThan(nameof(max), max, min);
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
@@ -175,17 +181,15 @@ namespace Fake.DataAccess.Random
 
         public string String(short minLength = 1, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue)
         {
-            ThrowIfValueLowerThan(nameof(maxLength), maxLength, minLength);
             ThrowIfValueHigherThan(nameof(minLength), minLength, maxLength);
-
-            ThrowIfValueLowerThan(nameof(maxChar), maxChar, minChar);
             ThrowIfValueHigherThan(nameof(minChar), minChar, maxChar);
+            ThrowIfValueLowerThan(nameof(minLength), minLength, 0);
 
             return faker.Random.String(minLength, maxLength, minChar, maxChar);
         }
 
         public IEnumerable<string> Strings(int count, short minLength = 1, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue)
-            => count <= 0 || minLength > maxLength || minChar > maxChar
+            => count <= 0 || minLength > maxLength || minChar > maxChar || minLength < 0
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => String(minLength, maxLength, minChar, maxChar)).ToList();
 
@@ -197,9 +201,9 @@ namespace Fake.DataAccess.Random
             : Enumerable.Range(1, count).Select(_ => Uuid()).ToList();
 
         public T Weighted<T>(IEnumerable<T> items, float[] weights)
-        {
-            throw new NotImplementedException();
-        }
+            => items == null
+            ? default(T)
+            : faker.Random.WeightedRandom<T>(items.ToArray(), weights);
 
         public string Word()
         {
@@ -248,11 +252,6 @@ namespace Fake.DataAccess.Random
         private static void ThrowIfValueHigherThan(string paramName, long value, long max)
         {
             if (value > max) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is higher than expected maximum value {max}");
-        }
-
-        private static void ThrowIfValueLowerThan(string paramName, double value, double min = 1)
-        {
-            if (value < min) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is lower than expected minimum value {min}");
         }
 
         private static void ThrowIfValueHigherThan(string paramName, double value, double max)

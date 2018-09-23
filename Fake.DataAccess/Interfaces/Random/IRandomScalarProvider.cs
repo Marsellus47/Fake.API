@@ -17,8 +17,8 @@ namespace Fake.DataAccess.Interfaces.Random
         long Odd(long min = long.MinValue, long max = long.MaxValue);
         IEnumerable<long> Odds(int count, long min = long.MinValue, long max = long.MaxValue);
 
-        double Double(double min = double.MinValue, double max = double.MaxValue);
-        IEnumerable<double> Doubles(int count, double min = double.MinValue, double max = double.MaxValue);
+        double Decimal(double min = double.MinValue, double max = double.MaxValue);
+        IEnumerable<double> Decimals(int count, double min = double.MinValue, double max = double.MaxValue);
 
         char Char(char min = char.MinValue, char max = char.MaxValue);
         IEnumerable<char> Chars(int count, char min = char.MinValue, char max = char.MaxValue);
@@ -49,8 +49,8 @@ namespace Fake.DataAccess.Interfaces.Random
         string AlphaNumeric(short minLength = 1, short maxLength = short.MaxValue);
         IEnumerable<string> AlphaNumerics(int count, short minLength = 1, short maxLength = short.MaxValue);
 
-        string Hexadecimal(int length = 1);
-        IEnumerable<string> Hexadecimals(int count, short minLength = 1, short maxLength = short.MaxValue);
+        string Hexadecimal(long min = 0, long max = long.MaxValue);
+        IEnumerable<string> Hexadecimals(int count, long min = 0, long max = long.MaxValue);
 
         T Weighted<T>(IEnumerable<T> items, float[] weights);
     }
