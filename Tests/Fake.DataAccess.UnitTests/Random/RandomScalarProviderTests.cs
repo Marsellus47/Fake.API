@@ -14,7 +14,7 @@ namespace Fake.DataAccess.UnitTests.Random
         private const short TestingSetSize = 1000;
         private readonly RandomScalarProvider SUT = new RandomScalarProvider();
         private readonly Func<long, bool> IsEven = number => number % 2 == 0;
-        private readonly Func<long, long, long> RandomNumber = (min, max) => new System.Random().Next(min, max);
+        private readonly Func<long, long, long> RandomNumber = (min, max) => new System.Random().NextLong(min, max);
 
         #region Number
 
@@ -67,6 +67,32 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Number(min: minValue, max: maxValue));
+        }
+
+        [Fact]
+        public void Number_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = long.MinValue;
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: minValue, max: minValue + 1));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Number_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: maxValue - 1, max: maxValue));
+
+            // Assert
+            Assert.Contains(maxValue, values);
         }
 
         #endregion Number
@@ -127,7 +153,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Numbers_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<long> values = SUT.Numbers(count);
@@ -150,6 +176,44 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Numbers_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = long.MinValue;
+
+            // Act
+            IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue, max: minValue + 1);
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Numbers_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: maxValue - 1, max: maxValue);
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Numbers_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<long> values = SUT.Numbers(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Numbers
@@ -217,6 +281,32 @@ namespace Fake.DataAccess.UnitTests.Random
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Digit(min: minValue, max: maxValue));
         }
 
+        [Fact]
+        public void Digit_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const byte minValue = byte.MinValue;
+
+            // Act
+            IEnumerable<byte> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Digit(min: minValue, max: minValue + 1));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Digit_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const byte maxValue = 9;
+
+            // Act
+            IEnumerable<byte> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Digit(min: maxValue - 1, max: maxValue));
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
         #endregion Digit
 
         #region Digits
@@ -275,7 +365,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Digits_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<byte> values = SUT.Digits(count);
@@ -298,6 +388,44 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Digits_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const byte minValue = byte.MinValue;
+
+            // Act
+            IEnumerable<byte> values = SUT.Digits(TestingSetSize, min: minValue, max: minValue + 1);
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Digits_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const byte maxValue = 9;
+
+            // Act
+            IEnumerable<byte> values = SUT.Digits(TestingSetSize, min: maxValue - 1, max: maxValue);
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Digits_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<byte> values = SUT.Digits(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Digits
@@ -356,6 +484,32 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Even(min: minValue, max: maxValue));
+        }
+
+        [Fact]
+        public void Even_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = long.MinValue;
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Even(min: minValue, max: minValue + 1));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Even_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue - 1;    // long.MaxValue is odd number so it cannot be picked
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Even(min: maxValue - 1, max: maxValue));
+
+            // Assert
+            Assert.Contains(maxValue, values);
         }
 
         #endregion Even
@@ -419,7 +573,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Evens_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<long> values = SUT.Evens(count);
@@ -442,6 +596,43 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+        [Fact]
+        public void Evens_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = long.MinValue;
+
+            // Act
+            IEnumerable<long> values = SUT.Evens(TestingSetSize, min: minValue, max: minValue + 1);
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Evens_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue - 1;    // long.MaxValue is odd number so it cannot be picked
+
+            // Act
+            IEnumerable<long> values = SUT.Evens(TestingSetSize, min: maxValue - 1, max: maxValue);
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Evens_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<long> values = SUT.Evens(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Evens
@@ -500,6 +691,32 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Odd(min: minValue, max: maxValue));
+        }
+
+        [Fact]
+        public void Odd_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = long.MinValue + 1;    // long.MinValue is even number so it cannot be picked
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Odd(min: minValue, max: minValue + 1));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Odd_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Odd(min: maxValue - 1, max: maxValue));
+
+            // Assert
+            Assert.Contains(maxValue, values);
         }
 
         #endregion Odd
@@ -563,7 +780,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Odds_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<long> values = SUT.Odds(count);
@@ -586,6 +803,44 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Odds_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = long.MinValue + 1;    // long.MinValue is even number so it cannot be picked
+
+            // Act
+            IEnumerable<long> values = SUT.Odds(TestingSetSize, min: minValue, max: minValue + 1);
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Odds_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = SUT.Odds(TestingSetSize, min: maxValue - 1, max: maxValue);
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Odds_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<long> values = SUT.Odds(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Odds
@@ -611,7 +866,7 @@ namespace Fake.DataAccess.UnitTests.Random
         {
             // Arrange
             var rand = new System.Random();
-            double minValue = rand.Next(double.MinValue, double.MaxValue);
+            double minValue = rand.NextDouble(double.MinValue, double.MaxValue);
 
             // Act
             IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(min: minValue));
@@ -625,7 +880,7 @@ namespace Fake.DataAccess.UnitTests.Random
         {
             // Arrange
             var rand = new System.Random();
-            double maxValue = rand.Next(double.MinValue, double.MaxValue);
+            double maxValue = rand.NextDouble(double.MinValue, double.MaxValue);
 
             // Act
             IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(max: maxValue));
@@ -643,6 +898,32 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Decimal(min: minValue, max: maxValue));
+        }
+
+        [Fact]
+        public void Decimal_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const double minValue = double.MinValue;
+
+            // Act
+            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(min: minValue, max: minValue + 1));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Decimal_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const double maxValue = double.MaxValue;
+
+            // Act
+            IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(min: maxValue - 1, max: maxValue));
+
+            // Assert
+            Assert.Contains(maxValue, values);
         }
 
         #endregion Decimal
@@ -678,7 +959,7 @@ namespace Fake.DataAccess.UnitTests.Random
         {
             // Arrange
             var rand = new System.Random();
-            double minValue = rand.Next(double.MinValue, double.MaxValue);
+            double minValue = rand.NextDouble(double.MinValue, double.MaxValue);
 
             // Act
             IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: minValue);
@@ -692,7 +973,7 @@ namespace Fake.DataAccess.UnitTests.Random
         {
             // Arrange
             var rand = new System.Random();
-            double maxValue = rand.Next(double.MinValue, double.MaxValue);
+            double maxValue = rand.NextDouble(double.MinValue, double.MaxValue);
 
             // Act
             IEnumerable<double> values = SUT.Decimals(TestingSetSize, max: maxValue);
@@ -705,7 +986,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Decimals_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<double> values = SUT.Decimals(count);
@@ -728,6 +1009,44 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Decimals_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const double minValue = double.MinValue;
+
+            // Act
+            IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: minValue, max: minValue + 1);
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Decimals_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const double maxValue = double.MaxValue;
+
+            // Act
+            IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: maxValue - 1, max: maxValue);
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Decimals_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<double> values = SUT.Decimals(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Decimals
@@ -783,6 +1102,32 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Char(min: minValue, max: maxValue));
+        }
+
+        [Fact]
+        public void Char_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const char minValue = char.MinValue;
+
+            // Act
+            IEnumerable<char> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Char(min: minValue, max: (char)(minValue + 1)));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Char_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const char maxValue = char.MaxValue;
+
+            // Act
+            IEnumerable<char> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Char(min: (char)(maxValue - 1), max: maxValue));
+
+            // Assert
+            Assert.Contains(maxValue, values);
         }
 
         #endregion Char
@@ -843,7 +1188,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Chars_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<char> values = SUT.Chars(count);
@@ -868,6 +1213,44 @@ namespace Fake.DataAccess.UnitTests.Random
             Assert.Empty(values);
         }
 
+        [Fact]
+        public void Chars_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const char minValue = char.MinValue;
+
+            // Act
+            IEnumerable<char> values = SUT.Chars(TestingSetSize, min: minValue, max: (char)(minValue + 1));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Chars_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const char maxValue = char.MaxValue;
+
+            // Act
+            IEnumerable<char> values = SUT.Chars(TestingSetSize, min: (char)(maxValue - 1), max: maxValue);
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Chars_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<char> values = SUT.Chars(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
+        }
+
         #endregion Chars
 
         #region String
@@ -876,7 +1259,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void String_ShouldReturnBetweenDefaultMinAndMaxLength()
         {
             // Arrange
-            const short minValue = 1;
+            const short minValue = 0;
             const short maxValue = short.MaxValue;
 
             // Act
@@ -997,6 +1380,54 @@ namespace Fake.DataAccess.UnitTests.Random
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.String(minLength: minValue));
         }
 
+        [Theory]
+        [InlineData(0)]
+        public void String_ShouldWorkForMinLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(minLength: boundaryValue, maxLength: (short)(boundaryValue + 1)));
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
+        }
+
+        [Theory]
+        [InlineData(short.MaxValue)]
+        public void String_ShouldWorkForMaxLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(minLength: (short)(boundaryValue - 1), maxLength: boundaryValue));
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
+        }
+
+        [Fact]
+        public void String_ShouldWorkForMinCharBoundaryCondition()
+        {
+            // Arrange
+            const char minValue = char.MinValue;
+
+            // Act
+            IEnumerable<char> values = SUT.String(TestingSetSize, TestingSetSize, minChar: minValue, maxChar: (char)(minValue + 1)).ToCharArray();
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void String_ShouldWorkForMaxCharBoundaryCondition()
+        {
+            // Arrange
+            const char maxValue = char.MaxValue;
+
+            // Act
+            IEnumerable<char> values = SUT.String(TestingSetSize, TestingSetSize, minChar: (char)(maxValue - 1), maxChar: maxValue).ToCharArray();
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
         #endregion String
 
         #region Strings
@@ -1108,7 +1539,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Strings_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<string> values = SUT.Strings(count);
@@ -1160,6 +1591,66 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public void Strings_ShouldWorkForMinLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: boundaryValue, maxLength: (short)(boundaryValue + 1));
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
+        }
+
+        [Theory]
+        [InlineData(short.MaxValue)]
+        public void Strings_ShouldWorkForMaxLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: (short)(boundaryValue - 1), maxLength: boundaryValue);
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
+        }
+
+        [Fact]
+        public void Strings_ShouldWorkForMinCharBoundaryCondition()
+        {
+            // Arrange
+            const char minValue = char.MinValue;
+
+            // Act
+            IEnumerable<char> values = SUT.Strings(1, TestingSetSize, TestingSetSize, minChar: minValue, maxChar: (char)(minValue + 1)).First().ToCharArray();
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Strings_ShouldWorkForMaxCharBoundaryCondition()
+        {
+            // Arrange
+            const char maxValue = char.MaxValue;
+
+            // Act
+            IEnumerable<char> values = SUT.Strings(1, TestingSetSize, TestingSetSize, minChar: (char)(maxValue - 1), maxChar: maxValue).First().ToCharArray();
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Strings_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.Strings(boundaryValue, 1, 1);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Strings
@@ -1236,6 +1727,18 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Hash(length));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Hash_ShouldWorkForLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            string value = SUT.Hash(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, value.Length);
         }
 
         #endregion Hash
@@ -1318,7 +1821,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Hashes_ShouldReturnEmptyEnumerationForNegativeLength()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<string> values = SUT.Hashes(count);
@@ -1326,6 +1829,30 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Hashes_ShouldWorkForLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            string value = SUT.Hashes(1, boundaryValue).First();
+
+            // Assert
+            Assert.Equal(boundaryValue, value.Length);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Hashes_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.Hashes(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Hashes
@@ -1393,6 +1920,19 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Assert
             Assert.All(values, Assert.False);
+        }
+
+        [Theory]
+        [InlineData(0F, 0, TestingSetSize)]
+        [InlineData(1F, TestingSetSize, 0)]
+        public void Boolean_ShouldWorkForWeightBoundaryCondition(float boundaryValue, short numberOfTrues, short numberOfFalses)
+        {
+            // Act
+            IEnumerable<bool> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Boolean(boundaryValue));
+
+            // Assert
+            Assert.Equal(numberOfTrues, values.Count(value => value));
+            Assert.Equal(numberOfFalses, values.Count(value => !value));
         }
 
         #endregion Boolean
@@ -1476,7 +2016,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Booleans_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<bool> values = SUT.Booleans(count);
@@ -1484,6 +2024,31 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(0F, 0, TestingSetSize)]
+        [InlineData(1F, TestingSetSize, 0)]
+        public void Booleans_ShouldWorkForWeightBoundaryCondition(float boundaryValue, short numberOfTrues, short numberOfFalses)
+        {
+            // Act
+            IEnumerable<bool> values = SUT.Booleans(TestingSetSize, boundaryValue);
+
+            // Assert
+            Assert.Equal(numberOfTrues, values.Count(value => value));
+            Assert.Equal(numberOfFalses, values.Count(value => !value));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Booleans_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<bool> values = SUT.Booleans(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Booleans
@@ -1514,6 +2079,19 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Assert
             Assert.Equal(default(int), value);
+        }
+
+        [Fact]
+        public void EnumerationElement_ShouldWorkForEnumerationLengthBoundaryCondition()
+        {
+            // Arrange
+            IEnumerable<int> enumeration = new List<int>();
+
+            // Act
+            IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.EnumerationElement(enumeration));
+
+            // Assert
+            Assert.All(enumeration, value => Assert.Equal(default(int), value));
         }
 
         #endregion EnumerationElement
@@ -1561,6 +2139,35 @@ namespace Fake.DataAccess.UnitTests.Random
             Assert.Empty(values);
         }
 
+        [Fact]
+        public void EnumerationElements_ShouldWorkForEnumerationLengthBoundaryCondition()
+        {
+            // Arrange
+            IEnumerable<int> enumeration = new List<int>();
+
+            // Act
+            IEnumerable<int> values = SUT.EnumerationElements(0, enumeration);
+
+            // Assert
+            Assert.Empty(enumeration);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void EnumerationElements_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Arrange
+            IEnumerable<int> enumeration = Enumerable.Range(1, boundaryValue);
+
+            // Act
+            IEnumerable<int> values = SUT.EnumerationElements(boundaryValue, enumeration);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
+        }
+
         #endregion EnumerationElements
 
         #region Shuffle
@@ -1603,6 +2210,29 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(0, true)]
+        [InlineData(1, true)]
+        [InlineData(short.MaxValue, false)]
+        public void Shuffle_ShouldWorkForEnumerationLengthBoundaryCondition(short boundaryValue, bool expectedSameEnumeration)
+        {
+            // Arrange
+            IEnumerable<int> enumeration = Enumerable.Range(1, boundaryValue);
+
+            // Act
+            IEnumerable<int> values = SUT.Shuffle(enumeration);
+
+            // Assert
+            if (expectedSameEnumeration)
+            {
+                Assert.True(enumeration.SequenceEqual(values));
+            }
+            else
+            {
+                Assert.False(enumeration.SequenceEqual(values));
+            }
         }
 
         #endregion
@@ -1667,7 +2297,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Words_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<string> values = SUT.Words(count);
@@ -1675,6 +2305,21 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(short.MinValue, 0)]
+        [InlineData(-1, 0)]
+        [InlineData(0, 0)]
+        [InlineData(1, 1)]
+        [InlineData(short.MaxValue, short.MaxValue)]
+        public void Words_ShouldWorkForCountBoundaryCondition(short boundaryValue, short expectedCount)
+        {
+            // Act
+            IEnumerable<string> values = SUT.Words(boundaryValue);
+
+            // Assert
+            Assert.Equal(expectedCount, values.Count());
         }
 
         #endregion Words
@@ -1695,7 +2340,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Uuids_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<Guid> values = SUT.Uuids(count);
@@ -1703,6 +2348,21 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(short.MinValue, 0)]
+        [InlineData(-1, 0)]
+        [InlineData(0, 0)]
+        [InlineData(1, 1)]
+        [InlineData(short.MaxValue, short.MaxValue)]
+        public void Uuids_ShouldWorkForCountBoundaryCondition(short boundaryValue, short expectedCount)
+        {
+            // Act
+            IEnumerable<Guid> values = SUT.Uuids(boundaryValue);
+
+            // Assert
+            Assert.Equal(expectedCount, values.Count());
         }
 
         #endregion Uuids
@@ -1737,7 +2397,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Locales_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 0);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<string> values = SUT.Locales(count);
@@ -1745,6 +2405,21 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(short.MinValue, 0)]
+        [InlineData(-1, 0)]
+        [InlineData(0, 0)]
+        [InlineData(1, 1)]
+        [InlineData(short.MaxValue, short.MaxValue)]
+        public void Locales_ShouldWorkForCountBoundaryCondition(short boundaryValue, short expectedCount)
+        {
+            // Act
+            IEnumerable<string> values = SUT.Locales(boundaryValue);
+
+            // Assert
+            Assert.Equal(expectedCount, values.Count());
         }
 
         #endregion Locales
@@ -1755,7 +2430,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumeric_ShouldReturnBetweenDefaultMinAndMaxLength()
         {
             // Arrange
-            const short minValue = 1;
+            const short minValue = 0;
             const short maxValue = short.MaxValue;
 
             // Act
@@ -1769,7 +2444,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumeric_ShouldReturnHigherThanMinLength()
         {
             // Arrange
-            short minValue = (short)RandomNumber(1, short.MaxValue);
+            short minValue = (short)RandomNumber(0, short.MaxValue);
 
             // Act
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric(minLength: minValue));
@@ -1782,7 +2457,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumeric_ShouldReturnLowerThanMaxLength()
         {
             // Arrange
-            short maxValue = (short)RandomNumber(1, short.MaxValue);
+            short maxValue = (short)RandomNumber(0, short.MaxValue);
 
             // Act
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric(maxLength: maxValue));
@@ -1796,7 +2471,7 @@ namespace Fake.DataAccess.UnitTests.Random
         {
             // Arrange
             const short minValue = short.MaxValue;
-            const short maxValue = 1;
+            const short maxValue = 0;
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.AlphaNumeric(minLength: minValue, maxLength: maxValue));
@@ -1806,11 +2481,34 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumeric_ShouldFailForNegativeLength()
         {
             // Arrange
-            const short minValue = short.MinValue;
-            const short maxValue = 0;
+            short length = (short)RandomNumber(short.MinValue, -1);
 
             // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.AlphaNumeric(minLength: minValue, maxLength: maxValue));
+            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.AlphaNumeric(minLength: length));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public void AlphaNumeric_ShouldWorkForMinLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize)
+                .Select(_ => SUT.AlphaNumeric(minLength: boundaryValue, maxLength: (short)(boundaryValue + 1)));
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
+        }
+
+        [Theory]
+        [InlineData(short.MaxValue)]
+        public void AlphaNumeric_ShouldWorkForMaxLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = Enumerable.Range(1, TestingSetSize)
+                .Select(_ => SUT.AlphaNumeric(minLength: (short)(boundaryValue - 1), maxLength: boundaryValue));
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
         }
 
         #endregion AlphaNumeric
@@ -1831,7 +2529,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumerics_ShouldReturnBetweenDefaultMinAndMaxLength()
         {
             // Arrange
-            const short minValue = 1;
+            const short minValue = 0;
             const short maxValue = short.MaxValue;
 
             // Act
@@ -1845,7 +2543,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumerics_ShouldReturnHigherThanMinLength()
         {
             // Arrange
-            short minValue = (short)RandomNumber(1, short.MaxValue);
+            short minValue = (short)RandomNumber(0, short.MaxValue);
 
             // Act
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: minValue);
@@ -1858,7 +2556,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumerics_ShouldReturnLowerThanMaxLength()
         {
             // Arrange
-            short maxValue = (short)RandomNumber(1, short.MaxValue);
+            short maxValue = (short)RandomNumber(0, short.MaxValue);
 
             // Act
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, maxLength: maxValue);
@@ -1872,7 +2570,7 @@ namespace Fake.DataAccess.UnitTests.Random
         {
             // Arrange
             const short minValue = short.MaxValue;
-            const short maxValue = 1;
+            const short maxValue = 0;
 
             // Act
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: minValue, maxLength: maxValue);
@@ -1886,7 +2584,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Alphanumerics_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 1);
+            short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
             IEnumerable<string> values = SUT.AlphaNumerics(count);
@@ -1894,6 +2592,40 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public void AlphaNumericc_ShouldWorkForMinLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: boundaryValue, maxLength: (short)(boundaryValue + 1));
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
+        }
+
+        [Theory]
+        [InlineData(short.MaxValue)]
+        public void AlphaNumerics_ShouldWorkForMaxLengthBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: (short)(boundaryValue - 1), maxLength: boundaryValue);
+
+            // Assert
+            Assert.Contains(values, value => value.Length == boundaryValue);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void AlphaNumerics_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.AlphaNumerics(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion AlphaNumeric
@@ -1918,7 +2650,9 @@ namespace Fake.DataAccess.UnitTests.Random
             const long maxValue = long.MaxValue;
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal()).Select(value => Convert.ToInt64(value, 16));
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
+                .Select(_ => SUT.Hexadecimal())
+                .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
             Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
@@ -1931,7 +2665,9 @@ namespace Fake.DataAccess.UnitTests.Random
             long minValue = RandomNumber(0, long.MaxValue);
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal(min: minValue)).Select(value => Convert.ToInt64(value, 16));
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
+                .Select(_ => SUT.Hexadecimal(min: minValue))
+                .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
             Assert.All(values, value => Assert.True(value >= minValue));
@@ -1944,7 +2680,9 @@ namespace Fake.DataAccess.UnitTests.Random
             long maxValue = RandomNumber(0, long.MaxValue);
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal(max: maxValue)).Select(value => Convert.ToInt64(value, 16));
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
+                .Select(_ => SUT.Hexadecimal(max: maxValue))
+                .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
             Assert.All(values, value => Assert.True(value <= maxValue));
@@ -1969,6 +2707,36 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Hexadecimal(min: minValue));
+        }
+
+        [Fact]
+        public void Hexadecimal_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = 0;
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
+                .Select(_ => SUT.Hexadecimal(min: minValue, max: minValue + 1))
+                .Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Hexadecimal_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
+                .Select(_ => SUT.Hexadecimal(min: maxValue - 1, max: maxValue))
+                .Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.Contains(maxValue, values);
         }
 
         #endregion Hexadecimal
@@ -2029,7 +2797,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Hexadecimals_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
-            int count = (int)RandomNumber(int.MinValue, 1);
+            short count = (short)RandomNumber(short.MinValue, 1);
 
             // Act
             IEnumerable<string> values = SUT.Hexadecimals(count);
@@ -2066,6 +2834,46 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             Assert.NotNull(values);
             Assert.Empty(values);
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldWorkForMinBoundaryCondition()
+        {
+            // Arrange
+            const long minValue = 0;
+
+            // Act
+            IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, min: minValue, max: minValue + 1)
+                .Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.Contains(minValue, values);
+        }
+
+        [Fact]
+        public void Hexadecimals_ShouldWorkForMaxBoundaryCondition()
+        {
+            // Arrange
+            const long maxValue = long.MaxValue;
+
+            // Act
+            IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, min: maxValue - 1, max: maxValue)
+                .Select(value => Convert.ToInt64(value, 16));
+
+            // Assert
+            Assert.Contains(maxValue, values);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(short.MaxValue)]
+        public void Hexadecimals_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        {
+            // Act
+            IEnumerable<string> values = SUT.Hexadecimals(boundaryValue);
+
+            // Assert
+            Assert.Equal(boundaryValue, values.Count());
         }
 
         #endregion Hexadecimals
@@ -2109,6 +2917,20 @@ namespace Fake.DataAccess.UnitTests.Random
 
             // Act/Assert
             Assert.ThrowsAny<Exception>(() => SUT.Weighted(enumeration, weights));
+        }
+
+        [Fact]
+        public void Weighted_ShouldWorkForEmptyEnumration()
+        {
+            // Arrange
+            IEnumerable<int> enumeration = new List<int>();
+            float[] weights = { };
+
+            // Act
+            IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Weighted(enumeration, weights));
+
+            // Assert
+            Assert.All(values, value => Assert.Equal(default(int), value));
         }
 
         #endregion Weighted

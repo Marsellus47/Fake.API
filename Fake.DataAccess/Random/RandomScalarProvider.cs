@@ -12,19 +12,19 @@ namespace Fake.DataAccess.Random
     {
         private readonly Faker faker = new Faker();
 
-        public string AlphaNumeric(short minLength = 1, short maxLength = short.MaxValue)
+        public string AlphaNumeric(short minLength = 0, short maxLength = short.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(minLength), minLength, maxLength);
-            ThrowIfValueLowerThan(nameof(minLength), minLength, 1);
+            ThrowIfValueLowerThan(nameof(minLength), minLength, 0);
 
             var rand = new System.Random();
-            var length = (short)rand.Next(minLength, maxLength);
+            var length = (short)rand.NextLong(minLength, maxLength);
 
             return faker.Random.AlphaNumeric(length);
         }
 
-        public IEnumerable<string> AlphaNumerics(int count, short minLength = 1, short maxLength = short.MaxValue)
-            => count <= 0 || minLength > maxLength
+        public IEnumerable<string> AlphaNumerics(short count, short minLength = 0, short maxLength = short.MaxValue)
+            => count < 0 || minLength > maxLength
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => AlphaNumeric(minLength, maxLength)).ToList();
 
@@ -33,7 +33,7 @@ namespace Fake.DataAccess.Random
             ? faker.Random.Bool(weight.Value)
             : faker.Random.Bool();
 
-        public IEnumerable<bool> Booleans(int count, float? weight = null)
+        public IEnumerable<bool> Booleans(short count, float? weight = null)
             => count <= 0
             ? new List<bool>()
             : Enumerable.Range(1, count).Select(_ => Boolean(weight)).ToList();
@@ -45,7 +45,7 @@ namespace Fake.DataAccess.Random
             return faker.Random.Char(min, max);
         }
 
-        public IEnumerable<char> Chars(int count, char min = char.MinValue, char max = char.MaxValue)
+        public IEnumerable<char> Chars(short count, char min = char.MinValue, char max = char.MaxValue)
             => count <= 0 || min > max
             ? new List<char>()
             : Enumerable.Range(1, count).Select(_ => Char(min, max)).ToList();
@@ -55,10 +55,10 @@ namespace Fake.DataAccess.Random
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
-            return rand.Next(min, max);
+            return rand.NextDouble(min, max);
         }
 
-        public IEnumerable<double> Decimals(int count, double min = double.MinValue, double max = double.MaxValue)
+        public IEnumerable<double> Decimals(short count, double min = double.MinValue, double max = double.MaxValue)
             => count <= 0 || min > max
             ? new List<double>()
             : Enumerable.Range(1, count).Select(_ => Decimal(min, max)).ToList();
@@ -71,7 +71,7 @@ namespace Fake.DataAccess.Random
             return (byte)faker.Random.Digits(1, min, max).First();
         }
 
-        public IEnumerable<byte> Digits(int count, byte min = 0, byte max = 9)
+        public IEnumerable<byte> Digits(short count, byte min = 0, byte max = 9)
             => count <= 0 || min > max
             ? new List<byte>()
             : Enumerable.Range(1, count).Select(_ => Digit(min, max)).ToList();
@@ -81,7 +81,7 @@ namespace Fake.DataAccess.Random
             ? default(T)
             : faker.Random.ArrayElement(enumeration.ToArray());
 
-        public IEnumerable<T> EnumerationElements<T>(int count, IEnumerable<T> enumeration)
+        public IEnumerable<T> EnumerationElements<T>(short count, IEnumerable<T> enumeration)
             => enumeration == null
             ? new T[0]
             : faker.Random.ArrayElements(enumeration.ToArray(), count);
@@ -91,14 +91,14 @@ namespace Fake.DataAccess.Random
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
-            long randomNumber = rand.Next(min, max);
+            long randomNumber = rand.NextLong(min, max);
 
             if (randomNumber % 2 == 0) return randomNumber;
             if (randomNumber < long.MaxValue) return randomNumber + 1;
             return randomNumber - 1;
         }
 
-        public IEnumerable<long> Evens(int count, long min = long.MinValue, long max = long.MaxValue)
+        public IEnumerable<long> Evens(short count, long min = long.MinValue, long max = long.MaxValue)
             => count <= 0 || min > max
             ? new List<long>()
             : Enumerable.Range(1, count).Select(_ => Even(min, max)).ToList();
@@ -110,7 +110,7 @@ namespace Fake.DataAccess.Random
             return faker.Random.Hash(length, upperCase);
         }
 
-        public IEnumerable<string> Hashes(int count, short length = 40, bool upperCase = false)
+        public IEnumerable<string> Hashes(short count, short length = 40, bool upperCase = false)
             => count <= 0
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hash(length, upperCase)).ToList();
@@ -121,12 +121,12 @@ namespace Fake.DataAccess.Random
             ThrowIfValueLowerThan(nameof(min), min, 0);
 
             var rand = new System.Random();
-            var randomValue = rand.Next(min, max);
+            var randomValue = rand.NextLong(min, max);
 
             return randomValue.ToString("X2");
         }
 
-        public IEnumerable<string> Hexadecimals(int count, long min = 0, long max = long.MaxValue)
+        public IEnumerable<string> Hexadecimals(short count, long min = 0, long max = long.MaxValue)
             => count <= 0 || min > max || min < 0
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hexadecimal(min, max)).ToList();
@@ -139,7 +139,7 @@ namespace Fake.DataAccess.Random
                 .Where(x => !string.IsNullOrEmpty(x))
                 .ToArray();
 
-        public IEnumerable<string> Locales(int count)
+        public IEnumerable<string> Locales(short count)
             => count <= 0
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Locale()).ToList();
@@ -149,10 +149,10 @@ namespace Fake.DataAccess.Random
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
-            return rand.Next(min, max);
+            return rand.NextLong(min, max);
         }
 
-        public IEnumerable<long> Numbers(int count, long min = long.MinValue, long max = long.MaxValue)
+        public IEnumerable<long> Numbers(short count, long min = long.MinValue, long max = long.MaxValue)
             => count <= 0 || min > max
             ? new List<long>()
             : Enumerable.Range(1, count).Select(_ => Number(min, max)).ToList();
@@ -162,14 +162,14 @@ namespace Fake.DataAccess.Random
             ThrowIfValueHigherThan(nameof(min), min, max);
 
             var rand = new System.Random();
-            long randomNumber = rand.Next(min, max);
+            long randomNumber = rand.NextLong(min, max);
 
             if (randomNumber % 2 != 0) return randomNumber;
             if (randomNumber < long.MaxValue) return randomNumber + 1;
             return randomNumber - 1;
         }
 
-        public IEnumerable<long> Odds(int count, long min = long.MinValue, long max = long.MaxValue)
+        public IEnumerable<long> Odds(short count, long min = long.MinValue, long max = long.MaxValue)
             => count <= 0 || min > max
             ? new List<long>()
             : Enumerable.Range(1, count).Select(_ => Odd(min, max)).ToList();
@@ -179,7 +179,7 @@ namespace Fake.DataAccess.Random
             ? new T[0]
             : faker.Random.Shuffle(enumeration.ToArray());
 
-        public string String(short minLength = 1, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue)
+        public string String(short minLength = 0, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(minLength), minLength, maxLength);
             ThrowIfValueHigherThan(nameof(minChar), minChar, maxChar);
@@ -188,14 +188,14 @@ namespace Fake.DataAccess.Random
             return faker.Random.String(minLength, maxLength, minChar, maxChar);
         }
 
-        public IEnumerable<string> Strings(int count, short minLength = 1, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue)
+        public IEnumerable<string> Strings(short count, short minLength = 0, short maxLength = short.MaxValue, char minChar = char.MinValue, char maxChar = char.MaxValue)
             => count <= 0 || minLength > maxLength || minChar > maxChar || minLength < 0
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => String(minLength, maxLength, minChar, maxChar)).ToList();
 
         public Guid Uuid() => faker.Random.Uuid();
 
-        public IEnumerable<Guid> Uuids(int count)
+        public IEnumerable<Guid> Uuids(short count)
             => count <= 0
             ? new List<Guid>()
             : Enumerable.Range(1, count).Select(_ => Uuid()).ToList();
@@ -221,7 +221,7 @@ namespace Fake.DataAccess.Random
             }
         }
 
-        public IEnumerable<string> Words(int count)
+        public IEnumerable<string> Words(short count)
         {
             if (count <= 0) return new List<string>();
 

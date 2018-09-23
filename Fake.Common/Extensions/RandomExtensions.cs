@@ -4,8 +4,10 @@ namespace Fake.Common.Extensions
 {
     public static class RandomExtensions
     {
-        public static long Next(this Random random, long minimum, long maximum)
+        public static long NextLong(this Random random, long minimum, long maximum)
         {
+            if (minimum == maximum) return minimum;
+
             //Working with ulong so that modulo works correctly with values > long.MaxValue
             ulong uRange = (ulong)(maximum - minimum);
 
@@ -21,10 +23,15 @@ namespace Fake.Common.Extensions
                 ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
             } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
 
-            return (long)(ulongRand % uRange) + minimum;
+            var randomValue = (long)(ulongRand % uRange) + minimum;
+
+            // Above code never returns maximum so here is random generation of long.MaxValue
+            return randomValue == maximum - 1 && random.Next() % 2 == 0
+                ? maximum
+                : randomValue;
         }
 
-        public static double Next(this Random random, double minimum, double maximum)
+        public static double NextDouble(this Random random, double minimum, double maximum)
         {
             var average = (minimum / 2.0) + (maximum / 2.0);
             var factor = maximum - average;
