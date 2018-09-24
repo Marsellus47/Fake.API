@@ -77,7 +77,7 @@ namespace Fake.DataAccess.Random
             : Enumerable.Range(1, count).Select(_ => Digit(min, max)).ToList();
 
         public T EnumerationElement<T>(IEnumerable<T> enumeration)
-            => enumeration == null
+            => enumeration?.Any() != true
             ? default(T)
             : faker.Random.ArrayElement(enumeration.ToArray());
 
@@ -131,9 +131,9 @@ namespace Fake.DataAccess.Random
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hexadecimal(min, max)).ToList();
 
-        public string Locale() => AllLocales[faker.Random.Number(AllLocales.Length - 1)];
+        public string Locale() => AllLocales()[faker.Random.Number(AllLocales().Length - 1)];
 
-        private static string[] AllLocales
+        private static string[] AllLocales()
             => CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .Select(culture => culture.IetfLanguageTag)
                 .Where(x => !string.IsNullOrEmpty(x))

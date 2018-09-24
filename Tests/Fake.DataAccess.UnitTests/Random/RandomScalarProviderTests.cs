@@ -1,14 +1,14 @@
 ﻿using Fake.Common.Extensions;
 using Fake.DataAccess.Random;
-using System;
+using FluentAssertions;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System;
 using Xunit;
 
 namespace Fake.DataAccess.UnitTests.Random
 {
-    // TODO Use FLuent assertions https://fluentassertions.com/
     public class RandomScalarProviderTests
     {
         private const short TestingSetSize = 1000;
@@ -29,7 +29,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number());
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(max: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -65,8 +65,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const long minValue = long.MaxValue;
             const long maxValue = long.MinValue;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Number(min: minValue, max: maxValue));
+            // Act
+            Action value = () => SUT.Number(min: minValue, max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -79,7 +82,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: minValue, max: minValue + 1));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -92,7 +95,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: maxValue - 1, max: maxValue));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion Number
@@ -106,7 +109,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -120,7 +123,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -133,7 +136,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -146,7 +149,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize, max: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -159,8 +162,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -174,8 +177,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -188,7 +191,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue, max: minValue + 1);
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -201,7 +204,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: maxValue - 1, max: maxValue);
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -213,7 +216,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Numbers
@@ -231,7 +234,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Digit());
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -244,7 +247,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Digit(min: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -257,7 +260,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Digit(max: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -266,8 +269,11 @@ namespace Fake.DataAccess.UnitTests.Random
             // Arrange
             const byte maxValue = 10;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Digit(max: maxValue));
+            // Act
+            Action value = () => SUT.Digit(max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -277,8 +283,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const byte minValue = 9;
             const byte maxValue = 0;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Digit(min: minValue, max: maxValue));
+            // Act
+            Action value = () => SUT.Digit(min: minValue, max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -291,7 +300,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Digit(min: minValue, max: minValue + 1));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -304,7 +313,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Digit(min: maxValue - 1, max: maxValue));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion Digit
@@ -318,7 +327,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -332,7 +341,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -345,7 +354,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(TestingSetSize, min: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -358,7 +367,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(TestingSetSize, max: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -371,8 +380,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -386,8 +395,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -400,7 +409,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(TestingSetSize, min: minValue, max: minValue + 1);
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -413,7 +422,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(TestingSetSize, min: maxValue - 1, max: maxValue);
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -425,7 +434,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<byte> values = SUT.Digits(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Digits
@@ -443,8 +452,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Even());
 
             // Assert
-            Assert.All(values, value => Assert.True(IsEven(value)));
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -457,8 +466,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Even(min: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(IsEven(value)));
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -471,8 +480,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Even(max: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(IsEven(value)));
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => IsEven(value));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -482,8 +491,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const long minValue = long.MaxValue;
             const long maxValue = long.MinValue;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Even(min: minValue, max: maxValue));
+            // Act
+            Action value = () => SUT.Even(min: minValue, max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -496,7 +508,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Even(min: minValue, max: minValue + 1));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -509,7 +521,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Even(min: maxValue - 1, max: maxValue));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion Even
@@ -523,7 +535,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -537,8 +549,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.True(IsEven(value)));
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -551,8 +563,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(TestingSetSize, min: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(IsEven(value)));
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -565,8 +577,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(TestingSetSize, max: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(IsEven(value)));
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => IsEven(value));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -579,8 +591,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -594,8 +606,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
         [Fact]
         public void Evens_ShouldWorkForMinBoundaryCondition()
@@ -607,7 +619,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(TestingSetSize, min: minValue, max: minValue + 1);
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -620,7 +632,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(TestingSetSize, min: maxValue - 1, max: maxValue);
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -632,7 +644,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Evens(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Evens
@@ -650,8 +662,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Odd());
 
             // Assert
-            Assert.All(values, value => Assert.False(IsEven(value)));
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => !IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -664,8 +676,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Odd(min: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.False(IsEven(value)));
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => !IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -678,8 +690,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Odd(max: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.False(IsEven(value)));
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => !IsEven(value));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -689,8 +701,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const long minValue = long.MaxValue;
             const long maxValue = long.MinValue;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Odd(min: minValue, max: maxValue));
+            // Act
+            Action value = () => SUT.Odd(min: minValue, max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -703,7 +718,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Odd(min: minValue, max: minValue + 1));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -716,7 +731,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Odd(min: maxValue - 1, max: maxValue));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion Odd
@@ -730,7 +745,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -744,8 +759,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.False(IsEven(value)));
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => !IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -758,8 +773,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(TestingSetSize, min: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.False(IsEven(value)));
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => !IsEven(value));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -772,8 +787,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(TestingSetSize, max: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.False(IsEven(value)));
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => !IsEven(value));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -786,8 +801,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -801,8 +816,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -815,7 +830,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(TestingSetSize, min: minValue, max: minValue + 1);
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -828,7 +843,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(TestingSetSize, min: maxValue - 1, max: maxValue);
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -840,7 +855,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Odds(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Odds
@@ -858,7 +873,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal());
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -872,7 +887,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(min: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -886,7 +901,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(max: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -896,8 +911,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const double minValue = double.MaxValue;
             const double maxValue = double.MinValue;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Decimal(min: minValue, max: maxValue));
+            // Act
+            Action value = () => SUT.Decimal(min: minValue, max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -910,7 +928,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(min: minValue, max: minValue + 1));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -923,7 +941,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Decimal(min: maxValue - 1, max: maxValue));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion Decimal
@@ -937,7 +955,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -951,7 +969,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -965,7 +983,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -979,7 +997,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(TestingSetSize, max: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -992,8 +1010,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -1007,8 +1025,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -1021,7 +1039,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: minValue, max: minValue + 1);
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -1034,7 +1052,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(TestingSetSize, min: maxValue - 1, max: maxValue);
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -1046,7 +1064,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<double> values = SUT.Decimals(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Decimals
@@ -1064,7 +1082,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Char());
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -1077,7 +1095,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Char(min: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -1090,7 +1108,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Char(max: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -1100,8 +1118,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const char minValue = char.MaxValue;
             const char maxValue = char.MinValue;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Char(min: minValue, max: maxValue));
+            // Act
+            Action value = () => SUT.Char(min: minValue, max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -1114,7 +1135,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Char(min: minValue, max: (char)(minValue + 1)));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -1127,7 +1148,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Char(min: (char)(maxValue - 1), max: maxValue));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion Char
@@ -1141,7 +1162,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -1155,7 +1176,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -1168,7 +1189,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(TestingSetSize, min: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -1181,7 +1202,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(TestingSetSize, max: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -1194,8 +1215,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -1209,8 +1230,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -1223,7 +1244,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(TestingSetSize, min: minValue, max: (char)(minValue + 1));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -1236,7 +1257,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(TestingSetSize, min: (char)(maxValue - 1), max: maxValue);
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -1248,7 +1269,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Chars(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Chars
@@ -1266,7 +1287,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String());
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value.Length, minValue, maxValue));
+            values.Should().OnlyContain(value => value.Length >= minValue && value.Length <= maxValue);
         }
 
         [Fact]
@@ -1280,7 +1301,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.String(minLength: TestingSetSize, maxLength: TestingSetSize);
 
             // Assert
-            Assert.All(value.ToCharArray(), @char => Assert.InRange(@char, minValue, maxValue));
+            value.ToCharArray().Should().OnlyContain(@char => @char >= minValue && @char <= maxValue);
         }
 
         [Fact]
@@ -1293,7 +1314,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(minLength: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length >= minValue));
+            values.Should().OnlyContain(value => value.Length >= minValue);
         }
 
         [Fact]
@@ -1306,7 +1327,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(maxLength: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length <= maxValue));
+            values.Should().OnlyContain(value => value.Length <= maxValue);
         }
 
         [Fact]
@@ -1319,7 +1340,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.String(minLength: TestingSetSize, maxLength: TestingSetSize, minChar: minValue);
 
             // Assert
-            Assert.All(value.ToCharArray(), @char => Assert.True(@char >= minValue));
+            value.ToCharArray().Should().OnlyContain(@char => @char >= minValue);
         }
 
         [Fact]
@@ -1332,7 +1353,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.String(minLength: TestingSetSize, maxLength: TestingSetSize, maxChar: maxValue);
 
             // Assert
-            Assert.All(value.ToCharArray(), @char => Assert.True(@char <= maxValue));
+            value.ToCharArray().Should().OnlyContain(@char => @char <= maxValue);
         }
 
         [Fact]
@@ -1345,7 +1366,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(minLength: length, maxLength: length));
 
             // Assert
-            Assert.All(values, Assert.Empty);
+            values.Should().OnlyContain(value => string.IsNullOrEmpty(value));
         }
 
         [Fact]
@@ -1355,8 +1376,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const short minValue = short.MaxValue;
             const short maxValue = 1;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.String(minLength: minValue, maxLength: maxValue));
+            // Act
+            Action value = () => SUT.String(minLength: minValue, maxLength: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -1366,8 +1390,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const char minValue = char.MaxValue;
             const char maxValue = char.MinValue;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.String(minChar: minValue, maxChar: maxValue));
+            // Act
+            Action value = () => SUT.String(minChar: minValue, maxChar: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -1376,8 +1403,11 @@ namespace Fake.DataAccess.UnitTests.Random
             // Arrange
             short minValue = (short)RandomNumber(short.MinValue, -1);
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.String(minLength: minValue));
+            // Act
+            Action value = () => SUT.String(minLength: minValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Theory]
@@ -1388,7 +1418,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(minLength: boundaryValue, maxLength: (short)(boundaryValue + 1)));
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         [Theory]
@@ -1399,7 +1429,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.String(minLength: (short)(boundaryValue - 1), maxLength: boundaryValue));
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         [Fact]
@@ -1412,7 +1442,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.String(TestingSetSize, TestingSetSize, minChar: minValue, maxChar: (char)(minValue + 1)).ToCharArray();
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -1425,7 +1455,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.String(TestingSetSize, TestingSetSize, minChar: (char)(maxValue - 1), maxChar: maxValue).ToCharArray();
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion String
@@ -1439,7 +1469,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -1453,7 +1483,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value.Length, minValue, maxValue));
+            values.Should().OnlyContain(value => value.Length >= minValue && value.Length <= maxValue);
         }
 
         [Fact]
@@ -1464,10 +1494,10 @@ namespace Fake.DataAccess.UnitTests.Random
             const char maxValue = char.MaxValue;
 
             // Act
-            IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: TestingSetSize, maxLength: TestingSetSize);
+            IEnumerable<string> values = SUT.Strings(1, minLength: TestingSetSize, maxLength: TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => Assert.InRange(@char, minValue, maxValue)));
+            values.First().ToCharArray().Should().OnlyContain(@char => @char >= minValue && @char <= maxValue);
         }
 
         [Fact]
@@ -1480,7 +1510,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length >= minValue));
+            values.Should().OnlyContain(value => value.Length >= minValue);
         }
 
         [Fact]
@@ -1493,7 +1523,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, maxLength: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length <= maxValue));
+            values.Should().OnlyContain(value => value.Length <= maxValue);
         }
 
         [Fact]
@@ -1503,10 +1533,10 @@ namespace Fake.DataAccess.UnitTests.Random
             char minValue = (char)RandomNumber(1, char.MaxValue);
 
             // Act
-            IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: TestingSetSize, maxLength: TestingSetSize, minChar: minValue);
+            IEnumerable<string> values = SUT.Strings(1, minLength: TestingSetSize, maxLength: TestingSetSize, minChar: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => Assert.True(@char >= minValue)));
+            values.First().ToCharArray().Should().OnlyContain(@char => @char >= minValue);
         }
 
         [Fact]
@@ -1519,7 +1549,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: TestingSetSize, maxLength: TestingSetSize, maxChar: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => Assert.True(@char <= maxValue)));
+            values.First().ToCharArray().Should().OnlyContain(@char => @char <= maxValue);
         }
 
         [Fact]
@@ -1532,7 +1562,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(1, minLength: length, maxLength: length);
 
             // Assert
-            Assert.All(values, Assert.Empty);
+            values.Should().OnlyContain(value => string.IsNullOrEmpty(value));
         }
 
         [Fact]
@@ -1545,8 +1575,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -1560,8 +1590,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: minValue, maxLength: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -1575,8 +1605,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minChar: minValue, maxChar: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -1589,8 +1619,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: minValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -1601,7 +1631,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: boundaryValue, maxLength: (short)(boundaryValue + 1));
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         [Theory]
@@ -1612,7 +1642,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(TestingSetSize, minLength: (short)(boundaryValue - 1), maxLength: boundaryValue);
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         [Fact]
@@ -1625,7 +1655,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Strings(1, TestingSetSize, TestingSetSize, minChar: minValue, maxChar: (char)(minValue + 1)).First().ToCharArray();
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -1638,7 +1668,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<char> values = SUT.Strings(1, TestingSetSize, TestingSetSize, minChar: (char)(maxValue - 1), maxChar: maxValue).First().ToCharArray();
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -1650,7 +1680,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Strings(boundaryValue, 1, 1);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Strings
@@ -1667,7 +1697,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hash());
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length == length));
+            values.Should().OnlyContain(value => value.Length == length);
         }
 
         [Fact]
@@ -1677,7 +1707,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.Hash(TestingSetSize);
 
             // Assert
-            Assert.All(value.ToCharArray(), @char => Assert.True(char.IsDigit(@char) || char.IsLower(@char)));
+            value.ToCharArray().Should().OnlyContain(@char => char.IsDigit(@char) || char.IsLower(@char));
         }
 
         [Fact]
@@ -1690,7 +1720,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.Hash(TestingSetSize, uppercase);
 
             // Assert
-            Assert.All(value.ToCharArray(), @char => Assert.True(char.IsDigit(@char) || char.IsLower(@char)));
+            value.ToCharArray().Should().OnlyContain(@char => char.IsDigit(@char) || char.IsLower(@char));
         }
 
         [Fact]
@@ -1703,7 +1733,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.Hash(TestingSetSize, uppercase);
 
             // Assert
-            Assert.All(value.ToCharArray(), @char => Assert.True(char.IsDigit(@char) || char.IsUpper(@char)));
+            value.ToCharArray().Should().OnlyContain(@char => char.IsDigit(@char) || char.IsUpper(@char));
         }
 
         [Fact]
@@ -1716,7 +1746,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hash(length));
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length >= length));
+            values.Should().OnlyContain(value => value.Length >= length);
         }
 
         [Fact]
@@ -1725,8 +1755,11 @@ namespace Fake.DataAccess.UnitTests.Random
             // Arrange
             short length = (short)RandomNumber(short.MinValue, 0);
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Hash(length));
+            // Act
+            Action value = () => SUT.Hash(length);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Theory]
@@ -1738,7 +1771,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.Hash(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, value.Length);
+            value.Length.Should().Be(boundaryValue);
         }
 
         #endregion Hash
@@ -1752,7 +1785,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hashes(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -1765,17 +1798,17 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hashes(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length == length));
+            values.Should().OnlyContain(value => value.Length == length);
         }
 
         [Fact]
         public void Hashes_ShouldReturnDigitOrDefaultLowercase()
         {
             // Act
-            IEnumerable<string> values = SUT.Hashes(TestingSetSize);
+            IEnumerable<string> values = SUT.Hashes(1, TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => Assert.True(char.IsDigit(@char) || char.IsLower(@char))));
+            values.First().ToCharArray().Should().OnlyContain(@char => char.IsDigit(@char) || char.IsLower(@char));
         }
 
         [Fact]
@@ -1785,10 +1818,10 @@ namespace Fake.DataAccess.UnitTests.Random
             const bool uppercase = false;
 
             // Act
-            IEnumerable<string> values = SUT.Hashes(TestingSetSize, upperCase: uppercase);
+            IEnumerable<string> values = SUT.Hashes(1, TestingSetSize, upperCase: uppercase);
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => Assert.True(char.IsDigit(@char) || char.IsLower(@char))));
+            values.First().ToCharArray().Should().OnlyContain(@char => char.IsDigit(@char) || char.IsLower(@char));
         }
 
         [Fact]
@@ -1798,10 +1831,10 @@ namespace Fake.DataAccess.UnitTests.Random
             const bool uppercase = true;
 
             // Act
-            IEnumerable<string> values = SUT.Hashes(TestingSetSize, upperCase: uppercase);
+            IEnumerable<string> values = SUT.Hashes(1, TestingSetSize, upperCase: uppercase);
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => Assert.True(char.IsDigit(@char) || char.IsUpper(@char))));
+            values.First().ToCharArray().Should().OnlyContain(@char => char.IsDigit(@char) || char.IsUpper(@char));
         }
 
         [Fact]
@@ -1814,7 +1847,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hashes(TestingSetSize, length);
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length >= length));
+            values.Should().OnlyContain(value => value.Length >= length);
         }
 
         [Fact]
@@ -1827,8 +1860,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hashes(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -1840,7 +1873,7 @@ namespace Fake.DataAccess.UnitTests.Random
             string value = SUT.Hashes(1, boundaryValue).First();
 
             // Assert
-            Assert.Equal(boundaryValue, value.Length);
+            value.Length.Should().Be(boundaryValue);
         }
 
         [Theory]
@@ -1852,7 +1885,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hashes(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Hashes
@@ -1866,8 +1899,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Boolean());
 
             // Assert
-            Assert.Contains(values, value => value);
-            Assert.Contains(values, value => !value);
+            values.Should().Contain(value => value);
+            values.Should().Contain(value => !value);
         }
 
         [Fact]
@@ -1880,7 +1913,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Boolean(weight));
 
             // Assert
-            Assert.True(values.Count(value => value) > values.Count() / 2);
+            values.Count(value => value).Should().BeCloseTo(TestingSetSize, TestingSetSize / 3);
         }
 
         [Fact]
@@ -1893,7 +1926,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Boolean(weight));
 
             // Assert
-            Assert.All(values, Assert.True);
+            values.Should().OnlyContain(_ => true);
         }
 
         [Fact]
@@ -1906,7 +1939,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Boolean(weight));
 
             // Assert
-            Assert.True(values.Count(value => !value) > values.Count() / 2);
+            values.Count(value => !value).Should().BeCloseTo(TestingSetSize, TestingSetSize / 3);
         }
 
         [Fact]
@@ -1919,7 +1952,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Boolean(weight));
 
             // Assert
-            Assert.All(values, Assert.False);
+            values.Should().OnlyContain(value => !value);
         }
 
         [Theory]
@@ -1931,8 +1964,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Boolean(boundaryValue));
 
             // Assert
-            Assert.Equal(numberOfTrues, values.Count(value => value));
-            Assert.Equal(numberOfFalses, values.Count(value => !value));
+            values.Count(value => value).Should().Be(numberOfTrues);
+            values.Count(value => !value).Should().Be(numberOfFalses);
         }
 
         #endregion Boolean
@@ -1946,7 +1979,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -1956,8 +1989,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(TestingSetSize);
 
             // Assert
-            Assert.Contains(values, value => value);
-            Assert.Contains(values, value => !value);
+            values.Should().Contain(value => value);
+            values.Should().Contain(value => value);
         }
 
         [Fact]
@@ -1970,7 +2003,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(TestingSetSize, weight);
 
             // Assert
-            Assert.True(values.Count(value => value) > values.Count() / 2);
+            values.Count(value => value).Should().BeCloseTo(TestingSetSize, TestingSetSize / 3);
         }
 
         [Fact]
@@ -1983,7 +2016,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(TestingSetSize, weight);
 
             // Assert
-            Assert.All(values, Assert.True);
+            values.Should().OnlyContain(value => value);
         }
 
         [Fact]
@@ -1996,7 +2029,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(TestingSetSize, weight);
 
             // Assert
-            Assert.True(values.Count(value => !value) > values.Count() / 2);
+            values.Count(value => !value).Should().BeCloseTo(TestingSetSize, TestingSetSize / 3);
         }
 
         [Fact]
@@ -2009,7 +2042,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(TestingSetSize, weight);
 
             // Assert
-            Assert.All(values, Assert.False);
+            values.Should().OnlyContain(value => !value);
         }
 
         [Fact]
@@ -2022,8 +2055,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -2035,8 +2068,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(TestingSetSize, boundaryValue);
 
             // Assert
-            Assert.Equal(numberOfTrues, values.Count(value => value));
-            Assert.Equal(numberOfFalses, values.Count(value => !value));
+            values.Count(value => value).Should().Be(numberOfTrues);
+            values.Count(value => !value).Should().Be(numberOfFalses);
         }
 
         [Theory]
@@ -2048,7 +2081,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<bool> values = SUT.Booleans(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Booleans
@@ -2065,7 +2098,7 @@ namespace Fake.DataAccess.UnitTests.Random
             int value = SUT.EnumerationElement(enumeration);
 
             // Assert
-            Assert.Contains(value, enumeration);
+            enumeration.Should().Contain(value);
         }
 
         [Fact]
@@ -2078,7 +2111,7 @@ namespace Fake.DataAccess.UnitTests.Random
             int value = SUT.EnumerationElement(enumeration);
 
             // Assert
-            Assert.Equal(default(int), value);
+            value.Should().Be(default(int));
         }
 
         [Fact]
@@ -2091,7 +2124,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.EnumerationElement(enumeration));
 
             // Assert
-            Assert.All(enumeration, value => Assert.Equal(default(int), value));
+            values.Should().OnlyContain(value => value == default(int));
         }
 
         #endregion EnumerationElement
@@ -2109,7 +2142,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.EnumerationElements(count, enumeration);
 
             // Assert
-            Assert.Equal(count, values.Count());
+            values.Count().Should().Be(count);
         }
 
         [Fact]
@@ -2122,7 +2155,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.EnumerationElements(TestingSetSize / 10, enumeration);
 
             // Assert
-            Assert.All(enumeration, item => Assert.Contains(item, enumeration));
+            values.Should().OnlyContain(value => enumeration.Contains(value));
         }
 
         [Fact]
@@ -2135,8 +2168,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.EnumerationElements(TestingSetSize / 10, enumeration);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -2149,7 +2182,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.EnumerationElements(0, enumeration);
 
             // Assert
-            Assert.Empty(enumeration);
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -2165,7 +2198,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.EnumerationElements(boundaryValue, enumeration);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion EnumerationElements
@@ -2182,7 +2215,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.Shuffle(enumeration);
 
             // Assert
-            Assert.Equal(enumeration.Count(), values.Count());
+            values.Count().Should().Be(enumeration.Count());
         }
 
         [Fact]
@@ -2195,7 +2228,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.Shuffle(enumeration);
 
             // Assert
-            Assert.False(enumeration.SequenceEqual(values));
+            enumeration.SequenceEqual(values).Should().BeFalse();
         }
 
         [Fact]
@@ -2208,8 +2241,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = SUT.Shuffle(enumeration);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -2227,11 +2260,11 @@ namespace Fake.DataAccess.UnitTests.Random
             // Assert
             if (expectedSameEnumeration)
             {
-                Assert.True(enumeration.SequenceEqual(values));
+                values.Should().BeEquivalentTo(enumeration, options => options.WithStrictOrdering());
             }
             else
             {
-                Assert.False(enumeration.SequenceEqual(values));
+                enumeration.SequenceEqual(values).Should().BeFalse();
             }
         }
 
@@ -2246,7 +2279,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Word());
 
             // Assert
-            Assert.All(values, Assert.NotEmpty);
+            values.Should().OnlyContain(value => !string.IsNullOrEmpty(value));
         }
 
         [Fact]
@@ -2256,7 +2289,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Word());
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => char.IsLetter(@char)));
+            values.Should().OnlyContain(value => value.ToCharArray().All(@char => char.IsLetter(@char)));
         }
 
         #endregion Word
@@ -2270,7 +2303,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Words(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -2280,7 +2313,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Words(TestingSetSize);
 
             // Assert
-            Assert.All(values, Assert.NotEmpty);
+            values.Should().OnlyContain(value => !string.IsNullOrEmpty(value));
         }
 
         [Fact]
@@ -2290,7 +2323,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Words(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.All(value.ToCharArray(), @char => char.IsLetter(@char)));
+            values.Should().OnlyContain(value => value.ToCharArray().All(@char => char.IsLetter(@char)));
         }
 
         [Fact]
@@ -2303,8 +2336,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Words(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -2319,7 +2352,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Words(boundaryValue);
 
             // Assert
-            Assert.Equal(expectedCount, values.Count());
+            values.Count().Should().Be(expectedCount);
         }
 
         #endregion Words
@@ -2333,7 +2366,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<Guid> values = SUT.Uuids(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -2346,8 +2379,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<Guid> values = SUT.Uuids(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -2362,7 +2395,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<Guid> values = SUT.Uuids(boundaryValue);
 
             // Assert
-            Assert.Equal(expectedCount, values.Count());
+            values.Count().Should().Be(expectedCount);
         }
 
         #endregion Uuids
@@ -2376,7 +2409,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Locale());
 
             // Assert
-            Assert.All(values, Assert.NotEmpty);
+            values.Should().OnlyContain(value => !string.IsNullOrEmpty(value));
         }
 
         #endregion Locale
@@ -2390,7 +2423,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Locales(TestingSetSize);
 
             // Assert
-            Assert.All(values, Assert.NotEmpty);
+            values.Should().OnlyContain(value => !string.IsNullOrEmpty(value));
         }
 
         [Fact]
@@ -2403,8 +2436,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Locales(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -2419,7 +2452,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Locales(boundaryValue);
 
             // Assert
-            Assert.Equal(expectedCount, values.Count());
+            values.Count().Should().Be(expectedCount);
         }
 
         #endregion Locales
@@ -2437,7 +2470,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric());
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value.Length, minValue, maxValue));
+            values.Should().OnlyContain(value => value.Length >= minValue && value.Length <= maxValue);
         }
 
         [Fact]
@@ -2450,7 +2483,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric(minLength: minValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length >= minValue));
+            values.Should().OnlyContain(value => value.Length >= minValue);
         }
 
         [Fact]
@@ -2463,7 +2496,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.AlphaNumeric(maxLength: maxValue));
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length <= maxValue));
+            values.Should().OnlyContain(value => value.Length <= maxValue);
         }
 
         [Fact]
@@ -2473,8 +2506,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const short minValue = short.MaxValue;
             const short maxValue = 0;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.AlphaNumeric(minLength: minValue, maxLength: maxValue));
+            // Act
+            Action value = () => SUT.AlphaNumeric(minLength: minValue, maxLength: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -2483,8 +2519,11 @@ namespace Fake.DataAccess.UnitTests.Random
             // Arrange
             short length = (short)RandomNumber(short.MinValue, -1);
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.AlphaNumeric(minLength: length));
+            // Act
+            Action value = () => SUT.AlphaNumeric(minLength: length);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Theory]
@@ -2496,7 +2535,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(_ => SUT.AlphaNumeric(minLength: boundaryValue, maxLength: (short)(boundaryValue + 1)));
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         [Theory]
@@ -2508,7 +2547,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(_ => SUT.AlphaNumeric(minLength: (short)(boundaryValue - 1), maxLength: boundaryValue));
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         #endregion AlphaNumeric
@@ -2522,7 +2561,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize);
 
             // Assert
-            Assert.Equal(TestingSetSize, values.Count());
+            values.Count().Should().Be(TestingSetSize);
         }
 
         [Fact]
@@ -2536,7 +2575,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value.Length, minValue, maxValue));
+            values.Should().OnlyContain(value => value.Length >= minValue && value.Length <= maxValue);
         }
 
         [Fact]
@@ -2549,7 +2588,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: minValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length >= minValue));
+            values.Should().OnlyContain(value => value.Length >= minValue);
         }
 
         [Fact]
@@ -2562,7 +2601,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, maxLength: maxValue);
 
             // Assert
-            Assert.All(values, value => Assert.True(value.Length <= maxValue));
+            values.Should().OnlyContain(value => value.Length <= maxValue);
         }
 
         [Fact]
@@ -2576,8 +2615,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: minValue, maxLength: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -2590,8 +2629,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Theory]
@@ -2602,7 +2641,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: boundaryValue, maxLength: (short)(boundaryValue + 1));
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         [Theory]
@@ -2613,7 +2652,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(TestingSetSize, minLength: (short)(boundaryValue - 1), maxLength: boundaryValue);
 
             // Assert
-            Assert.Contains(values, value => value.Length == boundaryValue);
+            values.Should().Contain(value => value.Length >= boundaryValue);
         }
 
         [Theory]
@@ -2625,7 +2664,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.AlphaNumerics(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion AlphaNumeric
@@ -2635,11 +2674,14 @@ namespace Fake.DataAccess.UnitTests.Random
         [Fact]
         public void Hexadecimal_ShouldReturnValidHexadecimal()
         {
+            // Arrange
+            long number;
+
             // Act
             IEnumerable<string> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Hexadecimal());
 
             // Assert
-            Assert.All(values, value => Assert.True(long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long number)));
+            values.Should().OnlyContain(value => long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out number));
         }
 
         [Fact]
@@ -2655,7 +2697,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -2670,7 +2712,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -2685,7 +2727,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -2695,8 +2737,11 @@ namespace Fake.DataAccess.UnitTests.Random
             const long minValue = long.MaxValue;
             const long maxValue = 0;
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Hexadecimal(min: minValue, max: maxValue));
+            // Act
+            Action value = () => SUT.Hexadecimal(min: minValue, max: maxValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -2705,8 +2750,11 @@ namespace Fake.DataAccess.UnitTests.Random
             // Arrange
             long minValue = RandomNumber(long.MinValue, -1);
 
-            // Act/Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => SUT.Hexadecimal(min: minValue));
+            // Act
+            Action value = () => SUT.Hexadecimal(min: minValue);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -2721,7 +2769,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -2736,7 +2784,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         #endregion Hexadecimal
@@ -2746,11 +2794,14 @@ namespace Fake.DataAccess.UnitTests.Random
         [Fact]
         public void Hexadecimals_ShouldReturnValidHexadecimal()
         {
+            // Arrange
+            long number;
+
             // Act
             IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize);
 
             // Assert
-            Assert.All(values, value => Assert.True(long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long number)));
+            values.Should().OnlyContain(value => long.TryParse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out number));
         }
 
         [Fact]
@@ -2764,7 +2815,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize).Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.All(values, value => Assert.InRange(value, minValue, maxValue));
+            values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
         }
 
         [Fact]
@@ -2777,7 +2828,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, min: minValue).Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.All(values, value => Assert.True(value >= minValue));
+            values.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
@@ -2790,7 +2841,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, max: maxValue).Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.All(values, value => Assert.True(value <= maxValue));
+            values.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
@@ -2803,8 +2854,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hexadecimals(count);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -2818,8 +2869,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -2832,8 +2883,8 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize, min: minValue);
 
             // Assert
-            Assert.NotNull(values);
-            Assert.Empty(values);
+            values.Should().NotBeNull();
+            values.Should().BeEmpty();
         }
 
         [Fact]
@@ -2847,7 +2898,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.Contains(minValue, values);
+            values.Should().Contain(minValue);
         }
 
         [Fact]
@@ -2861,7 +2912,7 @@ namespace Fake.DataAccess.UnitTests.Random
                 .Select(value => Convert.ToInt64(value, 16));
 
             // Assert
-            Assert.Contains(maxValue, values);
+            values.Should().Contain(maxValue);
         }
 
         [Theory]
@@ -2873,7 +2924,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<string> values = SUT.Hexadecimals(boundaryValue);
 
             // Assert
-            Assert.Equal(boundaryValue, values.Count());
+            values.Count().Should().Be(boundaryValue);
         }
 
         #endregion Hexadecimals
@@ -2891,7 +2942,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Weighted(enumeration, weights));
 
             // Assert
-            Assert.All(values, value => Assert.Contains(value, enumeration));
+            values.Should().OnlyContain(value => enumeration.Contains(value));
         }
 
         [Fact]
@@ -2905,7 +2956,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Weighted(enumeration, weights));
 
             // Assert
-            Assert.All(values, value => Assert.Equal(default(int), value));
+            values.Should().OnlyContain(value => value == default(int));
         }
 
         [Fact]
@@ -2915,8 +2966,11 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> enumeration = Enumerable.Range(1, 5);
             float[] weights = { 0.1F };
 
-            // Act/Assert
-            Assert.ThrowsAny<Exception>(() => SUT.Weighted(enumeration, weights));
+            // Act
+            Action value = () => SUT.Weighted(enumeration, weights);
+
+            // Assert
+            value.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]
@@ -2930,7 +2984,7 @@ namespace Fake.DataAccess.UnitTests.Random
             IEnumerable<int> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Weighted(enumeration, weights));
 
             // Assert
-            Assert.All(values, value => Assert.Equal(default(int), value));
+            values.Should().OnlyContain(value => value == default(int));
         }
 
         #endregion Weighted
