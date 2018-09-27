@@ -8,4 +8,8 @@
     <PackageReference Include="GraphQL" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fake.DataAccess\Fake.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
