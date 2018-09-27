@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A72347E3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fake.DataAccess.UnitTests", "Tests\Fake.DataAccess.UnitTests\Fake.DataAccess.UnitTests.csproj", "{C922C650-B101-44CD-8C93-7A875CF25508}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fake.Common", "Fake.Common\Fake.Common.csproj", "{FFDC190C-A23D-4B23-BB78-B71B2A629EFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fake.Common", "Fake.Common\Fake.Common.csproj", "{FFDC190C-A23D-4B23-BB78-B71B2A629EFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fake.API.GraphQL", "Fake.API.GraphQL\Fake.API.GraphQL.csproj", "{5E3718E1-FA25-437C-9BB5-39E7A9BA8A90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{FFDC190C-A23D-4B23-BB78-B71B2A629EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFDC190C-A23D-4B23-BB78-B71B2A629EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFDC190C-A23D-4B23-BB78-B71B2A629EFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E3718E1-FA25-437C-9BB5-39E7A9BA8A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E3718E1-FA25-437C-9BB5-39E7A9BA8A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E3718E1-FA25-437C-9BB5-39E7A9BA8A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E3718E1-FA25-437C-9BB5-39E7A9BA8A90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
