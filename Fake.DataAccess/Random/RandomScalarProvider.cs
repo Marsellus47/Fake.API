@@ -144,7 +144,7 @@ namespace Fake.DataAccess.Random
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Locale()).ToList();
 
-        public long Number(long min = long.MinValue, long max = long.MaxValue)
+        public long Integer(long min = long.MinValue, long max = long.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
 
@@ -152,10 +152,10 @@ namespace Fake.DataAccess.Random
             return rand.NextLong(min, max);
         }
 
-        public IEnumerable<long> Numbers(short count, long min = long.MinValue, long max = long.MaxValue)
+        public IEnumerable<long> Integers(short count, long min = long.MinValue, long max = long.MaxValue)
             => count <= 0 || min > max
             ? new List<long>()
-            : Enumerable.Range(1, count).Select(_ => Number(min, max)).ToList();
+            : Enumerable.Range(1, count).Select(_ => Integer(min, max)).ToList();
 
         public long Odd(long min = long.MinValue, long max = long.MaxValue)
         {

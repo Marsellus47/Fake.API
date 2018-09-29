@@ -26,7 +26,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long maxValue = long.MaxValue;
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number());
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Integer());
 
             // Assert
             values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
@@ -39,7 +39,7 @@ namespace Fake.DataAccess.UnitTests.Random
             long minValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: minValue));
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Integer(min: minValue));
 
             // Assert
             values.Should().OnlyContain(value => value >= minValue);
@@ -52,7 +52,7 @@ namespace Fake.DataAccess.UnitTests.Random
             long maxValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(max: maxValue));
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Integer(max: maxValue));
 
             // Assert
             values.Should().OnlyContain(value => value <= maxValue);
@@ -66,7 +66,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long maxValue = long.MinValue;
 
             // Act
-            Action value = () => SUT.Number(min: minValue, max: maxValue);
+            Action value = () => SUT.Integer(min: minValue, max: maxValue);
 
             // Assert
             value.Should().Throw<ArgumentOutOfRangeException>();
@@ -79,7 +79,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long minValue = long.MinValue;
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: minValue, max: minValue + 1));
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Integer(min: minValue, max: minValue + 1));
 
             // Assert
             values.Should().Contain(minValue);
@@ -92,7 +92,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long maxValue = long.MaxValue;
 
             // Act
-            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Number(min: maxValue - 1, max: maxValue));
+            IEnumerable<long> values = Enumerable.Range(1, TestingSetSize).Select(_ => SUT.Integer(min: maxValue - 1, max: maxValue));
 
             // Assert
             values.Should().Contain(maxValue);
@@ -106,7 +106,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Numbers_ShouldReturnCorrectCount()
         {
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize);
 
             // Assert
             values.Count().Should().Be(TestingSetSize);
@@ -120,7 +120,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long maxValue = long.MaxValue;
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize);
 
             // Assert
             values.Should().OnlyContain(value => value >= minValue && value <= maxValue);
@@ -133,7 +133,7 @@ namespace Fake.DataAccess.UnitTests.Random
             long minValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize, min: minValue);
 
             // Assert
             values.Should().OnlyContain(value => value >= minValue);
@@ -146,7 +146,7 @@ namespace Fake.DataAccess.UnitTests.Random
             long maxValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize, max: maxValue);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize, max: maxValue);
 
             // Assert
             values.Should().OnlyContain(value => value <= maxValue);
@@ -159,7 +159,7 @@ namespace Fake.DataAccess.UnitTests.Random
             short count = (short)RandomNumber(short.MinValue, 0);
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(count);
+            IEnumerable<long> values = SUT.Integers(count);
 
             // Assert
             values.Should().NotBeNull();
@@ -174,7 +174,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long maxValue = long.MinValue;
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue, max: maxValue);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
             values.Should().NotBeNull();
@@ -188,7 +188,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long minValue = long.MinValue;
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue, max: minValue + 1);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize, min: minValue, max: minValue + 1);
 
             // Assert
             values.Should().Contain(minValue);
@@ -201,7 +201,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const long maxValue = long.MaxValue;
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: maxValue - 1, max: maxValue);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize, min: maxValue - 1, max: maxValue);
 
             // Assert
             values.Should().Contain(maxValue);
@@ -213,7 +213,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Numbers_ShouldWorkForCountBoundaryCondition(short boundaryValue)
         {
             // Act
-            IEnumerable<long> values = SUT.Numbers(boundaryValue);
+            IEnumerable<long> values = SUT.Integers(boundaryValue);
 
             // Assert
             values.Count().Should().Be(boundaryValue);
@@ -392,7 +392,7 @@ namespace Fake.DataAccess.UnitTests.Random
             const byte maxValue = 0;
 
             // Act
-            IEnumerable<long> values = SUT.Numbers(TestingSetSize, min: minValue, max: maxValue);
+            IEnumerable<long> values = SUT.Integers(TestingSetSize, min: minValue, max: maxValue);
 
             // Assert
             values.Should().NotBeNull();

@@ -1,8 +1,10 @@
 ﻿using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
+using GraphQL.Http;
 using GraphQL.Server.Ui.GraphiQL;
 using GraphQL.Server;
 using GraphQL.Types;
+using GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,10 @@ namespace Fake.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
+            services.AddSingleton<IDocumentWriter, DocumentWriter>();
+
             services.AddScoped<GraphQL.Infrastructure.GraphQLQuery>();
             services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();
 

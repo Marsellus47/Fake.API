@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fake.DataAccess.UnitTests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fake.Common", "Fake.Common\Fake.Common.csproj", "{FFDC190C-A23D-4B23-BB78-B71B2A629EFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fake.API.GraphQL", "Fake.API.GraphQL\Fake.API.GraphQL.csproj", "{5E3718E1-FA25-437C-9BB5-39E7A9BA8A90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fake.API.GraphQL", "Fake.API.GraphQL\Fake.API.GraphQL.csproj", "{5E3718E1-FA25-437C-9BB5-39E7A9BA8A90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
