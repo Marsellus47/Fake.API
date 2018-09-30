@@ -16,10 +16,10 @@ namespace Fake.DataAccess.UnitTests.Random
         private readonly Func<long, bool> IsEven = number => number % 2 == 0;
         private readonly Func<long, long, long> RandomNumber = (min, max) => new System.Random().NextLong(min, max);
 
-        #region Number
+        #region Integer
 
         [Fact]
-        public void Number_ShouldReturnBetweenDefaultMinAndMax()
+        public void Integer_ShouldReturnBetweenDefaultMinAndMax()
         {
             // Arrange
             const long minValue = long.MinValue;
@@ -33,7 +33,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Number_ShouldReturnHigherThanMin()
+        public void Integer_ShouldReturnHigherThanMin()
         {
             // Arrange
             long minValue = RandomNumber(long.MinValue, long.MaxValue);
@@ -46,7 +46,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Number_ShouldReturnLowerThanMax()
+        public void Integer_ShouldReturnLowerThanMax()
         {
             // Arrange
             long maxValue = RandomNumber(long.MinValue, long.MaxValue);
@@ -59,7 +59,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Number_ShouldFailForInvertedMinMax()
+        public void Integer_ShouldFailForInvertedMinMax()
         {
             // Arrange
             const long minValue = long.MaxValue;
@@ -73,7 +73,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Number_ShouldWorkForMinBoundaryCondition()
+        public void Integer_ShouldWorkForMinBoundaryCondition()
         {
             // Arrange
             const long minValue = long.MinValue;
@@ -86,7 +86,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Number_ShouldWorkForMaxBoundaryCondition()
+        public void Integer_ShouldWorkForMaxBoundaryCondition()
         {
             // Arrange
             const long maxValue = long.MaxValue;
@@ -98,12 +98,12 @@ namespace Fake.DataAccess.UnitTests.Random
             values.Should().Contain(maxValue);
         }
 
-        #endregion Number
+        #endregion Integer
 
-        #region Numbers
+        #region Integers
 
         [Fact]
-        public void Numbers_ShouldReturnCorrectCount()
+        public void Integers_ShouldReturnCorrectCount()
         {
             // Act
             IEnumerable<long> values = SUT.Integers(TestingSetSize);
@@ -113,7 +113,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Numbers_ShouldReturnBetweenDefaultMinAndMax()
+        public void Integers_ShouldReturnBetweenDefaultMinAndMax()
         {
             // Arrange
             const long minValue = long.MinValue;
@@ -127,7 +127,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Numbers_ShouldReturnHigherThanMin()
+        public void Integers_ShouldReturnHigherThanMin()
         {
             // Arrange
             long minValue = RandomNumber(long.MinValue, long.MaxValue);
@@ -140,7 +140,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Numbers_ShouldReturnLowerThanMax()
+        public void Integers_ShouldReturnLowerThanMax()
         {
             // Arrange
             long maxValue = RandomNumber(long.MinValue, long.MaxValue);
@@ -153,7 +153,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Numbers_ShouldReturnEmptyEnumerationForNegativeCount()
+        public void Integers_ShouldReturnEmptyEnumerationForNegativeCount()
         {
             // Arrange
             short count = (short)RandomNumber(short.MinValue, 0);
@@ -167,7 +167,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Numbers_ShouldReturnEmptyEnumerationForInvertedMinMax()
+        public void Integers_ShouldReturnEmptyEnumerationForInvertedMinMax()
         {
             // Arrange
             const long minValue = long.MaxValue;
@@ -182,7 +182,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Numbers_ShouldWorkForMinBoundaryCondition()
+        public void Integers_ShouldWorkForMinBoundaryCondition()
         {
             // Arrange
             const long minValue = long.MinValue;
@@ -195,7 +195,7 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Numbers_ShouldWorkForMaxBoundaryCondition()
+        public void Integers_ShouldWorkForMaxBoundaryCondition()
         {
             // Arrange
             const long maxValue = long.MaxValue;
@@ -210,7 +210,7 @@ namespace Fake.DataAccess.UnitTests.Random
         [Theory]
         [InlineData(1)]
         [InlineData(short.MaxValue)]
-        public void Numbers_ShouldWorkForCountBoundaryCondition(short boundaryValue)
+        public void Integers_ShouldWorkForCountBoundaryCondition(short boundaryValue)
         {
             // Act
             IEnumerable<long> values = SUT.Integers(boundaryValue);
@@ -219,7 +219,7 @@ namespace Fake.DataAccess.UnitTests.Random
             values.Count().Should().Be(boundaryValue);
         }
 
-        #endregion Numbers
+        #endregion Integers
 
         #region Digit
 
