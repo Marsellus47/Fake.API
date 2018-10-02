@@ -90,11 +90,16 @@ namespace Fake.DataAccess.Random
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
 
+            if(min == max && min % 2 != 0)
+            {
+                throw new ArgumentException($"Unable to get even number between {min} and {max}");
+            }
+
             var rand = new System.Random();
             long randomNumber = rand.NextLong(min, max);
 
             if (randomNumber % 2 == 0) return randomNumber;
-            if (randomNumber < long.MaxValue) return randomNumber + 1;
+            if (randomNumber < long.MaxValue && randomNumber + 1 <= max) return randomNumber + 1;
             return randomNumber - 1;
         }
 
@@ -160,6 +165,11 @@ namespace Fake.DataAccess.Random
         public long Odd(long min = long.MinValue, long max = long.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
+
+            if (min == max && min % 2 == 0)
+            {
+                throw new ArgumentException($"Unable to get odd number between {min} and {max}");
+            }
 
             var rand = new System.Random();
             long randomNumber = rand.NextLong(min, max);

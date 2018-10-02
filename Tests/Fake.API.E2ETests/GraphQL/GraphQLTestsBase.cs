@@ -1,10 +1,11 @@
 ﻿using Fake.Common.Extensions;
 using GraphQL.Client.Http;
+using GraphQL.Common.Response;
 using System;
 
 namespace Fake.API.E2ETests.GraphQL
 {
-    public class GraphQLTestsBase
+    public abstract class GraphQLTestsBase<TResponse>
     {
         private const string SERVER_BASE_URL = "http://localhost:50765";
         private const string GRAPHQL_RESOURCE_URL = "/graphql";
@@ -31,5 +32,7 @@ namespace Fake.API.E2ETests.GraphQL
 
         protected readonly Func<long, long, long> RandomNumber = (min, max)
             => new System.Random().NextLong(min, max);
+
+        protected abstract TResponse ParseResponse(GraphQLResponse response);
     }
 }

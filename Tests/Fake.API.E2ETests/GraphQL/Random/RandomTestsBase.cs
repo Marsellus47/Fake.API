@@ -2,14 +2,14 @@
 
 namespace Fake.API.E2ETests.GraphQL.Random
 {
-    public class RandomTestsBase : GraphQLTestsBase
+    public class RandomTestsBase : GraphQLTestsBase<RandomDTO>
     {
         protected override sealed string BuildQuery(string subQuery)
         {
             return base.BuildQuery($" random {{ {subQuery} }} ");
         }
 
-        internal static RandomDTO GetRandom(GraphQLResponse response)
+        protected override RandomDTO ParseResponse(GraphQLResponse response)
             => response.GetDataFieldAs<RandomDTO>("random");
     }
 }

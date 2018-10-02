@@ -4,13 +4,13 @@ using Xunit;
 
 namespace Fake.API.E2ETests.GraphQL.Random
 {
-    public class IntegerTests : RandomTestsBase
+    public class DigitTests : RandomTestsBase
     {
         [Fact]
         public async Task ShouldGetBetweenDefaultMinAndMax()
         {
             // Arrange
-            string query = BuildQuery("integer");
+            string query = BuildQuery("digit");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -18,15 +18,15 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeInRange(int.MinValue, int.MaxValue);
+            random.Digit.Should().BeInRange(byte.MinValue, 9);
         }
 
         [Fact]
         public async Task ShouldGetHigherThanMin()
         {
             // Arrange
-            int minValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"integer(min:{minValue})");
+            byte minValue = (byte)RandomNumber(byte.MinValue, 9);
+            string query = BuildQuery($"digit(min:{minValue})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -34,15 +34,15 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeGreaterOrEqualTo(minValue);
+            random.Digit.Should().BeGreaterOrEqualTo(minValue);
         }
 
         [Fact]
         public async Task ShouldGetLowerThanMax()
         {
             // Arrange
-            int maxValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"integer(max:{maxValue})");
+            byte maxValue = (byte)RandomNumber(byte.MinValue, 9);
+            string query = BuildQuery($"digit(max:{maxValue})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -50,16 +50,16 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeLessOrEqualTo(maxValue);
+            random.Digit.Should().BeLessOrEqualTo(maxValue);
         }
 
         [Fact]
         public async Task ShouldSwitchMinAndMaxWhenInverted()
         {
             // Arrange
-            int minValue = (int)RandomNumber(30, 40);
-            int maxValue = (int)RandomNumber(10, 20);
-            string query = BuildQuery($"integer(min:{minValue}, max:{maxValue})");
+            byte minValue = (byte)RandomNumber(7, 9);
+            byte maxValue = (byte)RandomNumber(byte.MinValue, 3);
+            string query = BuildQuery($"digit(min:{minValue}, max:{maxValue})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -67,7 +67,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeInRange(maxValue, minValue);
+            random.Digit.Should().BeInRange(maxValue, minValue);
         }
     }
 }

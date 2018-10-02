@@ -66,6 +66,7 @@ namespace Fake.API.GraphQL.Types
                 {
                     var min = CoerceToByte(ctx.GetArgument<int>("min"), max: 9);
                     var max = CoerceToByte(ctx.GetArgument<int>("max"), max: 9);
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return (int)randomScalarProvider.Digit(min: min, max: max);
                 });
 
@@ -82,6 +83,7 @@ namespace Fake.API.GraphQL.Types
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var min = CoerceToByte(ctx.GetArgument<int>("min"), max: 9);
                     var max = CoerceToByte(ctx.GetArgument<int>("max"), max: 9);
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Digits(count: count, min: min, max: max).Select(value => (int)value);
                 });
 
@@ -100,6 +102,11 @@ namespace Fake.API.GraphQL.Types
                 {
                     var min = ctx.GetArgument<int>("min");
                     var max = ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
+
+                    if (min == max && min % 2 != 0)
+                        return null;
+
                     return randomScalarProvider.Even(min: min, max: max);
                 });
 
@@ -116,6 +123,7 @@ namespace Fake.API.GraphQL.Types
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var min = ctx.GetArgument<int>("min");
                     var max = ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Evens(count: count, min: min, max: max);
                 });
 
@@ -550,6 +558,16 @@ namespace Fake.API.GraphQL.Types
         private static void SwitchValuesWhenInverted(ref int shouldBeLower, ref int shouldBeHigher)
         {
             if(shouldBeLower > shouldBeHigher)
+            {
+                var temp = shouldBeLower;
+                shouldBeLower = shouldBeHigher;
+                shouldBeHigher = temp;
+            }
+        }
+
+        private static void SwitchValuesWhenInverted(ref byte shouldBeLower, ref byte shouldBeHigher)
+        {
+            if (shouldBeLower > shouldBeHigher)
             {
                 var temp = shouldBeLower;
                 shouldBeLower = shouldBeHigher;

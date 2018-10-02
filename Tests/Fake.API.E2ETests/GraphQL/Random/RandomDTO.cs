@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fake.API.E2ETests.GraphQL.Random
 {
-    internal class RandomDTO
+    public class RandomDTO
     {
         public int Integer { get; set; }
         public IEnumerable<long> Integers { get; set; }

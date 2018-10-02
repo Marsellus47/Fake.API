@@ -4,13 +4,13 @@ using Xunit;
 
 namespace Fake.API.E2ETests.GraphQL.Random
 {
-    public class IntegerTests : RandomTestsBase
+    public class EvenTests : RandomTestsBase
     {
         [Fact]
         public async Task ShouldGetBetweenDefaultMinAndMax()
         {
             // Arrange
-            string query = BuildQuery("integer");
+            string query = BuildQuery("even");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -18,7 +18,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeInRange(int.MinValue, int.MaxValue);
+            random.Even.Should().BeInRange(int.MinValue, int.MaxValue);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             int minValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"integer(min:{minValue})");
+            string query = BuildQuery($"even(min:{minValue})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -34,7 +34,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeGreaterOrEqualTo(minValue);
+            random.Even.Should().BeGreaterOrEqualTo(minValue);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             int maxValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"integer(max:{maxValue})");
+            string query = BuildQuery($"even(max:{maxValue})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -50,7 +50,24 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeLessOrEqualTo(maxValue);
+            random.Even.Should().BeLessOrEqualTo(maxValue);
+        }
+
+        [Fact]
+        public async Task ShouldGetEvenNumber()
+        {
+            // Arrange
+            int minValue = (int)RandomNumber(int.MinValue, 1000);
+            int maxValue = (int)RandomNumber(1001, int.MaxValue);
+            string query = BuildQuery($"even(min:{minValue}, max:{maxValue})");
+
+            // Act
+            var response = await Client.SendQueryAsync(query);
+
+            // Assert
+            response.Errors.Should().BeNull();
+            var random = ParseResponse(response);
+            (random.Even % 2).Should().Be(0);
         }
 
         [Fact]
@@ -59,7 +76,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Arrange
             int minValue = (int)RandomNumber(30, 40);
             int maxValue = (int)RandomNumber(10, 20);
-            string query = BuildQuery($"integer(min:{minValue}, max:{maxValue})");
+            string query = BuildQuery($"even(min:{minValue}, max:{maxValue})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -67,7 +84,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Integer.Should().BeInRange(maxValue, minValue);
+            random.Even.Should().BeInRange(maxValue, minValue);
         }
     }
 }

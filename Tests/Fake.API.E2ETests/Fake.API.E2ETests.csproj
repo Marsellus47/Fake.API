@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="codecracker.CSharp" Version="1.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="FluentAssertions" Version="5.4.2" />
     <PackageReference Include="GraphQL.Client" Version="2.0.0-alpha.2" />
     <PackageReference Include="xunit" Version="2.4.0" />
