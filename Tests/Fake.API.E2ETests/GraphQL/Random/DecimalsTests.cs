@@ -1,18 +1,19 @@
-﻿using FluentAssertions;
+﻿using Fake.Common.Extensions;
+using FluentAssertions;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Fake.API.E2ETests.GraphQL.Random
 {
-    public class EvensTests : RandomTestsBase
+    public class DecimalsTests : RandomTestsBase
     {
         [Fact]
         public async Task ShouldFailWithoutCount()
         {
             // Arrange
             short count = (short)RandomNumber(short.MinValue, MIN_COUNT - 1);
-            string query = BuildQuery("evens");
+            string query = BuildQuery("decimals");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -27,7 +28,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             short count = (short)RandomNumber(short.MinValue, MIN_COUNT - 1);
-            string query = BuildQuery($"evens(count:{count})");
+            string query = BuildQuery($"decimals(count:{count})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -35,7 +36,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Evens.Count().Should().Equals(MIN_COUNT);
+            random.Decimals.Count().Should().Equals(MIN_COUNT);
         }
 
         [Fact]
@@ -43,7 +44,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             short count = (short)RandomNumber(MIN_COUNT + 1, short.MaxValue);
-            string query = BuildQuery($"evens(count:{count})");
+            string query = BuildQuery($"decimals(count:{count})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -51,14 +52,14 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Evens.Count().Should().Equals(MAX_COUNT);
+            random.Decimals.Count().Should().Equals(MAX_COUNT);
         }
 
         [Fact]
         public async Task ShouldGetCorrectCount()
         {
             // Arrange
-            string query = BuildQuery($"evens(count:{TEST_COUNT})");
+            string query = BuildQuery($"decimals(count:{TEST_COUNT})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -66,14 +67,14 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Evens.Count().Should().Equals(TEST_COUNT);
+            random.Decimals.Count().Should().Equals(TEST_COUNT);
         }
 
         [Fact]
         public async Task ShouldGetBetweenDefaultMinAndMax()
         {
             // Arrange
-            string query = BuildQuery($"evens(count:{TEST_COUNT})");
+            string query = BuildQuery($"decimals(count:{TEST_COUNT})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -81,15 +82,16 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Evens.Should().OnlyContain(value => value >= int.MinValue && value <= int.MaxValue);
+            random.Decimals.Should().OnlyContain(value => value >= double.MinValue && value <= double.MaxValue);
         }
 
         [Fact]
         public async Task ShouldGetHigherThanMin()
         {
             // Arrange
-            int minValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"evens(count:{TEST_COUNT}, min:{minValue})");
+            var rand = new System.Random();
+            double minValue = rand.NextDouble(double.MinValue, double.MaxValue);
+            string query = BuildQuery($"decimals(count:{TEST_COUNT}, min:{minValue.ToString(DecimalNumberFormatInfo)})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -97,15 +99,16 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Evens.Should().OnlyContain(value => value >= minValue);
+            random.Decimals.Should().OnlyContain(value => value >= minValue);
         }
 
         [Fact]
         public async Task ShouldGetLowerThanMax()
         {
             // Arrange
-            int maxValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"evens(count:{TEST_COUNT}, max:{maxValue})");
+            var rand = new System.Random();
+            double maxValue = rand.NextDouble(double.MinValue, double.MaxValue);
+            string query = BuildQuery($"decimals(count:{TEST_COUNT}, max:{maxValue.ToString(DecimalNumberFormatInfo)})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -113,33 +116,17 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Evens.Should().OnlyContain(value => value <= maxValue);
-        }
-
-        [Fact]
-        public async Task ShouldGetEvenNumbers()
-        {
-            // Arrange
-            int minValue = (int)RandomNumber(int.MinValue, 1000);
-            int maxValue = (int)RandomNumber(1001, int.MaxValue);
-            string query = BuildQuery($"evens(count:{TEST_COUNT}, min:{minValue}, max:{maxValue})");
-
-            // Act
-            var response = await Client.SendQueryAsync(query);
-
-            // Assert
-            response.Errors.Should().BeNull();
-            var random = ParseResponse(response);
-            random.Evens.Should().OnlyContain(value => value % 2 == 0);
+            random.Decimals.Should().OnlyContain(value => value <= maxValue);
         }
 
         [Fact]
         public async Task ShouldSwitchMinAndMaxWhenInverted()
         {
             // Arrange
-            int minValue = (int)RandomNumber(30, 40);
-            int maxValue = (int)RandomNumber(10, 20);
-            string query = BuildQuery($"evens(count:{TEST_COUNT}, min:{minValue}, max:{maxValue})");
+            var rand = new System.Random();
+            double minValue = rand.NextDouble(30, 40);
+            double maxValue = rand.NextDouble(10, 20);
+            string query = BuildQuery($"decimals(count:{TEST_COUNT}, min:{minValue.ToString(DecimalNumberFormatInfo)}, max:{maxValue.ToString(DecimalNumberFormatInfo)})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -147,7 +134,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Evens.Should().OnlyContain(value => value >= maxValue && value <= minValue);
+            random.Decimals.Should().OnlyContain(value => value >= maxValue && value <= minValue);
         }
     }
 }

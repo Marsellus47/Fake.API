@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Fake.API.GraphQL.Types
 {
@@ -142,6 +143,7 @@ namespace Fake.API.GraphQL.Types
                 {
                     var min = ctx.GetArgument<int>("min");
                     var max = ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Odd(min: min, max: max);
                 });
 
@@ -158,6 +160,7 @@ namespace Fake.API.GraphQL.Types
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var min = ctx.GetArgument<int>("min");
                     var max = ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Odds(count: count, min: min, max: max);
                 });
 
@@ -176,6 +179,7 @@ namespace Fake.API.GraphQL.Types
                 {
                     var min = ctx.GetArgument<double>("min");
                     var max = ctx.GetArgument<double>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Decimal(min: min, max: max);
                 });
 
@@ -192,6 +196,7 @@ namespace Fake.API.GraphQL.Types
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var min = ctx.GetArgument<double>("min");
                     var max = ctx.GetArgument<double>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Decimals(count: count, min: min, max: max);
                 });
 
@@ -203,13 +208,14 @@ namespace Fake.API.GraphQL.Types
                 name: "Char",
                 description: "Random character",
                 arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = int.MinValue },
-                    new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = int.MaxValue }
+                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = (int)char.MinValue },
+                    new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = (int)char.MaxValue }
                     ),
                 resolve: ctx =>
                 {
                     var min = (char)ctx.GetArgument<int>("min");
                     var max = (char)ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Char(min: min, max: max);
                 });
 
@@ -218,14 +224,15 @@ namespace Fake.API.GraphQL.Types
                 description: "List of random characters",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "count", Description = $"Number of values to generate, from {MIN_COUNT} to {MAX_COUNT}" },
-                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = int.MinValue },
-                    new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = int.MaxValue }
+                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = (int)char.MinValue },
+                    new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = (int)char.MaxValue }
                     ),
                 resolve: ctx =>
                 {
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var min = (char)ctx.GetArgument<int>("min");
                     var max = (char)ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Chars(count: count, min: min, max: max);
                 });
 
@@ -246,8 +253,10 @@ namespace Fake.API.GraphQL.Types
                 {
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
                     var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    SwitchValuesWhenInverted(ref minLength, ref maxLength);
                     var minChar = (char)ctx.GetArgument<int>("minChar");
                     var maxChar = (char)ctx.GetArgument<int>("maxChar");
+                    SwitchValuesWhenInverted(ref minChar, ref maxChar);
                     return randomScalarProvider.String(minLength: minLength, maxLength: maxLength, minChar: minChar, maxChar: maxChar);
                 });
 
@@ -266,8 +275,10 @@ namespace Fake.API.GraphQL.Types
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
                     var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    SwitchValuesWhenInverted(ref minLength, ref maxLength);
                     var minChar = (char)ctx.GetArgument<int>("minChar");
                     var maxChar = (char)ctx.GetArgument<int>("maxChar");
+                    SwitchValuesWhenInverted(ref minChar, ref maxChar);
                     return randomScalarProvider.Strings(count: count, minLength: minLength, maxLength: maxLength, minChar: minChar, maxChar: maxChar);
                 });
 
@@ -459,6 +470,7 @@ namespace Fake.API.GraphQL.Types
                 {
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
                     var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    SwitchValuesWhenInverted(ref minLength, ref maxLength);
                     return randomScalarProvider.AlphaNumeric(minLength: minLength, maxLength: maxLength);
                 });
 
@@ -475,6 +487,7 @@ namespace Fake.API.GraphQL.Types
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
                     var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    SwitchValuesWhenInverted(ref minLength, ref maxLength);
                     return randomScalarProvider.AlphaNumerics(count: count, minLength: minLength, maxLength: maxLength);
                 });
 
@@ -493,6 +506,7 @@ namespace Fake.API.GraphQL.Types
                 {
                     var min = ctx.GetArgument<int>("min");
                     var max = ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Hexadecimal(min: min, max: max);
                 });
 
@@ -509,6 +523,7 @@ namespace Fake.API.GraphQL.Types
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var min = ctx.GetArgument<int>("min");
                     var max = ctx.GetArgument<int>("max");
+                    SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Hexadecimals(count: count, min: min, max: max);
                 });
 
@@ -555,19 +570,10 @@ namespace Fake.API.GraphQL.Types
             return (byte)number;
         }
 
-        private static void SwitchValuesWhenInverted(ref int shouldBeLower, ref int shouldBeHigher)
+        private static void SwitchValuesWhenInverted<T>(ref T shouldBeLower, ref T shouldBeHigher)
+            where T : IComparable
         {
-            if(shouldBeLower > shouldBeHigher)
-            {
-                var temp = shouldBeLower;
-                shouldBeLower = shouldBeHigher;
-                shouldBeHigher = temp;
-            }
-        }
-
-        private static void SwitchValuesWhenInverted(ref byte shouldBeLower, ref byte shouldBeHigher)
-        {
-            if (shouldBeLower > shouldBeHigher)
+            if (shouldBeLower.CompareTo(shouldBeHigher) > 0)
             {
                 var temp = shouldBeLower;
                 shouldBeLower = shouldBeHigher;

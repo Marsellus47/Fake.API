@@ -99,7 +99,7 @@ namespace Fake.DataAccess.Random
             long randomNumber = rand.NextLong(min, max);
 
             if (randomNumber % 2 == 0) return randomNumber;
-            if (randomNumber < long.MaxValue && randomNumber + 1 <= max) return randomNumber + 1;
+            if (randomNumber + 1 <= max) return randomNumber + 1;
             return randomNumber - 1;
         }
 
@@ -175,7 +175,7 @@ namespace Fake.DataAccess.Random
             long randomNumber = rand.NextLong(min, max);
 
             if (randomNumber % 2 != 0) return randomNumber;
-            if (randomNumber < long.MaxValue) return randomNumber + 1;
+            if (randomNumber + 1 <= max) return randomNumber + 1;
             return randomNumber - 1;
         }
 
@@ -254,19 +254,16 @@ namespace Fake.DataAccess.Random
             }
         }
 
-        private static void ThrowIfValueLowerThan(string paramName, long value, long min = 1)
+        private static void ThrowIfValueLowerThan<T>(string paramName, T value, T min)
+            where T : IComparable
         {
-            if (value < min) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is lower than expected minimum value {min}");
+            if (value.CompareTo(min) < 0) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is lower than expected minimum value {min}");
         }
 
-        private static void ThrowIfValueHigherThan(string paramName, long value, long max)
+        private static void ThrowIfValueHigherThan<T>(string paramName, T value, T max)
+            where T : IComparable
         {
-            if (value > max) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is higher than expected maximum value {max}");
-        }
-
-        private static void ThrowIfValueHigherThan(string paramName, double value, double max)
-        {
-            if (value > max) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is higher than expected maximum value {max}");
+            if (value.CompareTo(max) > 0) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is higher than expected maximum value {max}");
         }
     }
 }
