@@ -11,7 +11,6 @@ namespace Fake.API.E2ETests.GraphQL.Random
         public async Task ShouldFailWithoutCount()
         {
             // Arrange
-            short count = (short)RandomNumber(short.MinValue, MIN_COUNT - 1);
             string query = BuildQuery("integers");
 
             // Act
@@ -42,7 +41,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         public async Task ShouldGetLowerThanMaxCount()
         {
             // Arrange
-            short count = (short)RandomNumber(MIN_COUNT + 1, short.MaxValue);
+            short count = (short)RandomNumber(MAX_COUNT + 1, short.MaxValue);
             string query = BuildQuery($"integers(count:{count})");
 
             // Act

@@ -6,7 +6,6 @@ namespace Fake.API.E2ETests.GraphQL.Random
 {
     public class CharTests : RandomTestsBase
     {
-        [Fact]
         public async Task ShouldGetBetweenDefaultMinAndMax()
         {
             // Arrange
@@ -26,7 +25,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             char minValue = (char)RandomNumber(char.MinValue, char.MaxValue);
-            string query = BuildQuery($"char(min:{(int)minValue})");
+            string query = BuildQuery($"char(min:\"{minValue}\")");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -42,7 +41,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             char maxValue = (char)RandomNumber(char.MinValue, char.MaxValue);
-            string query = BuildQuery($"char(max:{(int)maxValue})");
+            string query = BuildQuery($"char(max:\"{maxValue}\")");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -59,7 +58,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Arrange
             char minValue = (char)RandomNumber('m', 'z');
             char maxValue = (char)RandomNumber('a', 'i');
-            string query = BuildQuery($"char(min:{(int)minValue}, max:{(int)maxValue})");
+            string query = BuildQuery($"char(min:\"{minValue}\", max:\"{maxValue}\")");
 
             // Act
             var response = await Client.SendQueryAsync(query);

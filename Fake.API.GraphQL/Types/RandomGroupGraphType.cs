@@ -208,13 +208,13 @@ namespace Fake.API.GraphQL.Types
                 name: "Char",
                 description: "Random character",
                 arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = (int)char.MinValue },
-                    new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = (int)char.MaxValue }
+                    new QueryArgument<StringGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = new string(new[] { (char)9 }) },
+                    new QueryArgument<StringGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = new string(new[] { char.MaxValue }) }
                     ),
                 resolve: ctx =>
                 {
-                    var min = (char)ctx.GetArgument<int>("min");
-                    var max = (char)ctx.GetArgument<int>("max");
+                    var min = ctx.GetArgument<string>("min")?.FirstOrDefault() ?? char.MinValue;
+                    var max = ctx.GetArgument<string>("max")?.FirstOrDefault() ?? char.MaxValue;
                     SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Char(min: min, max: max);
                 });
@@ -224,14 +224,14 @@ namespace Fake.API.GraphQL.Types
                 description: "List of random characters",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "count", Description = $"Number of values to generate, from {MIN_COUNT} to {MAX_COUNT}" },
-                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = (int)char.MinValue },
-                    new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = (int)char.MaxValue }
+                    new QueryArgument<StringGraphType> { Name = "min", Description = "Minimum character value", DefaultValue = new string(new[] { (char)9 }) },
+                    new QueryArgument<StringGraphType> { Name = "max", Description = "Maximum character value", DefaultValue = new string(new[] { char.MaxValue }) }
                     ),
                 resolve: ctx =>
                 {
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
-                    var min = (char)ctx.GetArgument<int>("min");
-                    var max = (char)ctx.GetArgument<int>("max");
+                    var min = ctx.GetArgument<string>("min")?.FirstOrDefault() ?? char.MinValue;
+                    var max = ctx.GetArgument<string>("max")?.FirstOrDefault() ?? char.MaxValue;
                     SwitchValuesWhenInverted(ref min, ref max);
                     return randomScalarProvider.Chars(count: count, min: min, max: max);
                 });
@@ -245,17 +245,17 @@ namespace Fake.API.GraphQL.Types
                 description: "Random string",
                 arguments: new QueryArguments(
                     new QueryArgument<IntGraphType> { Name = "minLength", Description = "Lower-bound string length", DefaultValue = 0 },
-                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Upper-bound string length", DefaultValue = 100 },
-                    new QueryArgument<IntGraphType> { Name = "minChar", Description = "Minimum character value", DefaultValue = int.MinValue },
-                    new QueryArgument<IntGraphType> { Name = "maxChar", Description = "Maximum character value", DefaultValue = int.MaxValue }
+                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Upper-bound string length", DefaultValue = (int)short.MaxValue },
+                    new QueryArgument<StringGraphType> { Name = "minChar", Description = "Minimum character value", DefaultValue = new string(new[] { (char)9 }) },
+                    new QueryArgument<StringGraphType> { Name = "maxChar", Description = "Maximum character value", DefaultValue = new string(new[] { char.MaxValue }) }
                     ),
                 resolve: ctx =>
                 {
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
-                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0);
                     SwitchValuesWhenInverted(ref minLength, ref maxLength);
-                    var minChar = (char)ctx.GetArgument<int>("minChar");
-                    var maxChar = (char)ctx.GetArgument<int>("maxChar");
+                    var minChar = ctx.GetArgument<string>("minChar")?.FirstOrDefault() ?? char.MinValue;
+                    var maxChar = ctx.GetArgument<string>("maxChar")?.FirstOrDefault() ?? char.MaxValue;
                     SwitchValuesWhenInverted(ref minChar, ref maxChar);
                     return randomScalarProvider.String(minLength: minLength, maxLength: maxLength, minChar: minChar, maxChar: maxChar);
                 });
@@ -265,19 +265,19 @@ namespace Fake.API.GraphQL.Types
                 description: "List of random strings",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "count", Description = $"Number of values to generate, from {MIN_COUNT} to {MAX_COUNT}" },
-                    new QueryArgument<IntGraphType> { Name = "minLength", Description = "Minimum length to generate", DefaultValue = 0 },
-                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Maximum length to generate", DefaultValue = 100 },
-                    new QueryArgument<IntGraphType> { Name = "minChar", Description = "Minimum character to generate", DefaultValue = int.MinValue },
-                    new QueryArgument<IntGraphType> { Name = "maxChar", Description = "Maximum character to generate", DefaultValue = int.MaxValue }
+                    new QueryArgument<IntGraphType> { Name = "minLength", Description = "Lower-bound string length", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Upper-bound string length", DefaultValue = (int)short.MaxValue },
+                    new QueryArgument<StringGraphType> { Name = "minChar", Description = "Minimum character value", DefaultValue = new string(new[] { (char)9 }) },
+                    new QueryArgument<StringGraphType> { Name = "maxChar", Description = "Maximum character value", DefaultValue = new string(new[] { char.MaxValue }) }
                     ),
                 resolve: ctx =>
                 {
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
-                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0);
                     SwitchValuesWhenInverted(ref minLength, ref maxLength);
-                    var minChar = (char)ctx.GetArgument<int>("minChar");
-                    var maxChar = (char)ctx.GetArgument<int>("maxChar");
+                    var minChar = ctx.GetArgument<string>("minChar")?.FirstOrDefault() ?? char.MinValue;
+                    var maxChar = ctx.GetArgument<string>("maxChar")?.FirstOrDefault() ?? char.MaxValue;
                     SwitchValuesWhenInverted(ref minChar, ref maxChar);
                     return randomScalarProvider.Strings(count: count, minLength: minLength, maxLength: maxLength, minChar: minChar, maxChar: maxChar);
                 });
@@ -329,7 +329,7 @@ namespace Fake.API.GraphQL.Types
                 resolve: ctx =>
                 {
                     var weight = ctx.GetArgument<double?>("weight");
-                    return randomScalarProvider.Boolean(weight: (float)weight);
+                    return randomScalarProvider.Boolean(weight: (float?)weight);
                 });
 
             Field<ListGraphType<BooleanGraphType>>(
@@ -343,7 +343,7 @@ namespace Fake.API.GraphQL.Types
                 {
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var weight = ctx.GetArgument<double?>("weight");
-                    return randomScalarProvider.Booleans(count: count, weight: (float)weight);
+                    return randomScalarProvider.Booleans(count: count, weight: (float?)weight);
                 });
 
             #endregion Hash
@@ -367,11 +367,11 @@ namespace Fake.API.GraphQL.Types
                 description: "Select random sub-list from the list of items",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "count", Description = $"Number of values to generate, from {MIN_COUNT} to {MAX_COUNT}" },
-                    new QueryArgument<NonNullGraphType<ListGraphType<StringGraphType>>> { Name = "items", Description = "List of items to choose from" }
+                    new QueryArgument<NonNullGraphType<ListGraphType<NonNullGraphType<StringGraphType>>>> { Name = "items", Description = "List of items to choose from" }
                     ),
                 resolve: ctx =>
                 {
-                    var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
+                    var count = CoerceToShort(ctx.GetArgument<int>("count"), min: 0, max: MAX_COUNT);
                     var items = ctx.GetArgument<IEnumerable<string>>("items");
                     return randomScalarProvider.EnumerationElements(count: count, enumeration: items);
                 });
@@ -384,7 +384,7 @@ namespace Fake.API.GraphQL.Types
                 name: "Shuffle",
                 description: "Shuffle the list of items",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<ListGraphType<StringGraphType>>> { Name = "items", Description = "List of items to choose from" }
+                    new QueryArgument<NonNullGraphType<ListGraphType<NonNullGraphType<StringGraphType>>>> { Name = "items", Description = "List of items to choose from" }
                     ),
                 resolve: ctx =>
                 {

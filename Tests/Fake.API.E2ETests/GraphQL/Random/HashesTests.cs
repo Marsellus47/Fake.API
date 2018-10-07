@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Fake.API.E2ETests.GraphQL.Random
 {
-    public class OddsTests : RandomTestsBase
+    public class HashesTests : RandomTestsBase
     {
         [Fact]
         public async Task ShouldFailWithoutCount()
         {
             // Arrange
-            string query = BuildQuery("odds");
+            string query = BuildQuery("hashes");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -26,7 +26,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             short count = (short)RandomNumber(short.MinValue, MIN_COUNT - 1);
-            string query = BuildQuery($"odds(count:{count})");
+            string query = BuildQuery($"hashes(count:{count})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -34,7 +34,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Odds.Count().Should().Equals(MIN_COUNT);
+            random.Hashes.Count().Should().Be(MIN_COUNT);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         {
             // Arrange
             short count = (short)RandomNumber(MAX_COUNT + 1, short.MaxValue);
-            string query = BuildQuery($"odds(count:{count})");
+            string query = BuildQuery($"hashes(count:{count})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -50,14 +50,14 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Odds.Count().Should().Equals(MAX_COUNT);
+            random.Hashes.Count().Should().Be(MAX_COUNT);
         }
 
         [Fact]
         public async Task ShouldGetCorrectCount()
         {
             // Arrange
-            string query = BuildQuery($"odds(count:{TEST_COUNT})");
+            string query = BuildQuery($"hashes(count:{TEST_COUNT})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -65,14 +65,14 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Odds.Count().Should().Equals(TEST_COUNT);
+            random.Hashes.Count().Should().Be(TEST_COUNT);
         }
 
         [Fact]
-        public async Task ShouldGetBetweenDefaultMinAndMax()
+        public async Task ShouldGetDefaultLength()
         {
             // Arrange
-            string query = BuildQuery($"odds(count:{TEST_COUNT})");
+            string query = BuildQuery($"hashes(count:{TEST_COUNT})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -80,15 +80,15 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Odds.Should().OnlyContain(value => value >= int.MinValue && value <= int.MaxValue);
+            random.Hashes.Should().OnlyContain(value => value.Length == 40);
         }
 
         [Fact]
-        public async Task ShouldGetHigherThanMin()
+        public async Task ShouldGetCorrectLength()
         {
             // Arrange
-            int minValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"odds(count:{TEST_COUNT}, min:{minValue})");
+            short length = (short)RandomNumber(0, short.MaxValue);
+            string query = BuildQuery($"hashes(count:{TEST_COUNT}, length:{length})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -96,15 +96,14 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Odds.Should().OnlyContain(value => value >= minValue);
+            random.Hashes.Should().OnlyContain(value => value.Length == length);
         }
 
         [Fact]
-        public async Task ShouldGetLowerThanMax()
+        public async Task ShouldGetDefaultUpperCase()
         {
             // Arrange
-            int maxValue = (int)RandomNumber(int.MinValue, int.MaxValue);
-            string query = BuildQuery($"odds(count:{TEST_COUNT}, max:{maxValue})");
+            string query = BuildQuery($"hashes(count:{TEST_COUNT})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -112,16 +111,35 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Odds.Should().OnlyContain(value => value <= maxValue);
+            random.Hashes.Should().OnlyContain(value => value.ToCharArray()
+                .Where(@char => char.IsLetter(@char))
+                .All(@char => char.IsLower(@char)));
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task ShouldGetCorrectUpperCase(bool upperCase)
+        {
+            // Arrange
+            string query = BuildQuery($"hashes(count:{TEST_COUNT}, upperCase:{upperCase.ToString().ToLower()})");
+
+            // Act
+            var response = await Client.SendQueryAsync(query);
+
+            // Assert
+            response.Errors.Should().BeNull();
+            var random = ParseResponse(response);
+            random.Hashes.Should().OnlyContain(value => value.ToCharArray()
+                .Where(@char => char.IsLetter(@char))
+                .All(@char => upperCase ? char.IsUpper(@char) : char.IsLower(@char)));
         }
 
         [Fact]
-        public async Task ShouldGetOddNumbers()
+        public async Task ShouldGetOnlyLettersAndDigits()
         {
             // Arrange
-            int minValue = (int)RandomNumber(int.MinValue, 1000);
-            int maxValue = (int)RandomNumber(1001, int.MaxValue);
-            string query = BuildQuery($"odds(count:{TEST_COUNT}, min:{minValue}, max:{maxValue})");
+            string query = BuildQuery($"hashes(count:{TEST_COUNT})");
 
             // Act
             var response = await Client.SendQueryAsync(query);
@@ -129,25 +147,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
             // Assert
             response.Errors.Should().BeNull();
             var random = ParseResponse(response);
-            random.Odds.Should().OnlyContain(value => value % 2 != 0);
-        }
-
-        [Fact]
-        public async Task ShouldSwitchMinAndMaxWhenInverted()
-        {
-            // Arrange
-            int minValue = (int)RandomNumber(30, 40);
-            int maxValue = (int)RandomNumber(10, 20);
-            string query = BuildQuery($"odds(count:{TEST_COUNT}, min:{minValue}, max:{maxValue})");
-
-            // Act
-            var response = await Client.SendQueryAsync(query);
-
-            // Assert
-            response.Errors.Should().BeNull();
-            var random = ParseResponse(response);
-            var failed = random.Odds.Where(value => value < maxValue || value > minValue).ToList();
-            random.Odds.Should().OnlyContain(value => value >= maxValue && value <= minValue);
+            random.Hashes.Should().OnlyContain(value => value.ToCharArray().All(@char => char.IsLetterOrDigit(@char)));
         }
     }
 }

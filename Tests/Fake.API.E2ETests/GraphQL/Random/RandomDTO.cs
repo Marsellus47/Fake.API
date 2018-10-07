@@ -29,7 +29,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
         public string Hash { get; set; }
         public IEnumerable<string> Hashes { get; set; }
 
-        public bool Boolean { get; set; }
+        public bool? Boolean { get; set; }
         public IEnumerable<bool> Booleans { get; set; }
 
         public string EnumerationElement { get; set; }
