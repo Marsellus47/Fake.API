@@ -464,12 +464,12 @@ namespace Fake.API.GraphQL.Types
                 description: "Random alphanumeric string",
                 arguments: new QueryArguments(
                     new QueryArgument<IntGraphType> { Name = "minLength", Description = "Lower-bound string length", DefaultValue = 0 },
-                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Upper-bound string length", DefaultValue = 100 }
+                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Upper-bound string length", DefaultValue = 1000 }
                     ),
                 resolve: ctx =>
                 {
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
-                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 1000);
                     SwitchValuesWhenInverted(ref minLength, ref maxLength);
                     return randomScalarProvider.AlphaNumeric(minLength: minLength, maxLength: maxLength);
                 });
@@ -480,13 +480,13 @@ namespace Fake.API.GraphQL.Types
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "count", Description = $"Number of values to generate, from {MIN_COUNT} to {MAX_COUNT}" },
                     new QueryArgument<IntGraphType> { Name = "minLength", Description = "Minimum length to generate", DefaultValue = 0 },
-                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Maximum length to generate", DefaultValue = 100 }
+                    new QueryArgument<IntGraphType> { Name = "maxLength", Description = "Maximum length to generate", DefaultValue = 1000 }
                     ),
                 resolve: ctx =>
                 {
                     var count = CoerceToShort(ctx.GetArgument<int>("count"), min: MIN_COUNT, max: MAX_COUNT);
                     var minLength = CoerceToShort(ctx.GetArgument<int>("minLength"), min: 0);
-                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 100);
+                    var maxLength = CoerceToShort(ctx.GetArgument<int>("maxLength"), min: 0, max: 1000);
                     SwitchValuesWhenInverted(ref minLength, ref maxLength);
                     return randomScalarProvider.AlphaNumerics(count: count, minLength: minLength, maxLength: maxLength);
                 });
@@ -499,7 +499,7 @@ namespace Fake.API.GraphQL.Types
                 name: "Hexadecimal",
                 description: "Random hexadecimal number",
                 arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum value", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum value", DefaultValue = int.MinValue },
                     new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum value", DefaultValue = int.MaxValue }
                     ),
                 resolve: ctx =>
@@ -515,7 +515,7 @@ namespace Fake.API.GraphQL.Types
                 description: "List of random hexadecimal numbers",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "count", Description = $"Number of values to generate, from {MIN_COUNT} to {MAX_COUNT}" },
-                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum value", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType> { Name = "min", Description = "Minimum value", DefaultValue = int.MinValue },
                     new QueryArgument<IntGraphType> { Name = "max", Description = "Maximum value", DefaultValue = int.MaxValue }
                     ),
                 resolve: ctx =>

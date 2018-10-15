@@ -120,10 +120,9 @@ namespace Fake.DataAccess.Random
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hash(length, upperCase)).ToList();
 
-        public string Hexadecimal(long min = 0, long max = long.MaxValue)
+        public string Hexadecimal(long min = long.MinValue, long max = long.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
-            ThrowIfValueLowerThan(nameof(min), min, 0);
 
             var rand = new System.Random();
             var randomValue = rand.NextLong(min, max);
@@ -131,8 +130,8 @@ namespace Fake.DataAccess.Random
             return randomValue.ToString("X2");
         }
 
-        public IEnumerable<string> Hexadecimals(short count, long min = 0, long max = long.MaxValue)
-            => count <= 0 || min > max || min < 0
+        public IEnumerable<string> Hexadecimals(short count, long min = long.MinValue, long max = long.MaxValue)
+            => count <= 0 || min > max
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hexadecimal(min, max)).ToList();
 

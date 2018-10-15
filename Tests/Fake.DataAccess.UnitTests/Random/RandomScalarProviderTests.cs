@@ -2704,7 +2704,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Hexadecimal_ShouldReturnHigherThanMin()
         {
             // Arrange
-            long minValue = RandomNumber(0, long.MaxValue);
+            long minValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
@@ -2719,7 +2719,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Hexadecimal_ShouldReturnLowerThanMax()
         {
             // Arrange
-            long maxValue = RandomNumber(0, long.MaxValue);
+            long maxValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
@@ -2735,7 +2735,7 @@ namespace Fake.DataAccess.UnitTests.Random
         {
             // Arrange
             const long minValue = long.MaxValue;
-            const long maxValue = 0;
+            const long maxValue = long.MinValue;
 
             // Act
             Action value = () => SUT.Hexadecimal(min: minValue, max: maxValue);
@@ -2745,23 +2745,10 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Hexadecimal_ShouldFailForNegativeMin()
-        {
-            // Arrange
-            long minValue = RandomNumber(long.MinValue, -1);
-
-            // Act
-            Action value = () => SUT.Hexadecimal(min: minValue);
-
-            // Assert
-            value.Should().Throw<ArgumentOutOfRangeException>();
-        }
-
-        [Fact]
         public void Hexadecimal_ShouldWorkForMinBoundaryCondition()
         {
             // Arrange
-            const long minValue = 0;
+            const long minValue = long.MinValue;
 
             // Act
             IEnumerable<long> values = Enumerable.Range(1, TestingSetSize)
@@ -2822,7 +2809,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Hexadecimals_ShouldReturnHigherThanMin()
         {
             // Arrange
-            long minValue = RandomNumber(0, long.MaxValue);
+            long minValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
             IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, min: minValue).Select(value => Convert.ToInt64(value, 16));
@@ -2835,7 +2822,7 @@ namespace Fake.DataAccess.UnitTests.Random
         public void Hexadecimals_ShouldReturnLowerThanMax()
         {
             // Arrange
-            long maxValue = RandomNumber(0, long.MaxValue);
+            long maxValue = RandomNumber(long.MinValue, long.MaxValue);
 
             // Act
             IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, max: maxValue).Select(value => Convert.ToInt64(value, 16));
@@ -2845,25 +2832,11 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Hexadecimals_ShouldReturnEmptyEnumerationForNegativeCount()
-        {
-            // Arrange
-            short count = (short)RandomNumber(short.MinValue, 1);
-
-            // Act
-            IEnumerable<string> values = SUT.Hexadecimals(count);
-
-            // Assert
-            values.Should().NotBeNull();
-            values.Should().BeEmpty();
-        }
-
-        [Fact]
         public void Hexadecimals_ShouldReturnEmptyEnumerationInvertedMinMax()
         {
             // Arrange
             const long minValue = long.MaxValue;
-            const long maxValue = 0;
+            const long maxValue = long.MinValue;
 
             // Act
             IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize, min: minValue, max: maxValue);
@@ -2874,24 +2847,10 @@ namespace Fake.DataAccess.UnitTests.Random
         }
 
         [Fact]
-        public void Hexadecimals_ShouldReturnEmptyEnumerationNegativeMin()
-        {
-            // Arrange
-            long minValue = RandomNumber(long.MinValue, -1);
-
-            // Act
-            IEnumerable<string> values = SUT.Hexadecimals(TestingSetSize, min: minValue);
-
-            // Assert
-            values.Should().NotBeNull();
-            values.Should().BeEmpty();
-        }
-
-        [Fact]
         public void Hexadecimals_ShouldWorkForMinBoundaryCondition()
         {
             // Arrange
-            const long minValue = 0;
+            const long minValue = long.MinValue;
 
             // Act
             IEnumerable<long> values = SUT.Hexadecimals(TestingSetSize, min: minValue, max: minValue + 1)
