@@ -542,7 +542,9 @@ namespace Fake.API.GraphQL.Types
                 {
                     var items = ctx.GetArgument<IEnumerable<string>>("items");
                     var weights = ctx.GetArgument<IEnumerable<double>>("weights");
-                    return randomScalarProvider.Weighted(items: items, weights: weights.Select(value => (float)value).ToArray());
+                    return items.Count() == weights.Count()
+                        ? randomScalarProvider.Weighted(items: items, weights: weights.Select(value => (float)value).ToArray())
+                        : null;
                 });
 
             #endregion EnumerationElement
