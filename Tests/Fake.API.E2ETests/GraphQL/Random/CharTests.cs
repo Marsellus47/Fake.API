@@ -6,6 +6,7 @@ namespace Fake.API.E2ETests.GraphQL.Random
 {
     public class CharTests : RandomTestsBase
     {
+        [Fact]
         public async Task ShouldGetBetweenDefaultMinAndMax()
         {
             // Arrange
