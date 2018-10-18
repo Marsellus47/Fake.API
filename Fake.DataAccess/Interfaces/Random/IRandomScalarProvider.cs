@@ -5,8 +5,8 @@ namespace Fake.DataAccess.Interfaces.Random
 {
     public interface IRandomScalarProvider
     {
-        long Number(long min = long.MinValue, long max = long.MaxValue);
-        IEnumerable<long> Numbers(short count, long min = long.MinValue, long max = long.MaxValue);
+        long Integer(long min = long.MinValue, long max = long.MaxValue);
+        IEnumerable<long> Integers(short count, long min = long.MinValue, long max = long.MaxValue);
 
         byte Digit(byte min = 0, byte max = 9);
         IEnumerable<byte> Digits(short count, byte min = 0, byte max = 9);

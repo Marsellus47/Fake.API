@@ -90,11 +90,16 @@ namespace Fake.DataAccess.Random
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
 
+            if(min == max && min % 2 != 0)
+            {
+                throw new ArgumentException($"Unable to get even number between {min} and {max}");
+            }
+
             var rand = new System.Random();
             long randomNumber = rand.NextLong(min, max);
 
             if (randomNumber % 2 == 0) return randomNumber;
-            if (randomNumber < long.MaxValue) return randomNumber + 1;
+            if (randomNumber + 1 <= max) return randomNumber + 1;
             return randomNumber - 1;
         }
 
@@ -115,10 +120,9 @@ namespace Fake.DataAccess.Random
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hash(length, upperCase)).ToList();
 
-        public string Hexadecimal(long min = 0, long max = long.MaxValue)
+        public string Hexadecimal(long min = long.MinValue, long max = long.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
-            ThrowIfValueLowerThan(nameof(min), min, 0);
 
             var rand = new System.Random();
             var randomValue = rand.NextLong(min, max);
@@ -126,8 +130,8 @@ namespace Fake.DataAccess.Random
             return randomValue.ToString("X2");
         }
 
-        public IEnumerable<string> Hexadecimals(short count, long min = 0, long max = long.MaxValue)
-            => count <= 0 || min > max || min < 0
+        public IEnumerable<string> Hexadecimals(short count, long min = long.MinValue, long max = long.MaxValue)
+            => count <= 0 || min > max
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Hexadecimal(min, max)).ToList();
 
@@ -144,7 +148,7 @@ namespace Fake.DataAccess.Random
             ? new List<string>()
             : Enumerable.Range(1, count).Select(_ => Locale()).ToList();
 
-        public long Number(long min = long.MinValue, long max = long.MaxValue)
+        public long Integer(long min = long.MinValue, long max = long.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
 
@@ -152,20 +156,25 @@ namespace Fake.DataAccess.Random
             return rand.NextLong(min, max);
         }
 
-        public IEnumerable<long> Numbers(short count, long min = long.MinValue, long max = long.MaxValue)
+        public IEnumerable<long> Integers(short count, long min = long.MinValue, long max = long.MaxValue)
             => count <= 0 || min > max
             ? new List<long>()
-            : Enumerable.Range(1, count).Select(_ => Number(min, max)).ToList();
+            : Enumerable.Range(1, count).Select(_ => Integer(min, max)).ToList();
 
         public long Odd(long min = long.MinValue, long max = long.MaxValue)
         {
             ThrowIfValueHigherThan(nameof(min), min, max);
 
+            if (min == max && min % 2 == 0)
+            {
+                throw new ArgumentException($"Unable to get odd number between {min} and {max}");
+            }
+
             var rand = new System.Random();
             long randomNumber = rand.NextLong(min, max);
 
             if (randomNumber % 2 != 0) return randomNumber;
-            if (randomNumber < long.MaxValue) return randomNumber + 1;
+            if (randomNumber + 1 <= max) return randomNumber + 1;
             return randomNumber - 1;
         }
 
@@ -244,19 +253,16 @@ namespace Fake.DataAccess.Random
             }
         }
 
-        private static void ThrowIfValueLowerThan(string paramName, long value, long min = 1)
+        private static void ThrowIfValueLowerThan<T>(string paramName, T value, T min)
+            where T : IComparable
         {
-            if (value < min) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is lower than expected minimum value {min}");
+            if (value.CompareTo(min) < 0) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is lower than expected minimum value {min}");
         }
 
-        private static void ThrowIfValueHigherThan(string paramName, long value, long max)
+        private static void ThrowIfValueHigherThan<T>(string paramName, T value, T max)
+            where T : IComparable
         {
-            if (value > max) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is higher than expected maximum value {max}");
-        }
-
-        private static void ThrowIfValueHigherThan(string paramName, double value, double max)
-        {
-            if (value > max) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is higher than expected maximum value {max}");
+            if (value.CompareTo(max) > 0) throw new ArgumentOutOfRangeException(paramName, value, $"Value {value} is higher than expected maximum value {max}");
         }
     }
 }

@@ -4,14 +4,6 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodeAnalysisRuleSet>Fake.DataAccess.UnitTests.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodeAnalysisRuleSet>Fake.DataAccess.UnitTests.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="codecracker.CSharp" Version="1.1.0">
       <PrivateAssets>all</PrivateAssets>
@@ -19,11 +11,8 @@
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="5.4.2" />
     <PackageReference Include="FluentAssertions.Analyzers" Version="0.11.4" />
+    <PackageReference Include="GraphQL.Client" Version="2.0.0-alpha.2" />
     <PackageReference Include="xunit" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.console" Version="2.4.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -31,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Fake.DataAccess\Fake.DataAccess.csproj" />
+    <ProjectReference Include="..\..\Fake.Common\Fake.Common.csproj" />
   </ItemGroup>
 
 </Project>
