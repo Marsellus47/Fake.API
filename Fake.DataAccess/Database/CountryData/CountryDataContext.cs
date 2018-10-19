@@ -10,7 +10,7 @@ namespace Fake.DataAccess.Database.CountryData
             : base(options) { }
 
         public DbSet<Currency> Currencies { get; set; }
-        //public DbSet<Language> Languages { get; set; }
+        public DbSet<Language> Languages { get; set; }
         //public DbSet<Country> Country { get; set; }
         //public DbSet<CountryLanguage> CountryLanguages { get; set; }
         //public DbSet<State> States { get; set; }
@@ -21,7 +21,7 @@ namespace Fake.DataAccess.Database.CountryData
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
-            //modelBuilder.ApplyConfiguration(new LanguageConfiguration());
+            modelBuilder.ApplyConfiguration(new LanguageConfiguration());
         }
     }
 }
