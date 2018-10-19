@@ -18,11 +18,11 @@ namespace Fake.DataAccess.Database.CountryData.Models
         public string Iso3 { get; set; }
         public string Iso { get; set; }
         public uint Population { get; set; }
-        public List<State> States { get; set; }
+        //public List<State> States { get; set; }
 
         public int CurrencyId { get; set; }
         public Currency Currency { get; set; }
 
-        public List<CountryLanguage> CountryLanguages { get; set; }
+        //public List<CountryLanguage> CountryLanguages { get; set; }
     }
 }

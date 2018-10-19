@@ -57,19 +57,19 @@ namespace Fake.DataAccess.Database.CountryData
                     Iso = country.Iso,
                     Iso3 = country.Iso3,
                     IsoNumeric = country.IsoNumeric,
-                    CountryLanguages = country.Languages
+                    /*CountryLanguages = country.Languages
                         .Select(language => new CountryLanguage
                         {
                             CountryId = countryIndex + 1,
                             LanguageId = languages[language] + 1
                         })
-                        .ToList(),
+                        .ToList(),*/
                     Name = country.Name,
                     PhonePrefix = country.PhonePrefix,
                     Population = country.Population,
                     PostCodeFormat = country.PostCodeFormat,
                     PostCodeRegex = country.PostCodeRegex,
-                    States = country.States
+                    /*States = country.States
                         .Where(state => !string.IsNullOrEmpty(state.Name))
                         .Select(state => new State
                         {
@@ -99,11 +99,11 @@ namespace Fake.DataAccess.Database.CountryData
                                 .ToList()
                         })
                         .ToList(),
-                    TopLevelDomain = country.TopLevelDomain
+                    TopLevelDomain = country.TopLevelDomain*/
                 })
                 .ToList();
 
-            int stateId = 0;
+            /*int stateId = 0;
             int provinceId = 0;
             int communityId = 0;
             int placeId = 0;
@@ -143,7 +143,7 @@ namespace Fake.DataAccess.Database.CountryData
                                         });
                                 });
                         });
-                });
+                });*/
         }
 
         public static List<Currency> Currencies { get; set; }
