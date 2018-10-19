@@ -20,6 +20,7 @@ namespace Fake.DataAccess.Database.CountryData
                     Name = x.Key.CurrencyName
                 })
                 .Distinct()
+                .OrderBy(x => x.Code)
                 .Select((currency, index) => new Currency
                 {
                     Id = index + 1,
@@ -34,7 +35,7 @@ namespace Fake.DataAccess.Database.CountryData
                 .Distinct()
                 .OrderBy(language => language)
                 .Select((language, index) => new { language, index })
-                .ToDictionary(x => x.language, x => x.index);
+                .ToDictionary(x => x.language, x => x.index + 1);
 
             Languages = languages.Select(keyValue => new Language
             {
@@ -109,29 +110,39 @@ namespace Fake.DataAccess.Database.CountryData
 
             Countries
                 .SelectMany(x => x.States, (country, state) => new { country, state })
+                .OrderBy(countryState => countryState.state.Name)
                 .ToList()
                 .ForEach(countryState =>
                 {
                     countryState.state.Id = ++stateId;
                     countryState.state.CountryId = countryState.country.Id;
 
-                    countryState.state.Provinces.ToList().ForEach(province =>
-                    {
-                        province.Id = ++provinceId;
-                        province.StateId = countryState.state.Id;
-
-                        province.Communities.ToList().ForEach(community =>
+                    countryState.state.Provinces
+                        .OrderBy(province => province.Name)
+                        .ToList()
+                        .ForEach(province =>
                         {
-                            community.Id = ++communityId;
-                            community.ProvinceId = province.Id;
+                            province.Id = ++provinceId;
+                            province.StateId = countryState.state.Id;
 
-                            community.Places.ToList().ForEach(place =>
-                            {
-                                place.Id = ++placeId;
-                                place.CommunityId = community.Id;
-                            });
+                            province.Communities
+                                .OrderBy(community => community.Name)
+                                .ToList()
+                                .ForEach(community =>
+                                {
+                                    community.Id = ++communityId;
+                                    community.ProvinceId = province.Id;
+
+                                    community.Places
+                                        .OrderBy(place => place.Name)
+                                        .ToList()
+                                        .ForEach(place =>
+                                        {
+                                            place.Id = ++placeId;
+                                            place.CommunityId = community.Id;
+                                        });
+                                });
                         });
-                    });
                 });
         }
 

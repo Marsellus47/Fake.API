@@ -21,6 +21,7 @@ namespace Fake.DataAccess.Database.CountryData
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
+            //modelBuilder.ApplyConfiguration(new LanguageConfiguration());
         }
     }
 }
