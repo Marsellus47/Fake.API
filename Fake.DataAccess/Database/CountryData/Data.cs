@@ -69,13 +69,13 @@ namespace Fake.DataAccess.Database.CountryData
                     Population = country.Population,
                     PostCodeFormat = country.PostCodeFormat,
                     PostCodeRegex = country.PostCodeRegex,
-                    /*States = country.States
+                    States = country.States
                         .Where(state => !string.IsNullOrEmpty(state.Name))
                         .Select(state => new State
                         {
                             Code = state.Code,
                             Name = state.Name,
-                            Provinces = state.Provinces
+                            /*Provinces = state.Provinces
                                 .Select(province => new Province
                                 {
                                     Code = province.Code,
@@ -96,17 +96,17 @@ namespace Fake.DataAccess.Database.CountryData
                                         .ToList(),
                                     Name = province.Name
                                 })
-                                .ToList()
+                                .ToList()*/
                         })
                         .ToList(),
-                    TopLevelDomain = country.TopLevelDomain*/
+                    TopLevelDomain = country.TopLevelDomain
                 })
                 .ToList();
 
-            /*int stateId = 0;
-            int provinceId = 0;
-            int communityId = 0;
-            int placeId = 0;
+            int stateId = 0;
+            //int provinceId = 0;
+            //int communityId = 0;
+            //int placeId = 0;
 
             Countries
                 .SelectMany(x => x.States, (country, state) => new { country, state })
@@ -117,7 +117,7 @@ namespace Fake.DataAccess.Database.CountryData
                     countryState.state.Id = ++stateId;
                     countryState.state.CountryId = countryState.country.Id;
 
-                    countryState.state.Provinces
+                    /*countryState.state.Provinces
                         .OrderBy(province => province.Name)
                         .ToList()
                         .ForEach(province =>
@@ -142,8 +142,8 @@ namespace Fake.DataAccess.Database.CountryData
                                             place.CommunityId = community.Id;
                                         });
                                 });
-                        });
-                });*/
+                        });*/
+                });
         }
 
         public static List<Currency> Currencies { get; set; }

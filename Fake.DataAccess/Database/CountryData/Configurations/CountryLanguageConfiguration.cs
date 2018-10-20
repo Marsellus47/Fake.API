@@ -9,23 +9,23 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
     {
         public void Configure(EntityTypeBuilder<CountryLanguage> builder)
         {
-            builder.HasKey(x => new
+            builder.HasKey(countryLanguage => new
             {
-                x.CountryId,
-                x.LanguageId
+                countryLanguage.CountryId,
+                countryLanguage.LanguageId
             });
 
             builder.HasData(Data.Countries
-                .SelectMany(x => x.CountryLanguages)
-                .GroupBy(x => new
+                .SelectMany(countryLanguage => countryLanguage.CountryLanguages)
+                .GroupBy(countryLanguage => new
                 {
-                    x.CountryId,
-                    x.LanguageId
+                    countryLanguage.CountryId,
+                    countryLanguage.LanguageId
                 })
-                .Select(x => new
+                .Select(group => new
                 {
-                    x.Key.CountryId,
-                    x.Key.LanguageId
+                    group.Key.CountryId,
+                    group.Key.LanguageId
                 })
                 .OrderBy(x => x.CountryId)
                 .ThenBy(x => x.LanguageId)

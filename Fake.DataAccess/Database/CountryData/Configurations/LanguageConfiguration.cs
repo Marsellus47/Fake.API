@@ -8,7 +8,7 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
     {
         public void Configure(EntityTypeBuilder<Language> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasKey(language => language.Id);
             builder.HasData(Data.Languages.ToArray());
         }
     }

@@ -9,7 +9,7 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
     {
         public void Configure(EntityTypeBuilder<Country> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasKey(country => country.Id);
 
             builder.HasData(Data.Countries
                 .Select(country => new

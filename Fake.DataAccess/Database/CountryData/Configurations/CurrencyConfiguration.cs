@@ -8,7 +8,7 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
     {
         public void Configure(EntityTypeBuilder<Currency> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasKey(currency => currency.Id);
             builder.HasData(Data.Currencies.ToArray());
         }
     }
