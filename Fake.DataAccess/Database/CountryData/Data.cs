@@ -57,13 +57,13 @@ namespace Fake.DataAccess.Database.CountryData
                     Iso = country.Iso,
                     Iso3 = country.Iso3,
                     IsoNumeric = country.IsoNumeric,
-                    /*CountryLanguages = country.Languages
+                    CountryLanguages = country.Languages
                         .Select(language => new CountryLanguage
                         {
                             CountryId = countryIndex + 1,
-                            LanguageId = languages[language] + 1
+                            LanguageId = languages[language]
                         })
-                        .ToList(),*/
+                        .ToList(),
                     Name = country.Name,
                     PhonePrefix = country.PhonePrefix,
                     Population = country.Population,

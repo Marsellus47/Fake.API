@@ -12,7 +12,7 @@ namespace Fake.DataAccess.Database.CountryData
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Country> Country { get; set; }
-        //public DbSet<CountryLanguage> CountryLanguages { get; set; }
+        public DbSet<CountryLanguage> CountryLanguages { get; set; }
         //public DbSet<State> States { get; set; }
         //public DbSet<Province> Provinces { get; set; }
         //public DbSet<Community> Communities { get; set; }
@@ -23,6 +23,7 @@ namespace Fake.DataAccess.Database.CountryData
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
             modelBuilder.ApplyConfiguration(new LanguageConfiguration());
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
+            modelBuilder.ApplyConfiguration(new CountryLanguageConfiguration());
         }
     }
 }

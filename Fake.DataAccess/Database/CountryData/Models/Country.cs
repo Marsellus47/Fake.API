@@ -23,6 +23,6 @@ namespace Fake.DataAccess.Database.CountryData.Models
         public int CurrencyId { get; set; }
         public Currency Currency { get; set; }
 
-        //public List<CountryLanguage> CountryLanguages { get; set; }
+        public List<CountryLanguage> CountryLanguages { get; set; }
     }
 }
