@@ -9,12 +9,19 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
     {
         public void Configure(EntityTypeBuilder<Province> builder)
         {
-            builder.HasKey(country => country.Id);
+            builder.HasKey(province => province.Id);
 
             builder.HasData(Data.Countries
                 .SelectMany(country => country.States)
                 .SelectMany(state => state.Provinces)
                 .OrderBy(province => province.Id)
+                .Select(province => new
+                {
+                    province.Id,
+                    province.Name,
+                    province.Code,
+                    province.StateId
+                })
                 .ToArray());
         }
     }
