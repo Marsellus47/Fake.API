@@ -14,7 +14,7 @@ namespace Fake.DataAccess.Database.CountryData
         public DbSet<Country> Country { get; set; }
         public DbSet<CountryLanguage> CountryLanguages { get; set; }
         public DbSet<State> State { get; set; }
-        //public DbSet<Province> Province { get; set; }
+        public DbSet<Province> Province { get; set; }
         //public DbSet<Community> Community { get; set; }
         //public DbSet<Place> Place { get; set; }
 
@@ -25,6 +25,7 @@ namespace Fake.DataAccess.Database.CountryData
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new CountryLanguageConfiguration());
             modelBuilder.ApplyConfiguration(new StateConfiguration());
+            modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
         }
     }
 }

@@ -3,14 +3,16 @@ using Fake.DataAccess.Database.CountryData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fake.DataAccess.Database.CountryData.Migrations
 {
     [DbContext(typeof(CountryDataContext))]
-    partial class CountryDataContextModelSnapshot : ModelSnapshot
+    [Migration("20181021050905_ProvinceTable")]
+    partial class ProvinceTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

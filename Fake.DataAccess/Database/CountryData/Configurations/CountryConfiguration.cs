@@ -14,21 +14,21 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
             builder.HasData(Data.Countries
                 .Select(country => new
                 {
-                    Id = country.Id,
-                    Name = country.Name,
-                    PostCodeRegex = country.PostCodeRegex,
-                    PostCodeFormat = country.PostCodeFormat,
-                    PhonePrefix = country.PhonePrefix,
-                    TopLevelDomain = country.TopLevelDomain,
-                    Continent = country.Continent,
-                    Area = country.Area,
-                    Capital = country.Capital,
-                    Fips = country.Fips,
-                    IsoNumeric = country.IsoNumeric,
-                    Iso3 = country.Iso3,
-                    Iso = country.Iso,
-                    Population = country.Population,
-                    CurrencyId = country.CurrencyId
+                    country.Id,
+                    country.Name,
+                    country.PostCodeRegex,
+                    country.PostCodeFormat,
+                    country.PhonePrefix,
+                    country.TopLevelDomain,
+                    country.Continent,
+                    country.Area,
+                    country.Capital,
+                    country.Fips,
+                    country.IsoNumeric,
+                    country.Iso3,
+                    country.Iso,
+                    country.Population,
+                    country.CurrencyId
                 })
                 .ToArray());
         }

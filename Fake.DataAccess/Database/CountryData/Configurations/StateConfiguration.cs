@@ -14,6 +14,13 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
             builder.HasData(Data.Countries
                 .SelectMany(country => country.States)
                 .OrderBy(state => state.Id)
+                .Select(state => new
+                {
+                    state.Id,
+                    state.Name,
+                    state.Code,
+                    state.CountryId
+                })
                 .ToArray());
         }
     }
