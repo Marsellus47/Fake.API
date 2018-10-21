@@ -84,14 +84,14 @@ namespace Fake.DataAccess.Database.CountryData
                                         {
                                             Code = community.Code,
                                             Name = community.Name,
-                                            //Places = community.Places
-                                            //    .Select(place => new Place
-                                            //    {
-                                            //        LatLong = place.LatLong,
-                                            //        Name = place.Name,
-                                            //        PostCode = place.PostCode
-                                            //    })
-                                            //    .ToList()
+                                            Places = community.Places
+                                                .Select(place => new Place
+                                                {
+                                                    LatLong = place.LatLong,
+                                                    Name = place.Name,
+                                                    PostCode = place.PostCode
+                                                })
+                                                .ToList()
                                         })
                                         .ToList(),
                                     Name = province.Name
@@ -106,7 +106,7 @@ namespace Fake.DataAccess.Database.CountryData
             int stateId = 0;
             int provinceId = 0;
             int communityId = 0;
-            //int placeId = 0;
+            int placeId = 0;
 
             Countries
                 .SelectMany(x => x.States, (country, state) => new { country, state })
@@ -133,14 +133,14 @@ namespace Fake.DataAccess.Database.CountryData
                                     community.Id = ++communityId;
                                     community.ProvinceId = province.Id;
 
-                                    //community.Places
-                                    //    .OrderBy(place => place.Name)
-                                    //    .ToList()
-                                    //    .ForEach(place =>
-                                    //    {
-                                    //        place.Id = ++placeId;
-                                    //        place.CommunityId = community.Id;
-                                    //    });
+                                    community.Places
+                                        .OrderBy(place => place.Name)
+                                        .ToList()
+                                        .ForEach(place =>
+                                        {
+                                            place.Id = ++placeId;
+                                            place.CommunityId = community.Id;
+                                        });
                                 });
                         });
                 });

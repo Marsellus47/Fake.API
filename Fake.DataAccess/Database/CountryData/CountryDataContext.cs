@@ -16,7 +16,7 @@ namespace Fake.DataAccess.Database.CountryData
         public DbSet<State> State { get; set; }
         public DbSet<Province> Province { get; set; }
         public DbSet<Community> Community { get; set; }
-        //public DbSet<Place> Place { get; set; }
+        public DbSet<Place> Place { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,7 @@ namespace Fake.DataAccess.Database.CountryData
             modelBuilder.ApplyConfiguration(new StateConfiguration());
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
             modelBuilder.ApplyConfiguration(new CommunityConfiguration());
+            modelBuilder.ApplyConfiguration(new PlaceConfiguration());
         }
     }
 }

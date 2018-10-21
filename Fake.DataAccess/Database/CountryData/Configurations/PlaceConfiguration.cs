@@ -5,24 +5,18 @@ using System.Linq;
 
 namespace Fake.DataAccess.Database.CountryData.Configurations
 {
-    public class CommunityConfiguration : IEntityTypeConfiguration<Community>
+    public class PlaceConfiguration : IEntityTypeConfiguration<Place>
     {
-        public void Configure(EntityTypeBuilder<Community> builder)
+        public void Configure(EntityTypeBuilder<Place> builder)
         {
-            builder.HasKey(community => community.Id);
+            builder.HasKey(place => place.Id);
 
             builder.HasData(Data.Countries
                 .SelectMany(country => country.States)
                 .SelectMany(state => state.Provinces)
                 .SelectMany(province => province.Communities)
-                .OrderBy(community => community.Id)
-                .Select(community => new
-                {
-                    community.Id,
-                    community.Name,
-                    community.Code,
-                    community.ProvinceId
-                })
+                .SelectMany(community => community.Places)
+                .OrderBy(place => place.Id)
                 .ToArray());
         }
     }
