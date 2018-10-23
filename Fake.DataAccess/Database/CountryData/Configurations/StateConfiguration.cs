@@ -1,7 +1,6 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Linq;
 
 namespace Fake.DataAccess.Database.CountryData.Configurations
 {
@@ -10,18 +9,6 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
         public void Configure(EntityTypeBuilder<State> builder)
         {
             builder.HasKey(state => state.Id);
-
-            builder.HasData(Data.Countries
-                .SelectMany(country => country.States)
-                .OrderBy(state => state.Id)
-                .Select(state => new
-                {
-                    state.Id,
-                    state.Name,
-                    state.Code,
-                    state.CountryId
-                })
-                .ToArray());
         }
     }
 }

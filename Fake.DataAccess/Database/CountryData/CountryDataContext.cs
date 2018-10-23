@@ -9,10 +9,10 @@ namespace Fake.DataAccess.Database.CountryData
         public CountryDataContext(DbContextOptions<CountryDataContext> options)
             : base(options) { }
 
-        public DbSet<Currency> Currencies { get; set; }
-        public DbSet<Language> Languages { get; set; }
+        public DbSet<Currency> Currency { get; set; }
+        public DbSet<Language> Language { get; set; }
         public DbSet<Country> Country { get; set; }
-        public DbSet<CountryLanguage> CountryLanguages { get; set; }
+        public DbSet<CountryLanguage> CountryLanguage { get; set; }
         public DbSet<State> State { get; set; }
         public DbSet<Province> Province { get; set; }
         public DbSet<Community> Community { get; set; }

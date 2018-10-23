@@ -1,7 +1,6 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Linq;
 
 namespace Fake.DataAccess.Database.CountryData.Configurations
 {
@@ -10,20 +9,6 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
         public void Configure(EntityTypeBuilder<Community> builder)
         {
             builder.HasKey(community => community.Id);
-
-            builder.HasData(Data.Countries
-                .SelectMany(country => country.States)
-                .SelectMany(state => state.Provinces)
-                .SelectMany(province => province.Communities)
-                .OrderBy(community => community.Id)
-                .Select(community => new
-                {
-                    community.Id,
-                    community.Name,
-                    community.Code,
-                    community.ProvinceId
-                })
-                .ToArray());
         }
     }
 }
