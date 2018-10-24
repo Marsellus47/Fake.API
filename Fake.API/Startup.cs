@@ -1,4 +1,5 @@
-﻿using Fake.DataAccess.Interfaces.Random;
+﻿using Fake.DataAccess.Database.CountryData;
+using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
 using GraphQL.Http;
 using GraphQL.Server.Ui.GraphiQL;
@@ -8,6 +9,7 @@ using GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,6 +39,9 @@ namespace Fake.API
             services.AddGraphQL(options => options.ExposeExceptions = true);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            const string countryDataConnectionString = @"Server=(localdb)\mssqllocaldb;Database=Fake.API.CountryData;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<CountryDataContext>(options => options.UseSqlServer(countryDataConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -14,6 +14,6 @@ namespace Fake.API.E2ETests.GraphQL.Random
             => response.GetDataFieldAs<RandomDTO>("random");
 
         protected NumberFormatInfo DecimalNumberFormatInfo
-            => new NumberFormatInfo { PercentDecimalSeparator = "." };
+            => new NumberFormatInfo { NumberDecimalSeparator = "." };
     }
 }
