@@ -28,8 +28,27 @@ namespace Fake.API.GraphQL.Infrastructure
             Field<ListGraphType<CurrencyType>>(
                 "currencies",
                 resolve: context => countryDataContext.Currency.ToList());
-        }
 
-        #endregion
+            #endregion
+
+            #region Language
+
+            Field<LanguageType>(
+                name: "language",
+                description: "Language",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "code", Description = "Language code" }),
+                resolve: context =>
+                {
+                    var code = context.GetArgument<string>("code");
+                    return countryDataContext.Language.SingleOrDefault(currency => currency.Code == code);
+                });
+
+            Field<ListGraphType<LanguageType>>(
+                "languages",
+                resolve: context => countryDataContext.Language.ToList());
+
+            #endregion
+        }
     }
 }
