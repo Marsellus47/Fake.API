@@ -40,6 +40,7 @@ namespace Fake.API
             services.AddScoped<RandomGroupGraphType>();
             services.AddScoped<CurrencyType>();
             services.AddScoped<LanguageType>();
+            services.AddScoped<CountryType>();
             services.AddScoped<CountryDataGraphType>();
 
             services.AddGraphQL(options => options.ExposeExceptions = true);

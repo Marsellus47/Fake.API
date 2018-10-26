@@ -46,6 +46,25 @@ namespace Fake.API.GraphQL.Types.CountryData
                 resolve: context => countryDataContext.Language.ToList());
 
             #endregion
+
+            #region Country
+
+            Field<CountryType>(
+                name: "country",
+                description: "Country",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name", Description = "Country name" }),
+                resolve: context =>
+                {
+                    var name = context.GetArgument<string>("name");
+                    return countryDataContext.Country.SingleOrDefault(country => country.Name == name);
+                });
+
+            Field<ListGraphType<CountryType>>(
+                "countries",
+                resolve: context => countryDataContext.Country.ToList());
+
+            #endregion
         }
     }
 }
