@@ -1,5 +1,6 @@
 ﻿using Fake.API.GraphQL.Types.CountryData;
 using Fake.API.GraphQL.Types;
+using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
@@ -29,6 +30,10 @@ namespace Fake.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region GraphQL
+
+            services.AddGraphQL(options => options.ExposeExceptions = true);
+
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
@@ -36,19 +41,30 @@ namespace Fake.API
             services.AddScoped<GraphQL.Infrastructure.GraphQLQuery>();
             services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();
 
-            services.AddScoped<IRandomScalarProvider, RandomScalarProvider>();
             services.AddScoped<RandomGroupGraphType>();
             services.AddScoped<CurrencyType>();
             services.AddScoped<LanguageType>();
             services.AddScoped<CountryType>();
+            services.AddScoped<StateType>();
             services.AddScoped<CountryDataGraphType>();
 
-            services.AddGraphQL(options => options.ExposeExceptions = true);
+            #endregion
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            #region Data access
 
             const string countryDataConnectionString = @"Server=(localdb)\mssqllocaldb;Database=Fake.API.CountryData;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<CountryDataContext>(options => options.UseSqlServer(countryDataConnectionString));
+
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<IStateRepository, StateRepository>();
+
+            #endregion
+
+            services.AddScoped<IRandomScalarProvider, RandomScalarProvider>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

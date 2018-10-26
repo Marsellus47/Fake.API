@@ -1,68 +1,89 @@
-﻿using Fake.DataAccess.Database.CountryData;
+﻿using Fake.DataAccess.Database.CountryData.Repositories;
 using GraphQL.Types;
-using System.Linq;
 
 namespace Fake.API.GraphQL.Types.CountryData
 {
     public class CountryDataGraphType : ObjectGraphType
     {
-        public CountryDataGraphType(CountryDataContext countryDataContext)
+        public CountryDataGraphType(
+            ICountryRepository countryRepository,
+            ICurrencyRepository currencyRepository,
+            ILanguageRepository languageRepository,
+            IStateRepository stateRepository)
         {
-
             #region Currency
 
-            Field<CurrencyType>(
+            FieldAsync<CurrencyType>(
                 name: "currency",
                 description: "Currency",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "code", Description = "Currency code" }),
-                resolve: context =>
+                resolve: async(context) =>
                 {
                     var code = context.GetArgument<string>("code");
-                    return countryDataContext.Currency.SingleOrDefault(currency => currency.Code == code);
+                    return await currencyRepository.GetCurrencyByCodeAsync(code);
                 });
 
-            Field<ListGraphType<CurrencyType>>(
+            FieldAsync<ListGraphType<CurrencyType>>(
                 "currencies",
-                resolve: context => countryDataContext.Currency.ToList());
+                resolve: async (context) => await currencyRepository.GetCurrenciesAsync());
 
             #endregion
 
             #region Language
 
-            Field<LanguageType>(
+            FieldAsync<LanguageType>(
                 name: "language",
                 description: "Language",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "code", Description = "Language code" }),
-                resolve: context =>
+                resolve: async (context) =>
                 {
                     var code = context.GetArgument<string>("code");
-                    return countryDataContext.Language.SingleOrDefault(currency => currency.Code == code);
+                    return await languageRepository.GetLanguageByCodeAsync(code);
                 });
 
-            Field<ListGraphType<LanguageType>>(
+            FieldAsync<ListGraphType<LanguageType>>(
                 "languages",
-                resolve: context => countryDataContext.Language.ToList());
+                resolve: async (context) => await languageRepository.GetLanguagesAsync());
 
             #endregion
 
             #region Country
 
-            Field<CountryType>(
+            FieldAsync<CountryType>(
                 name: "country",
                 description: "Country",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name", Description = "Country name" }),
-                resolve: context =>
+                resolve: async (context) =>
                 {
                     var name = context.GetArgument<string>("name");
-                    return countryDataContext.Country.SingleOrDefault(country => country.Name == name);
+                    return await countryRepository.GetCountryByNameAsync(name);
                 });
 
-            Field<ListGraphType<CountryType>>(
+            FieldAsync<ListGraphType<CountryType>>(
                 "countries",
-                resolve: context => countryDataContext.Country.ToList());
+                resolve: async (context) => await countryRepository.GetCountriesAsync());
+
+            #endregion
+
+            #region State
+
+            FieldAsync<StateType>(
+                name: "state",
+                description: "State",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "code", Description = "State code" }),
+                resolve: async (context) =>
+                {
+                    var code = context.GetArgument<string>("code");
+                    return await stateRepository.GetStateByCodeAsync(code);
+                });
+
+            FieldAsync<ListGraphType<StateType>>(
+                "states",
+                resolve: async (context) => await stateRepository.GetStatesAsync());
 
             #endregion
         }
