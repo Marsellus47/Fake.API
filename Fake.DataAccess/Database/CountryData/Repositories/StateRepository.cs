@@ -25,6 +25,11 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
             return await _countryDataContext.State.Where(state => state.CountryId == countryId).ToListAsync();
         }
 
+        public Task<State> GetStateByIdAsync(int id)
+        {
+            return _countryDataContext.State.FindAsync(id);
+        }
+
         public Task<State> GetStateByCodeAsync(string code)
         {
             return _countryDataContext.State.FirstOrDefaultAsync(state => state.Code == code);

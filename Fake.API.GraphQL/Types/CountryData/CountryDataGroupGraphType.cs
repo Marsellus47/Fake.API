@@ -9,6 +9,7 @@ namespace Fake.API.GraphQL.Types.CountryData
             ICountryRepository countryRepository,
             ICurrencyRepository currencyRepository,
             ILanguageRepository languageRepository,
+            IProvinceRepository provinceRepository,
             IStateRepository stateRepository)
         {
             #region Currency
@@ -84,6 +85,25 @@ namespace Fake.API.GraphQL.Types.CountryData
             FieldAsync<ListGraphType<StateType>>(
                 "states",
                 resolve: async (context) => await stateRepository.GetStatesAsync());
+
+            #endregion
+
+            #region Province
+
+            FieldAsync<ProvinceType>(
+                name: "province",
+                description: "Province",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "code", Description = "Province code" }),
+                resolve: async (context) =>
+                {
+                    var code = context.GetArgument<string>("code");
+                    return await provinceRepository.GetProvinceByCodeAsync(code);
+                });
+
+            FieldAsync<ListGraphType<ProvinceType>>(
+                "provinces",
+                resolve: async (context) => await provinceRepository.GetProvincesAsync());
 
             #endregion
         }

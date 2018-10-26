@@ -8,6 +8,7 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
     {
         Task<IEnumerable<State>> GetStatesAsync();
         Task<IEnumerable<State>> GetStatesByCountryIdAsync(int countryId);
+        Task<State> GetStateByIdAsync(int id);
         Task<State> GetStateByCodeAsync(string code);
     }
 }

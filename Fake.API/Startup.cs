@@ -43,9 +43,10 @@ namespace Fake.API
 
             services.AddScoped<RandomGroupGraphType>();
             services.AddScoped<CountryDataGroupGraphType>();
+            services.AddScoped<CountryType>();
             services.AddScoped<CurrencyType>();
             services.AddScoped<LanguageType>();
-            services.AddScoped<CountryType>();
+            services.AddScoped<ProvinceType>();
             services.AddScoped<StateType>();
 
             #endregion
@@ -58,6 +59,7 @@ namespace Fake.API
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<IProvinceRepository, ProvinceRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
 
             #endregion
