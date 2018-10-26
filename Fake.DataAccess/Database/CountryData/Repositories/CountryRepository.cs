@@ -19,9 +19,14 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
             return await _countryDataContext.Country.ToListAsync();
         }
 
-        public async Task<Country> GetCountryByNameAsync(string name)
+        public Task<Country> GetCountryByIdAsync(int id)
         {
-            return await _countryDataContext.Country.FirstOrDefaultAsync(country => country.Name == name);
+            return _countryDataContext.Country.FindAsync(id);
+        }
+
+        public Task<Country> GetCountryByNameAsync(string name)
+        {
+            return _countryDataContext.Country.FirstOrDefaultAsync(country => country.Name == name);
         }
     }
 }

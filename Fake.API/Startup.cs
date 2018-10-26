@@ -42,11 +42,11 @@ namespace Fake.API
             services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();
 
             services.AddScoped<RandomGroupGraphType>();
+            services.AddScoped<CountryDataGroupGraphType>();
             services.AddScoped<CurrencyType>();
             services.AddScoped<LanguageType>();
             services.AddScoped<CountryType>();
             services.AddScoped<StateType>();
-            services.AddScoped<CountryDataGraphType>();
 
             #endregion
 

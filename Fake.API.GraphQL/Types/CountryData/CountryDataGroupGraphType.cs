@@ -3,9 +3,9 @@ using GraphQL.Types;
 
 namespace Fake.API.GraphQL.Types.CountryData
 {
-    public class CountryDataGraphType : ObjectGraphType
+    public class CountryDataGroupGraphType : ObjectGraphType
     {
-        public CountryDataGraphType(
+        public CountryDataGroupGraphType(
             ICountryRepository countryRepository,
             ICurrencyRepository currencyRepository,
             ILanguageRepository languageRepository,

@@ -7,6 +7,7 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
     public interface ICountryRepository
     {
         Task<IEnumerable<Country>> GetCountriesAsync();
+        Task<Country> GetCountryByIdAsync(int id);
         Task<Country> GetCountryByNameAsync(string name);
     }
 }
