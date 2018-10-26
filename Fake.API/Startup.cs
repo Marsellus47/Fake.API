@@ -1,4 +1,6 @@
-﻿using Fake.DataAccess.Database.CountryData;
+﻿using Fake.API.GraphQL.Types.CountryData;
+using Fake.API.GraphQL.Types;
+using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
 using GraphQL.Http;
@@ -35,6 +37,10 @@ namespace Fake.API
             services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();
 
             services.AddScoped<IRandomScalarProvider, RandomScalarProvider>();
+            services.AddScoped<RandomGroupGraphType>();
+            services.AddScoped<CurrencyType>();
+            services.AddScoped<LanguageType>();
+            services.AddScoped<CountryDataGraphType>();
 
             services.AddGraphQL(options => options.ExposeExceptions = true);
 

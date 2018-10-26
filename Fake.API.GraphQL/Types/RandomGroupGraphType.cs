@@ -1,4 +1,4 @@
-﻿using Fake.DataAccess.Random;
+﻿using Fake.DataAccess.Interfaces.Random;
 using GraphQL.Types;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +11,8 @@ namespace Fake.API.GraphQL.Types
         private const short MIN_COUNT = 1;
         private const short MAX_COUNT = 1000;
 
-        public RandomGroupGraphType()
+        public RandomGroupGraphType(IRandomScalarProvider randomScalarProvider)
         {
-            var randomScalarProvider = new RandomScalarProvider();  // TODO Dependency injection
-
             Name = "Random";
             Description = "Random value generator";
 
