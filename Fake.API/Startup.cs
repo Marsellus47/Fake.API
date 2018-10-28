@@ -43,6 +43,7 @@ namespace Fake.API
 
             services.AddScoped<RandomGroupGraphType>();
             services.AddScoped<CountryDataGroupGraphType>();
+            services.AddScoped<CommunityType>();
             services.AddScoped<CountryType>();
             services.AddScoped<CurrencyType>();
             services.AddScoped<LanguageType>();
@@ -56,6 +57,7 @@ namespace Fake.API
             const string countryDataConnectionString = @"Server=(localdb)\mssqllocaldb;Database=Fake.API.CountryData;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<CountryDataContext>(options => options.UseSqlServer(countryDataConnectionString));
 
+            services.AddScoped<ICommunityRepository, CommunityRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
