@@ -10,8 +10,8 @@ namespace Fake.API.GraphQL.Types.CountryData
         public CommunityType(IProvinceRepository provinceRepository, IPlaceRepository placeRepository)
         {
             Field(state => state.Id);
-            Field(state => state.Name);
-            Field(state => state.Code);
+            Field(state => state.Name, nullable: true);
+            Field(state => state.Code, nullable: true);
             Field<ProvinceType, Province>()
                 .Name("province")
                 .ResolveAsync(context => provinceRepository.GetProvinceByIdAsync(context.Source.ProvinceId));

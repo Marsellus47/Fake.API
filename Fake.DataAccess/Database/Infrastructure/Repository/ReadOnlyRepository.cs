@@ -15,7 +15,10 @@ namespace Fake.DataAccess.Database.Infrastructure.Repository
         protected ReadOnlyRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
+            DbSet = dbContext.Set<TEntity>();
         }
+
+        protected DbSet<TEntity> DbSet { get; }
 
         protected async Task<IEnumerable<TEntity>> GetAllAsync()
         {

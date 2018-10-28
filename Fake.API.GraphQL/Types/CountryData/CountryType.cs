@@ -7,7 +7,10 @@ namespace Fake.API.GraphQL.Types.CountryData
 {
     public class CountryType : ObjectGraphType<Country>
     {
-        public CountryType(ICurrencyRepository currencyRepository, IStateRepository stateRepository)
+        public CountryType(
+            ICurrencyRepository currencyRepository,
+            IStateRepository stateRepository,
+            ILanguageRepository languageRepository)
         {
             Field(c => c.Id);
             Field(c => c.Name);
@@ -29,6 +32,9 @@ namespace Fake.API.GraphQL.Types.CountryData
             Field<ListGraphType<StateType>, IEnumerable<State>>()
                 .Name("states")
                 .ResolveAsync(ctx => stateRepository.GetStatesByCountryIdAsync(ctx.Source.Id));
+            Field<ListGraphType<LanguageType>, IEnumerable<Language>>()
+                .Name("languages")
+                .ResolveAsync(ctx => languageRepository.GetLanguagesByCountryIdAsync(ctx.Source.Id));
         }
     }
 }

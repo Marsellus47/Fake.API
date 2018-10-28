@@ -7,6 +7,7 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
     public interface ILanguageRepository
     {
         Task<IEnumerable<Language>> GetLanguagesAsync();
+        Task<IEnumerable<Language>> GetLanguagesByCountryIdAsync(int countryId);
         Task<Language> GetLanguageByCodeAsync(string code);
     }
 }
