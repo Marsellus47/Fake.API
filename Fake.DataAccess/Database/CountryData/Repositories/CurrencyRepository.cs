@@ -1,6 +1,9 @@
-﻿using Fake.DataAccess.Database.CountryData.Models;
+﻿using Fake.Common.Extensions;
+using Fake.DataAccess.Database.CountryData.Models;
 using Fake.DataAccess.Database.Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
@@ -10,9 +13,16 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
         public CurrencyRepository(CountryDataContext countryDataContext)
             : base(countryDataContext) { }
 
-        public Task<IEnumerable<Currency>> GetCurrenciesAsync()
+        public async Task<IEnumerable<Currency>> GetCurrenciesAsync(int? pageNumber = null, int? pageSize = null)
         {
-            return GetAllAsync();
+            if (pageNumber.HasValue && pageSize.HasValue)
+            {
+                return await DbSet.AsQueryable()
+                    .Paginate(pageNumber.Value, pageSize.Value)
+                    .ToListAsync();
+            }
+
+            return await GetAllAsync();
         }
 
         public Task<Currency> GetCurrencyByIdAsync(int id)

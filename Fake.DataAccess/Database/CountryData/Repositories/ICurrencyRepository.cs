@@ -6,7 +6,7 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
 {
     public interface ICurrencyRepository
     {
-        Task<IEnumerable<Currency>> GetCurrenciesAsync();
+        Task<IEnumerable<Currency>> GetCurrenciesAsync(int? pageNumber = null, int? pageSize = null);
         Task<Currency> GetCurrencyByIdAsync(int id);
         Task<Currency> GetCurrencyByCodeAsync(string code);
     }

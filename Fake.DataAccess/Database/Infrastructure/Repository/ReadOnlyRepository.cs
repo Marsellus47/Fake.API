@@ -22,22 +22,22 @@ namespace Fake.DataAccess.Database.Infrastructure.Repository
 
         protected async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _dbContext.Set<TEntity>().ToListAsync();
+            return await DbSet.ToListAsync();
         }
 
         protected async Task<IEnumerable<TEntity>> GetFilteredAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return await _dbContext.Set<TEntity>().Where(filter).ToListAsync();
+            return await DbSet.Where(filter).ToListAsync();
         }
 
         protected Task<TEntity> FindAsync(params object[] keyValues)
         {
-            return _dbContext.Set<TEntity>().FindAsync(keyValues);
+            return DbSet.FindAsync(keyValues);
         }
 
         protected Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return _dbContext.Set<TEntity>().FirstOrDefaultAsync(filter);
+            return DbSet.FirstOrDefaultAsync(filter);
         }
     }
 }

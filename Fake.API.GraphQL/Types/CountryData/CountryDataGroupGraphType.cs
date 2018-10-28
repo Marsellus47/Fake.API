@@ -1,4 +1,5 @@
-﻿using Fake.DataAccess.Database.CountryData.Repositories;
+﻿using Fake.API.GraphQL.Helpers;
+using Fake.DataAccess.Database.CountryData.Repositories;
 using GraphQL.Types;
 
 namespace Fake.API.GraphQL.Types.CountryData
@@ -29,7 +30,12 @@ namespace Fake.API.GraphQL.Types.CountryData
 
             FieldAsync<ListGraphType<CurrencyType>>(
                 "currencies",
-                resolve: async (context) => await currencyRepository.GetCurrenciesAsync());
+                arguments: new QueryArguments(Pagination.QueryArguments),
+                resolve: async (context) =>
+                {
+                    var paginationValues = Pagination.ParseArguments(context);
+                    return await currencyRepository.GetCurrenciesAsync(paginationValues.PageNumber, paginationValues.PageSize);
+                });
 
             #endregion
 
