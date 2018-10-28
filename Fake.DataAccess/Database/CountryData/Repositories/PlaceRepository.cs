@@ -1,38 +1,33 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
-using Microsoft.EntityFrameworkCore;
+using Fake.DataAccess.Database.Infrastructure.Repository;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class PlaceRepository : IPlaceRepository
+    public class PlaceRepository : ReadOnlyRepository<Place>, IPlaceRepository
     {
-        private readonly CountryDataContext _countryDataContext;
-
         public PlaceRepository(CountryDataContext countryDataContext)
+            : base(countryDataContext) { }
+
+        public Task<IEnumerable<Place>> GetPlacesAsync()
         {
-            _countryDataContext = countryDataContext;
+            return GetAllAsync();
         }
 
-        public async Task<IEnumerable<Place>> GetPlacesAsync()
+        public Task<IEnumerable<Place>> GetPlacesByCommunityIdAsync(int communityId)
         {
-            return await _countryDataContext.Place.ToListAsync();
-        }
-
-        public async Task<IEnumerable<Place>> GetPlacesByCommunityIdAsync(int communityId)
-        {
-            return await _countryDataContext.Place.Where(place => place.CommunityId == communityId).ToListAsync();
+            return GetFilteredAsync(place => place.CommunityId == communityId);
         }
 
         public Task<Place> GetPlaceByIdAsync(int id)
         {
-            return _countryDataContext.Place.FindAsync(id);
+            return FindAsync(id);
         }
 
         public Task<Place> GetPlaceByNameAsync(string name)
         {
-            return _countryDataContext.Place.FirstOrDefaultAsync(place => place.Name == name);
+            return GetFirstAsync(place => place.Name == name);
         }
     }
 }

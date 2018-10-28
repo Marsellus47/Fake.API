@@ -1,38 +1,33 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
-using Microsoft.EntityFrameworkCore;
+using Fake.DataAccess.Database.Infrastructure.Repository;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class StateRepository : IStateRepository
+    public class StateRepository : ReadOnlyRepository<State>, IStateRepository
     {
-        private readonly CountryDataContext _countryDataContext;
-
         public StateRepository(CountryDataContext countryDataContext)
+            : base(countryDataContext) { }
+
+        public Task<IEnumerable<State>> GetStatesAsync()
         {
-            _countryDataContext = countryDataContext;
+            return GetAllAsync();
         }
 
-        public async Task<IEnumerable<State>> GetStatesAsync()
+        public Task<IEnumerable<State>> GetStatesByCountryIdAsync(int countryId)
         {
-            return await _countryDataContext.State.ToListAsync();
-        }
-
-        public async Task<IEnumerable<State>> GetStatesByCountryIdAsync(int countryId)
-        {
-            return await _countryDataContext.State.Where(state => state.CountryId == countryId).ToListAsync();
+            return GetFilteredAsync(state => state.CountryId == countryId);
         }
 
         public Task<State> GetStateByIdAsync(int id)
         {
-            return _countryDataContext.State.FindAsync(id);
+            return FindAsync(id);
         }
 
         public Task<State> GetStateByCodeAsync(string code)
         {
-            return _countryDataContext.State.FirstOrDefaultAsync(state => state.Code == code);
+            return GetFirstAsync(state => state.Code == code);
         }
     }
 }

@@ -1,37 +1,33 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
-using Microsoft.EntityFrameworkCore;
+using Fake.DataAccess.Database.Infrastructure.Repository;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class CommunityRepository : ICommunityRepository
+    public class CommunityRepository : ReadOnlyRepository<Community>, ICommunityRepository
     {
-        private readonly CountryDataContext _countryDataContext;
-
         public CommunityRepository(CountryDataContext countryDataContext)
+            : base(countryDataContext) { }
+
+        public Task<IEnumerable<Community>> GetCommunitiesAsync()
         {
-            _countryDataContext = countryDataContext;
-        }
-        public async Task<IEnumerable<Community>> GetCommunitiesAsync()
-        {
-            return await _countryDataContext.Community.ToListAsync();
+            return GetAllAsync();
         }
 
-        public async Task<IEnumerable<Community>> GetCommunitiesByProvinceIdAsync(int provinceId)
+        public Task<IEnumerable<Community>> GetCommunitiesByProvinceIdAsync(int provinceId)
         {
-            return await _countryDataContext.Community.Where(community => community.ProvinceId == provinceId).ToListAsync();
+            return GetFilteredAsync(community => community.ProvinceId == provinceId);
         }
 
         public Task<Community> GetCommunityByIdAsync(int id)
         {
-            return _countryDataContext.Community.FindAsync(id);
+            return FindAsync(id);
         }
 
         public Task<Community> GetCommunityByCodeAsync(string code)
         {
-            return _countryDataContext.Community.FirstOrDefaultAsync(community => community.Code == code);
+            return GetFirstAsync(community => community.Code == code);
         }
     }
 }

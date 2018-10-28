@@ -1,32 +1,28 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
-using Microsoft.EntityFrameworkCore;
+using Fake.DataAccess.Database.Infrastructure.Repository;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class CountryRepository : ICountryRepository
+    public class CountryRepository : ReadOnlyRepository<Country>, ICountryRepository
     {
-        private readonly CountryDataContext _countryDataContext;
-
         public CountryRepository(CountryDataContext countryDataContext)
-        {
-            _countryDataContext = countryDataContext;
-        }
+            : base(countryDataContext) { }
 
-        public async Task<IEnumerable<Country>> GetCountriesAsync()
+        public Task<IEnumerable<Country>> GetCountriesAsync()
         {
-            return await _countryDataContext.Country.ToListAsync();
+            return GetAllAsync();
         }
 
         public Task<Country> GetCountryByIdAsync(int id)
         {
-            return _countryDataContext.Country.FindAsync(id);
+            return FindAsync(id);
         }
 
         public Task<Country> GetCountryByNameAsync(string name)
         {
-            return _countryDataContext.Country.FirstOrDefaultAsync(country => country.Name == name);
+            return GetFirstAsync(country => country.Name == name);
         }
     }
 }
