@@ -47,6 +47,7 @@ namespace Fake.API
             services.AddScoped<CountryType>();
             services.AddScoped<CurrencyType>();
             services.AddScoped<LanguageType>();
+            services.AddScoped<PlaceType>();
             services.AddScoped<ProvinceType>();
             services.AddScoped<StateType>();
 
@@ -61,6 +62,7 @@ namespace Fake.API
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
+            services.AddScoped<IPlaceRepository, PlaceRepository>();
             services.AddScoped<IProvinceRepository, ProvinceRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
 
