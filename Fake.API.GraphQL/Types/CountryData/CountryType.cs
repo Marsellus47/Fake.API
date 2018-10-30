@@ -1,5 +1,6 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
 using Fake.DataAccess.Database.CountryData.Repositories;
+using GraphQL.DataLoader;
 using GraphQL.Types;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ namespace Fake.API.GraphQL.Types.CountryData
     public class CountryType : ObjectGraphType<Country>
     {
         public CountryType(
+            IDataLoaderContextAccessor accessor,
             ICurrencyRepository currencyRepository,
             IStateRepository stateRepository,
             ILanguageRepository languageRepository)
@@ -28,7 +30,11 @@ namespace Fake.API.GraphQL.Types.CountryData
             Field(c => c.Population, type: typeof(IntGraphType));
             Field<CurrencyType, Currency>()
                 .Name("currency")
-                .ResolveAsync(ctx => currencyRepository.GetCurrencyByIdAsync(ctx.Source.CurrencyId));
+                .ResolveAsync(ctx =>
+                {
+                    var currencyDataLoader = accessor.Context.GetOrAddBatchLoader<int, Currency>("GetCurrencies", currencyRepository.GetCurrenciesAsync);
+                    return currencyDataLoader.LoadAsync(ctx.Source.CurrencyId);
+                });
             Field<ListGraphType<StateType>, IEnumerable<State>>()
                 .Name("states")
                 .ResolveAsync(ctx => stateRepository.GetStatesByCountryIdAsync(ctx.Source.Id));

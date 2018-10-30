@@ -4,6 +4,8 @@ using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
+using GraphQL.DataLoader;
+using GraphQL.Execution;
 using GraphQL.Http;
 using GraphQL.Server.Ui.GraphiQL;
 using GraphQL.Server;
@@ -37,6 +39,8 @@ namespace Fake.API
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
+            services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
+            services.AddSingleton<IDocumentExecutionListener, DataLoaderDocumentListener>();
 
             services.AddScoped<GraphQL.Infrastructure.GraphQLQuery>();
             services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();

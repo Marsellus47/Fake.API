@@ -4,6 +4,7 @@ using Fake.DataAccess.Database.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
@@ -23,6 +24,12 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
             }
 
             return await GetAllAsync();
+        }
+
+        public async Task<IDictionary<int, Currency>> GetCurrenciesAsync(IEnumerable<int> currencyIds, CancellationToken token)
+        {
+            return await DbSet.Where(currency => currencyIds.Contains(currency.Id))
+                .ToDictionaryAsync(currency => currency.Id, token);
         }
 
         public Task<Currency> GetCurrencyByIdAsync(int id)
