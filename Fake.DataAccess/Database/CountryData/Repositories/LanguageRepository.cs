@@ -19,12 +19,19 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
 
         public async Task<IEnumerable<Language>> GetLanguagesByCountryIdAsync(int countryId)
         {
-            return await DbSet
-                .Include(language => language.CountryLanguages)
-                .SelectMany(language => language.CountryLanguages)
+            return await GetDbSet<CountryLanguage>()
                 .Where(countryLanguage => countryLanguage.CountryId == countryId)
                 .Select(countryLanguage => countryLanguage.Language)
                 .ToListAsync();
+        }
+
+        public async Task<ILookup<int, Language>> GetLanguagesByCountryIdsAsync(IEnumerable<int> countryIds)
+        {
+            var countryLanguages = await GetDbSet<CountryLanguage>()
+                .Where(countryLanguage => countryIds.Contains(countryLanguage.CountryId))
+                .Include(countryLanguage => countryLanguage.Language)
+                .ToListAsync();
+            return countryLanguages.ToLookup(countryLanguage => countryLanguage.CountryId, countryLanguage => countryLanguage.Language);
         }
 
         public Task<Language> GetLanguageByCodeAsync(string code)

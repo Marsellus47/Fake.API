@@ -3,6 +3,7 @@ using Fake.DataAccess.Database.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
@@ -17,14 +18,27 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
             return GetAllAsync();
         }
 
+        public async Task<IDictionary<int, Country>> GetCountriesAsync(IEnumerable<int> countryIds, CancellationToken token)
+        {
+            return await DbSet.Where(country => countryIds.Contains(country.Id))
+                .ToDictionaryAsync(country => country.Id, token);
+        }
+
         public async Task<IEnumerable<Country>> GetCountriesByLanguageIdAsync(int languageId)
         {
-            return await DbSet
-                .Include(country => country.CountryLanguages)
-                .SelectMany(country => country.CountryLanguages)
+            return await GetDbSet<CountryLanguage>()
                 .Where(countryLanguage => countryLanguage.LanguageId == languageId)
                 .Select(countryLanguage => countryLanguage.Country)
                 .ToListAsync();
+        }
+
+        public async Task<ILookup<int, Country>> GetCountriesByLanguageIdsAsync(IEnumerable<int> languageIds)
+        {
+            var countries = await GetDbSet<CountryLanguage>()
+                .Where(countryLanguage => languageIds.Contains(countryLanguage.LanguageId))
+                .Include(countryLanguage => countryLanguage.Country)
+                .ToListAsync();
+            return countries.ToLookup(countryLanguage => countryLanguage.LanguageId, countryLanguage => countryLanguage.Country);
         }
 
         public Task<Country> GetCountryByIdAsync(int id)

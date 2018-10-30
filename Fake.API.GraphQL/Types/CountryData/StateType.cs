@@ -1,5 +1,6 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
 using Fake.DataAccess.Database.CountryData.Repositories;
+using GraphQL.DataLoader;
 using GraphQL.Types;
 using System.Collections.Generic;
 
@@ -7,17 +8,28 @@ namespace Fake.API.GraphQL.Types.CountryData
 {
     public class StateType : ObjectGraphType<State>
     {
-        public StateType(ICountryRepository countryRepository, IProvinceRepository provinceRepository)
+        public StateType(
+            IDataLoaderContextAccessor accessor,
+            ICountryRepository countryRepository,
+            IProvinceRepository provinceRepository)
         {
             Field(state => state.Id);
             Field(state => state.Name);
             Field(state => state.Code);
             Field<CountryType, Country>()
                 .Name("country")
-                .ResolveAsync(context => countryRepository.GetCountryByIdAsync(context.Source.CountryId));
+                .ResolveAsync(context =>
+                {
+                    var countryDataLoader = accessor.Context.GetOrAddBatchLoader<int, Country>(nameof(countryRepository.GetCountriesAsync), countryRepository.GetCountriesAsync);
+                    return countryDataLoader.LoadAsync(context.Source.CountryId);
+                });
             Field<ListGraphType<ProvinceType>, IEnumerable<Province>>()
                 .Name("provinces")
-                .ResolveAsync(ctx => provinceRepository.GetProvincesByStateIdAsync(ctx.Source.Id));
+                .ResolveAsync(context =>
+                {
+                    var provinceDataLoader = accessor.Context.GetOrAddCollectionBatchLoader<int, Province>(nameof(provinceRepository.GetProvincesByStateIdsAsync), provinceRepository.GetProvincesByStateIdsAsync);
+                    return provinceDataLoader.LoadAsync(context.Source.Id);
+                });
         }
     }
 }

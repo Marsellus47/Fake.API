@@ -30,17 +30,25 @@ namespace Fake.API.GraphQL.Types.CountryData
             Field(c => c.Population, type: typeof(IntGraphType));
             Field<CurrencyType, Currency>()
                 .Name("currency")
-                .ResolveAsync(ctx =>
+                .ResolveAsync(context =>
                 {
-                    var currencyDataLoader = accessor.Context.GetOrAddBatchLoader<int, Currency>("GetCurrencies", currencyRepository.GetCurrenciesAsync);
-                    return currencyDataLoader.LoadAsync(ctx.Source.CurrencyId);
+                    var currencyDataLoader = accessor.Context.GetOrAddBatchLoader<int, Currency>(nameof(currencyRepository.GetCurrenciesAsync), currencyRepository.GetCurrenciesAsync);
+                    return currencyDataLoader.LoadAsync(context.Source.CurrencyId);
                 });
             Field<ListGraphType<StateType>, IEnumerable<State>>()
                 .Name("states")
-                .ResolveAsync(ctx => stateRepository.GetStatesByCountryIdAsync(ctx.Source.Id));
+                .ResolveAsync(context =>
+                {
+                    var stateDataLoader = accessor.Context.GetOrAddCollectionBatchLoader<int, State>(nameof(stateRepository.GetStatesByCountryIdsAsync), stateRepository.GetStatesByCountryIdsAsync);
+                    return stateDataLoader.LoadAsync(context.Source.Id);
+                });
             Field<ListGraphType<LanguageType>, IEnumerable<Language>>()
                 .Name("languages")
-                .ResolveAsync(ctx => languageRepository.GetLanguagesByCountryIdAsync(ctx.Source.Id));
+                .ResolveAsync(context =>
+                {
+                    var languageDataLoader = accessor.Context.GetOrAddCollectionBatchLoader<int, Language>(nameof(languageRepository.GetLanguagesByCountryIdsAsync), languageRepository.GetLanguagesByCountryIdsAsync);
+                    return languageDataLoader.LoadAsync(context.Source.Id);
+                });
         }
     }
 }

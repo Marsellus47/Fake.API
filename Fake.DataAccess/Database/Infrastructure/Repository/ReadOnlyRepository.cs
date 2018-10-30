@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
+using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace Fake.DataAccess.Database.Infrastructure.Repository
 {
@@ -19,6 +19,12 @@ namespace Fake.DataAccess.Database.Infrastructure.Repository
         }
 
         protected DbSet<TEntity> DbSet { get; }
+
+        protected DbSet<T> GetDbSet<T>()
+            where T : class
+        {
+            return _dbContext.Set<T>();
+        }
 
         protected async Task<IEnumerable<TEntity>> GetAllAsync()
         {
