@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using GraphQL.Validation;
+using Fake.API.GraphQL.Infrastructure.Validation;
 
 namespace Fake.API
 {
@@ -44,6 +46,8 @@ namespace Fake.API
 
             services.AddScoped<GraphQL.Infrastructure.GraphQLQuery>();
             services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();
+            services.AddSingleton<IValidationRule, ArgumentValueLowerThanOrEqual>();
+            services.AddSingleton<IValidationRule, ArgumentValueHigherThanOrEqual>();
 
             services.AddScoped<RandomGroupGraphType>();
             services.AddScoped<CountryDataGroupGraphType>();
