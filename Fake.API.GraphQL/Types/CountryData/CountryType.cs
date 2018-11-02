@@ -14,7 +14,7 @@ namespace Fake.API.GraphQL.Types.CountryData
             IStateRepository stateRepository,
             ILanguageRepository languageRepository)
         {
-            Field(c => c.Id);
+            Field(c => c.Id, type: typeof(IdGraphType));
             Field(c => c.Name);
             Field(c => c.PostCodeRegex);
             Field(c => c.PostCodeFormat);

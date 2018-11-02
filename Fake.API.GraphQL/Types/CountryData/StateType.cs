@@ -13,9 +13,9 @@ namespace Fake.API.GraphQL.Types.CountryData
             ICountryRepository countryRepository,
             IProvinceRepository provinceRepository)
         {
-            Field(state => state.Id);
+            Field(state => state.Id, type: typeof(IdGraphType));
             Field(state => state.Name);
-            Field(state => state.Code);
+            Field(state => state.Code, nullable: true);
             Field<CountryType, Country>()
                 .Name("country")
                 .ResolveAsync(context =>

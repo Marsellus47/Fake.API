@@ -13,7 +13,7 @@ namespace Fake.API.GraphQL.Types.CountryData
             IProvinceRepository provinceRepository,
             IPlaceRepository placeRepository)
         {
-            Field(state => state.Id);
+            Field(state => state.Id, type: typeof(IdGraphType));
             Field(state => state.Name, nullable: true);
             Field(state => state.Code, nullable: true);
             Field<ProvinceType, Province>()

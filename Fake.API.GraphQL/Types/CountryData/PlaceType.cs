@@ -9,7 +9,7 @@ namespace Fake.API.GraphQL.Types.CountryData
     {
         public PlaceType(IDataLoaderContextAccessor accessor, ICommunityRepository communityRepository)
         {
-            Field(state => state.Id);
+            Field(state => state.Id, type: typeof(IdGraphType));
             Field(state => state.Name);
             Field(state => state.PostCode);
             Field(state => state.LatLong);

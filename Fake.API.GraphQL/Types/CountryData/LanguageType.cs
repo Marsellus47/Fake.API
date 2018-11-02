@@ -10,7 +10,7 @@ namespace Fake.API.GraphQL.Types.CountryData
     {
         public LanguageType(IDataLoaderContextAccessor accessor, ICountryRepository countryRepository)
         {
-            Field(c => c.Id);
+            Field(c => c.Id, type: typeof(IdGraphType));
             Field(c => c.Code);
             Field<ListGraphType<CountryType>, IEnumerable<Country>>()
                 .Name("countries")
