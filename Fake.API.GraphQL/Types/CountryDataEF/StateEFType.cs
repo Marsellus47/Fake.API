@@ -20,6 +20,10 @@ namespace Fake.API.GraphQL.Types.CountryDataEF
                 name: "provinces",
                 resolve: context => context.Source.Provinces,
                 includeNames: new[] { nameof(State.Provinces) });
+            AddNavigationConnectionField<ProvinceEFType, Province>(
+                name: "provincesConnection",
+                resolve: context => context.Source.Provinces,
+                includeNames: new[] { nameof(State.Provinces) });
         }
     }
 }

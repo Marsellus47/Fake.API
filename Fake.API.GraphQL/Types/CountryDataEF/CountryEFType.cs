@@ -33,8 +33,16 @@ namespace Fake.API.GraphQL.Types.CountryDataEF
                 name: "states",
                 resolve: context => context.Source.States,
                 includeNames: new[] { nameof(Country.States) });
+            AddNavigationConnectionField<StateEFType, State>(
+                name: "statesConnection",
+                resolve: context => context.Source.States,
+                includeNames: new[] { nameof(Country.States) });
             AddNavigationField<LanguageEFType, Language>(
                 name: "languages",
+                resolve: context => countryDataContext.CountryLanguage.Where(x => x.CountryId == context.Source.Id).Select(x => x.Language),
+                includeNames: new[] { nameof(Country.CountryLanguages), $"{nameof(Country.CountryLanguages)}.{nameof(CountryLanguage.Language)}" });
+            AddNavigationConnectionField<LanguageEFType, Language>(
+                name: "languagesConnection",
                 resolve: context => countryDataContext.CountryLanguage.Where(x => x.CountryId == context.Source.Id).Select(x => x.Language),
                 includeNames: new[] { nameof(Country.CountryLanguages), $"{nameof(Country.CountryLanguages)}.{nameof(CountryLanguage.Language)}" });
         }

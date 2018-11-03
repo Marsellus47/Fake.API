@@ -18,12 +18,20 @@ namespace Fake.API.GraphQL.Types.CountryDataEF
                 "currencies",
                 resolve: context => countryDataContext.Currency);
 
+            AddQueryConnectionField<CurrencyEFType, Currency>(
+                "currenciesConnection",
+                resolve: context => countryDataContext.Currency);
+
             #endregion
 
             #region Language
 
             AddQueryField<LanguageEFType, Language>(
                 "languages",
+                resolve: context => countryDataContext.Language);
+
+            AddQueryConnectionField<LanguageEFType, Language>(
+                "languagesConnection",
                 resolve: context => countryDataContext.Language);
 
             #endregion
@@ -34,12 +42,20 @@ namespace Fake.API.GraphQL.Types.CountryDataEF
                 "countries",
                 resolve: context => countryDataContext.Country);
 
+            AddQueryConnectionField<CountryEFType, Country>(
+                "countriesConnection",
+                resolve: context => countryDataContext.Country);
+
             #endregion
 
             #region State
 
             AddQueryField<StateEFType, State>(
                 "states",
+                resolve: context => countryDataContext.State);
+
+            AddQueryConnectionField<StateEFType, State>(
+                "statesConnection",
                 resolve: context => countryDataContext.State);
 
             #endregion
@@ -50,6 +66,10 @@ namespace Fake.API.GraphQL.Types.CountryDataEF
                 "provinces",
                 resolve: context => countryDataContext.Province);
 
+            AddQueryConnectionField<ProvinceEFType, Province>(
+                "provincesConnection",
+                resolve: context => countryDataContext.Province);
+
             #endregion
 
             #region Community
@@ -58,12 +78,20 @@ namespace Fake.API.GraphQL.Types.CountryDataEF
                 "communities",
                 resolve: context => countryDataContext.Community);
 
+            AddQueryConnectionField<CommunityEFType, Community>(
+                "communitiesConnection",
+                resolve: context => countryDataContext.Community);
+
             #endregion
 
             #region Place
 
             AddQueryField<PlaceEFType, Place>(
                 "places",
+                resolve: context => countryDataContext.Place);
+
+            AddQueryConnectionField<PlaceEFType, Place>(
+                "placesConnection",
                 resolve: context => countryDataContext.Place);
 
             #endregion
