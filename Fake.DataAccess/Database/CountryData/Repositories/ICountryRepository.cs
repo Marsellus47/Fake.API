@@ -12,6 +12,7 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
         Task<IDictionary<int, Country>> GetCountriesAsync(IEnumerable<int> countryIds, CancellationToken token);
         Task<IEnumerable<Country>> GetCountriesByLanguageIdAsync(int languageId);
         Task<ILookup<int, Country>> GetCountriesByLanguageIdsAsync(IEnumerable<int> languageIds);
+        Task<ILookup<int, Country>> GetCountriesByCurrencyIdsAsync(IEnumerable<int> currencyIds);
         Task<Country> GetCountryByIdAsync(int id);
         Task<Country> GetCountryByNameAsync(string name);
     }

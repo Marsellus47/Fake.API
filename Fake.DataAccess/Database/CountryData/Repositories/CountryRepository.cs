@@ -41,6 +41,14 @@ namespace Fake.DataAccess.Database.CountryData.Repositories
             return countries.ToLookup(countryLanguage => countryLanguage.LanguageId, countryLanguage => countryLanguage.Country);
         }
 
+        public async Task<ILookup<int, Country>> GetCountriesByCurrencyIdsAsync(IEnumerable<int> currencyIds)
+        {
+            var countries = await DbSet
+                .Where(country => currencyIds.Contains(country.CurrencyId))
+                .ToListAsync();
+            return countries.ToLookup(countryLanguage => countryLanguage.CurrencyId);
+        }
+
         public Task<Country> GetCountryByIdAsync(int id)
         {
             return FindAsync(id);

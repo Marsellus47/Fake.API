@@ -1,24 +1,27 @@
-﻿using Fake.API.GraphQL.Types.CountryData;
+﻿using Fake.API.GraphQL.Infrastructure.Validation;
+using Fake.API.GraphQL.Types.CountryData;
 using Fake.API.GraphQL.Types;
 using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
 using GraphQL.DataLoader;
+using GraphQL.EntityFramework;
 using GraphQL.Execution;
 using GraphQL.Http;
 using GraphQL.Server.Ui.GraphiQL;
 using GraphQL.Server;
 using GraphQL.Types;
+using GraphQL.Validation;
 using GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using GraphQL.Validation;
-using Fake.API.GraphQL.Infrastructure.Validation;
+using Fake.API.GraphQL.Types.CountryDataEF;
 
 namespace Fake.API
 {
@@ -50,6 +53,7 @@ namespace Fake.API
             services.AddSingleton<IValidationRule, ArgumentValueHigherThanOrEqual>();
 
             services.AddScoped<RandomGroupGraphType>();
+
             services.AddScoped<CountryDataGroupGraphType>();
             services.AddScoped<CommunityType>();
             services.AddScoped<CountryType>();
@@ -59,12 +63,26 @@ namespace Fake.API
             services.AddScoped<ProvinceType>();
             services.AddScoped<StateType>();
 
+            services.AddScoped<CountryDataEFGroupGraphType>();
+            services.AddScoped<CommunityEFType>();
+            services.AddScoped<CountryEFType>();
+            services.AddScoped<CurrencyEFType>();
+            services.AddScoped<LanguageEFType>();
+            services.AddScoped<PlaceEFType>();
+            services.AddScoped<ProvinceEFType>();
+            services.AddScoped<StateEFType>();
+
             #endregion
 
             #region Data access
 
             const string countryDataConnectionString = @"Server=(localdb)\mssqllocaldb;Database=Fake.API.CountryData;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<CountryDataContext>(options => options.UseSqlServer(countryDataConnectionString));
+            services.AddDbContext<CountryDataContext>(options => options
+                .UseSqlServer(countryDataConnectionString)
+                .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
+
+            EfGraphQLConventions.RegisterConnectionTypesInContainer(services);
+            EfGraphQLConventions.RegisterInContainer(services, services.BuildServiceProvider().GetRequiredService<CountryDataContext>());
 
             services.AddScoped<ICommunityRepository, CommunityRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
