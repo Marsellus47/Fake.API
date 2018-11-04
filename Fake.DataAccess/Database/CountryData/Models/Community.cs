@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Fake.DataAccess.Database.Infrastructure.Model;
+using System.Collections.Generic;
 
 namespace Fake.DataAccess.Database.CountryData.Models
 {
-    public class Community
+    public class Community : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public List<Place> Places { get; set; }

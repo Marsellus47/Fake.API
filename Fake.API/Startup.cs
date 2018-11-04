@@ -1,5 +1,7 @@
 ﻿using Fake.API.GraphQL.Infrastructure.Validation;
-using Fake.API.GraphQL.Types.CountryData;
+using Fake.API.GraphQL.Infrastructure;
+using Fake.API.GraphQL.Types.CountryData.Input;
+using Fake.API.GraphQL.Types.CountryData.Output;
 using Fake.API.GraphQL.Types;
 using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
@@ -45,8 +47,9 @@ namespace Fake.API
             services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
             services.AddSingleton<IDocumentExecutionListener, DataLoaderDocumentListener>();
 
-            services.AddScoped<GraphQL.Infrastructure.GraphQLQuery>();
-            services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();
+            services.AddScoped<ISchema, GraphQLSchema>();
+            services.AddScoped<GraphQLQuery>();
+            services.AddScoped<GraphQLMutation>();
             services.AddSingleton<IValidationRule, ArgumentValueLowerThanOrEqual>();
             services.AddSingleton<IValidationRule, ArgumentValueHigherThanOrEqual>();
 
@@ -60,6 +63,10 @@ namespace Fake.API
             services.AddScoped<PlaceType>();
             services.AddScoped<ProvinceType>();
             services.AddScoped<StateType>();
+
+            services.AddScoped<CurrencyInsertInputType>();
+            services.AddScoped<CurrencyUpdateInputType>();
+            services.AddScoped<CurrencyPartialUpdateInputType>();
 
             #endregion
 

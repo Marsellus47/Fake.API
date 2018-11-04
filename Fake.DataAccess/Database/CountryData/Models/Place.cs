@@ -1,8 +1,9 @@
-﻿namespace Fake.DataAccess.Database.CountryData.Models
+﻿using Fake.DataAccess.Database.Infrastructure.Model;
+
+namespace Fake.DataAccess.Database.CountryData.Models
 {
-    public class Place
+    public class Place : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string PostCode { get; set; }
         public string LatLong { get; set; }

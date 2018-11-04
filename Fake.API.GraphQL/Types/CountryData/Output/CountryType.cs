@@ -4,7 +4,7 @@ using GraphQL.DataLoader;
 using GraphQL.Types;
 using System.Collections.Generic;
 
-namespace Fake.API.GraphQL.Types.CountryData
+namespace Fake.API.GraphQL.Types.CountryData.Output
 {
     public class CountryType : ObjectGraphType<Country>
     {

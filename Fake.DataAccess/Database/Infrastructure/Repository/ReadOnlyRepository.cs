@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Fake.DataAccess.Database.Infrastructure.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
@@ -8,22 +9,22 @@ using System;
 namespace Fake.DataAccess.Database.Infrastructure.Repository
 {
     public abstract class ReadOnlyRepository<TEntity>
-        where TEntity: class
+        where TEntity: Entity
     {
-        private readonly DbContext _dbContext;
-
         protected ReadOnlyRepository(DbContext dbContext)
         {
-            _dbContext = dbContext;
+            DbContext = dbContext;
             DbSet = dbContext.Set<TEntity>();
         }
+
+        protected DbContext DbContext { get; }
 
         protected DbSet<TEntity> DbSet { get; }
 
         protected DbSet<T> GetDbSet<T>()
             where T : class
         {
-            return _dbContext.Set<T>();
+            return DbContext.Set<T>();
         }
 
         protected async Task<IEnumerable<TEntity>> GetAllAsync()

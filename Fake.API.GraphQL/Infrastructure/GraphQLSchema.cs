@@ -5,10 +5,11 @@ namespace Fake.API.GraphQL.Infrastructure
 {
     public class GraphQLSchema : Schema
     {
-        public GraphQLSchema(IDependencyResolver dependencyResolver, GraphQLQuery query)
-            : base(dependencyResolver)
+        public GraphQLSchema(IDependencyResolver resolver)
+            : base(resolver)
         {
-            Query = query;
+            Query = resolver.Resolve<GraphQLQuery>();
+            Mutation = resolver.Resolve<GraphQLMutation>();
         }
     }
 }
