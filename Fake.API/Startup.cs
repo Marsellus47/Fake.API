@@ -6,7 +6,6 @@ using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
 using GraphQL.DataLoader;
-using GraphQL.EntityFramework;
 using GraphQL.Execution;
 using GraphQL.Http;
 using GraphQL.Server.Ui.GraphiQL;
@@ -21,7 +20,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Fake.API.GraphQL.Types.CountryDataEF;
 
 namespace Fake.API
 {
@@ -63,15 +61,6 @@ namespace Fake.API
             services.AddScoped<ProvinceType>();
             services.AddScoped<StateType>();
 
-            services.AddScoped<CountryDataEFGroupGraphType>();
-            services.AddScoped<CommunityEFType>();
-            services.AddScoped<CountryEFType>();
-            services.AddScoped<CurrencyEFType>();
-            services.AddScoped<LanguageEFType>();
-            services.AddScoped<PlaceEFType>();
-            services.AddScoped<ProvinceEFType>();
-            services.AddScoped<StateEFType>();
-
             #endregion
 
             #region Data access
@@ -80,9 +69,6 @@ namespace Fake.API
             services.AddDbContext<CountryDataContext>(options => options
                 .UseSqlServer(countryDataConnectionString)
                 .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
-
-            EfGraphQLConventions.RegisterConnectionTypesInContainer(services);
-            EfGraphQLConventions.RegisterInContainer(services, services.BuildServiceProvider().GetRequiredService<CountryDataContext>());
 
             services.AddScoped<ICommunityRepository, CommunityRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
