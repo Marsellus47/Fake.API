@@ -9,7 +9,7 @@ namespace Fake.API.GraphQL.Infrastructure
         public GraphQLQuery()
         {
             Field<RandomGroupGraphType>("random", resolve: context => new { });
-            Field<CountryDataGroupGraphType>("countryData", resolve: context => new { });
+            Field<CountryDataOutputGroupGraphType>("countryData", resolve: context => new { });
         }
     }
 }

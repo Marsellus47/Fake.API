@@ -55,7 +55,7 @@ namespace Fake.API
 
             services.AddScoped<RandomGroupGraphType>();
 
-            services.AddScoped<CountryDataGroupGraphType>();
+            services.AddScoped<CountryDataOutputGroupGraphType>();
             services.AddScoped<CommunityType>();
             services.AddScoped<CountryType>();
             services.AddScoped<CurrencyType>();
@@ -64,6 +64,7 @@ namespace Fake.API
             services.AddScoped<ProvinceType>();
             services.AddScoped<StateType>();
 
+            services.AddScoped<CountryDataInputGroupGraphType>();
             services.AddScoped<CurrencyInsertInputType>();
             services.AddScoped<CurrencyUpdateInputType>();
             services.AddScoped<CurrencyPartialUpdateInputType>();

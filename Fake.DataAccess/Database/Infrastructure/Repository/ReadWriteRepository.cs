@@ -34,7 +34,9 @@ namespace Fake.DataAccess.Database.Infrastructure.Repository
 
         public async Task<TEntity> PartiallyUpdateAsync(IDictionary<string, object> values)
         {
-            int id = int.Parse(values[idColumnName.Camelize()] as string);
+            var idValue = values[idColumnName.Camelize()];
+            int id = idValue is int ? (int)idValue : int.Parse(idValue as string);
+            //int id = int.Parse(values[idColumnName.Camelize()] as string);
             TEntity entity = await FindAsync(id);
 
             if (entity == null)
