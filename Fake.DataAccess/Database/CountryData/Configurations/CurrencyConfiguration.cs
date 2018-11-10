@@ -9,6 +9,7 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
         public void Configure(EntityTypeBuilder<Currency> builder)
         {
             builder.HasKey(currency => currency.Id);
+            builder.HasIndex(currency => currency.Code).IsUnique();
         }
     }
 }

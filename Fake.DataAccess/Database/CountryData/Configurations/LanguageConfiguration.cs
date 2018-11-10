@@ -9,6 +9,7 @@ namespace Fake.DataAccess.Database.CountryData.Configurations
         public void Configure(EntityTypeBuilder<Language> builder)
         {
             builder.HasKey(language => language.Id);
+            builder.HasIndex(language => language.Code).IsUnique();
         }
     }
 }
