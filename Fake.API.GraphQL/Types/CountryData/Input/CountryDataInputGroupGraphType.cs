@@ -1,9 +1,11 @@
 ﻿using Fake.API.GraphQL.Types.CountryData.Output;
 using Fake.DataAccess.Database.CountryData.Models;
 using Fake.DataAccess.Database.CountryData.Repositories;
+using GraphQL;
 using GraphQL.Types;
 using Humanizer;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Fake.API.GraphQL.Types.CountryData.Input
 {
@@ -38,6 +40,13 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
                 resolve: async (context) =>
                 {
                     var values = context.Arguments["currency"] as IDictionary<string, object>;
+
+                    ValidateMandatoryField(context, values, nameof(Currency.Code));
+                    ValidateMandatoryField(context, values, nameof(Currency.Name));
+
+                    if (context.Errors.Any())
+                        return null;
+
                     return await currencyRepository.PartiallyUpdateAsync(values);
                 });
 
@@ -51,6 +60,14 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
                 });
 
             #endregion
+        }
+
+        private void ValidateMandatoryField(ResolveFieldContext<object> context, IDictionary<string, object> values, string fieldName)
+        {
+            if (values.TryGetValue(fieldName.Camelize(), out object fieldValue) && fieldValue == null)
+            {
+                context.Errors.Add(new ExecutionError($"{fieldName.Camelize()} is mandatory"));
+            }
         }
     }
 }
