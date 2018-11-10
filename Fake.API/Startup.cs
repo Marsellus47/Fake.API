@@ -68,6 +68,8 @@ namespace Fake.API
             services.AddScoped<CurrencyInsertInputType>();
             services.AddScoped<CurrencyUpdateInputType>();
             services.AddScoped<CurrencyPartialUpdateInputType>();
+            services.AddScoped<LanguageInsertInputType>();
+            services.AddScoped<LanguageUpdateInputType>();
 
             #endregion
 

@@ -11,7 +11,9 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
 {
     public class CountryDataInputGroupGraphType : ObjectGraphType
     {
-        public CountryDataInputGroupGraphType(ICurrencyRepository currencyRepository)
+        public CountryDataInputGroupGraphType(
+            ICurrencyRepository currencyRepository,
+            ILanguageRepository languageRepository)
         {
             #region Currency
 
@@ -57,6 +59,38 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
                 {
                     var id = context.GetArgument<int>(nameof(Currency.Id).Camelize());
                     return await currencyRepository.DeleteAsync(id);
+                });
+
+            #endregion
+
+            #region Language
+
+            FieldAsync<NonNullGraphType<LanguageType>>(
+                "insertLanguage",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<LanguageInsertInputType>> { Name = "language" }),
+                resolve: async (context) =>
+                {
+                    var language = context.GetArgument<Language>("language");
+                    await languageRepository.InsertAsync(language);
+                    return language;
+                });
+
+            FieldAsync<LanguageType>(
+                "updateLanguage",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<LanguageUpdateInputType>> { Name = "language" }),
+                resolve: async (context) =>
+                {
+                    var language = context.GetArgument<Language>("language");
+                    return await languageRepository.UpdateAsync(language);
+                });
+
+            FieldAsync<NonNullGraphType<BooleanGraphType>>(
+                "deleteLanguage",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = nameof(Language.Id).Camelize() }),
+                resolve: async (context) =>
+                {
+                    var id = context.GetArgument<int>(nameof(Language.Id).Camelize());
+                    return await languageRepository.DeleteAsync(id);
                 });
 
             #endregion

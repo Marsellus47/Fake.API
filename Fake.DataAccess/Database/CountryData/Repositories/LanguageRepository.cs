@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class LanguageRepository : ReadOnlyRepository<Language>, ILanguageRepository
+    public class LanguageRepository : ReadWriteRepository<Language>, ILanguageRepository
     {
         public LanguageRepository(CountryDataContext countryDataContext)
             : base(countryDataContext) { }
