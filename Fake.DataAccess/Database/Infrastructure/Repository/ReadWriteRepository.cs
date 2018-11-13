@@ -36,7 +36,6 @@ namespace Fake.DataAccess.Database.Infrastructure.Repository
         {
             var idValue = values[idColumnName.Camelize()];
             int id = idValue is int ? (int)idValue : int.Parse(idValue as string);
-            //int id = int.Parse(values[idColumnName.Camelize()] as string);
             TEntity entity = await FindAsync(id);
 
             if (entity == null)
@@ -47,7 +46,8 @@ namespace Fake.DataAccess.Database.Infrastructure.Repository
                 foreach (var value in values.Where(NonIdColumnCondition))
                 {
                     var property = typeof(TEntity).GetProperty(value.Key.Pascalize());
-                    property.SetValue(entity, value.Value);
+                    var propertyValue = Convert.ChangeType(value.Value, property.PropertyType);
+                    property.SetValue(entity, propertyValue);
                 }
 
                 DbSet.Update(entity);

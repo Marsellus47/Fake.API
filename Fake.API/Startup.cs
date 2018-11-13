@@ -65,11 +65,17 @@ namespace Fake.API
             services.AddScoped<StateType>();
 
             services.AddScoped<CountryDataInputGroupGraphType>();
+            services.AddScoped<CurrencyInputGroupGraphType>();
             services.AddScoped<CurrencyInsertInputType>();
             services.AddScoped<CurrencyUpdateInputType>();
             services.AddScoped<CurrencyPartialUpdateInputType>();
+            services.AddScoped<LanguageInputGroupGraphType>();
             services.AddScoped<LanguageInsertInputType>();
             services.AddScoped<LanguageUpdateInputType>();
+            services.AddScoped<CountryInputGroupGraphType>();
+            services.AddScoped<CountryInsertInputType>();
+            services.AddScoped<CountryUpdateInputType>();
+            services.AddScoped<CountryPartialUpdateInputType>();
 
             #endregion
 
