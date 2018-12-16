@@ -1,30 +1,27 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
 using GraphQL.Types;
-using Humanizer;
 
 namespace Fake.API.GraphQL.Types.CountryData.Input
 {
-    public class CountryPartialUpdateInputType : InputObjectGraphType
+    public class CountryPartialUpdateInputType : InputObjectGraphType<Country>
     {
         public CountryPartialUpdateInputType()
         {
-            Name = "CountryPartialUpdateInputType";
-
-            Field<NonNullGraphType<IdGraphType>>(nameof(Country.Id).Camelize());
-            Field<StringGraphType>(nameof(Country.Name).Camelize());
-            Field<StringGraphType>(nameof(Country.PostCodeRegex).Camelize());
-            Field<StringGraphType>(nameof(Country.PostCodeFormat).Camelize());
-            Field<StringGraphType>(nameof(Country.PhonePrefix).Camelize());
-            Field<StringGraphType>(nameof(Country.TopLevelDomain).Camelize());
-            Field<StringGraphType>(nameof(Country.Continent).Camelize());
-            Field<FloatGraphType>(nameof(Country.Area).Camelize());
-            Field<StringGraphType>(nameof(Country.Capital).Camelize());
-            Field<StringGraphType>(nameof(Country.Fips).Camelize());
-            Field<IntGraphType>(nameof(Country.IsoNumeric).Camelize());
-            Field<StringGraphType>(nameof(Country.Iso3).Camelize());
-            Field<StringGraphType>(nameof(Country.Iso).Camelize());
-            Field<IntGraphType>(nameof(Country.Population).Camelize());
-            Field<IntGraphType>(nameof(Country.CurrencyId).Camelize());
+            Field(country => country.Id, type: typeof(NonNullGraphType<IdGraphType>));
+            Field(country => country.Name, nullable: true);
+            Field(country => country.PostCodeRegex, nullable: true);
+            Field(country => country.PostCodeFormat, nullable: true);
+            Field(country => country.PhonePrefix, nullable: true);
+            Field(country => country.TopLevelDomain, nullable: true);
+            Field(country => country.Continent, nullable: true);
+            Field(country => country.Area, nullable: true, type: typeof(FloatGraphType));
+            Field(country => country.Capital, nullable: true);
+            Field(country => country.Fips, nullable: true);
+            Field(country => country.IsoNumeric, nullable: true, type: typeof(IntGraphType));
+            Field(country => country.Iso3, nullable: true);
+            Field(country => country.Iso, nullable: true);
+            Field(country => country.Population, nullable: true, type: typeof(IntGraphType));
+            Field(country => country.CurrencyId, nullable: true);
         }
     }
 }

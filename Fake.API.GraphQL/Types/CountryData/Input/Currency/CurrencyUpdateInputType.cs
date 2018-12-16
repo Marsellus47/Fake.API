@@ -1,18 +1,15 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
 using GraphQL.Types;
-using Humanizer;
 
 namespace Fake.API.GraphQL.Types.CountryData.Input
 {
-    public class CurrencyUpdateInputType : InputObjectGraphType
+    public class CurrencyUpdateInputType : InputObjectGraphType<Currency>
     {
         public CurrencyUpdateInputType()
         {
-            Name = "CurrencyUpdateInput";
-
-            Field<NonNullGraphType<IdGraphType>>(nameof(Currency.Id).Camelize());
-            Field<NonNullGraphType<StringGraphType>>(nameof(Currency.Code).Camelize());
-            Field<NonNullGraphType<StringGraphType>>(nameof(Currency.Name).Camelize());
+            Field(currency => currency.Id, type: typeof(NonNullGraphType<IdGraphType>));
+            Field(currency => currency.Code);
+            Field(currency => currency.Name);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
+using Fake.DataAccess.Database.Infrastructure.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public interface IStateRepository
+    public interface IStateRepository : IReadWriteRepository<State>
     {
         Task<IEnumerable<State>> GetStatesAsync();
         Task<IDictionary<int, State>> GetStatesAsync(IEnumerable<int> stateIds, CancellationToken token);

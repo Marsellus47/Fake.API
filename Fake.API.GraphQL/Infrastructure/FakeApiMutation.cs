@@ -3,9 +3,9 @@ using GraphQL.Types;
 
 namespace Fake.API.GraphQL.Infrastructure
 {
-    public class GraphQLMutation : ObjectGraphType
+    public class FakeApiMutation : ObjectGraphType
     {
-        public GraphQLMutation()
+        public FakeApiMutation()
         {
             Field<CountryDataInputGroupGraphType>("countryData", resolve: context => new { });
         }

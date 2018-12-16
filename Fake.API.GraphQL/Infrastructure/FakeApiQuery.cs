@@ -4,9 +4,9 @@ using GraphQL.Types;
 
 namespace Fake.API.GraphQL.Infrastructure
 {
-    public class GraphQLQuery : ObjectGraphType
+    public class FakeApiQuery : ObjectGraphType
     {
-        public GraphQLQuery()
+        public FakeApiQuery()
         {
             Field<RandomGroupGraphType>("random", resolve: context => new { });
             Field<CountryDataOutputGroupGraphType>("countryData", resolve: context => new { });
