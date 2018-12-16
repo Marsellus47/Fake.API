@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class ProvinceRepository : ReadOnlyRepository<Province>, IProvinceRepository
+    public class ProvinceRepository : ReadWriteRepository<Province>, IProvinceRepository
     {
         public ProvinceRepository(CountryDataContext countryDataContext)
             : base(countryDataContext) { }
