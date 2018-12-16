@@ -26,7 +26,8 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
                 resolve: async (context) =>
                 {
                     var language = context.GetArgument<Language>("language");
-                    return await languageRepository.UpdateAsync(language);
+                    await languageRepository.UpdateAsync(language);
+                    return language;
                 });
 
             FieldAsync<NonNullGraphType<BooleanGraphType>>(

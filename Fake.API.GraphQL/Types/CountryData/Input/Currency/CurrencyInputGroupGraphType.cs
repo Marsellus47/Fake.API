@@ -29,7 +29,8 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
                 resolve: async (context) =>
                 {
                     var currency = context.GetArgument<Currency>("currency");
-                    return await currencyRepository.UpdateAsync(currency);
+                    await currencyRepository.UpdateAsync(currency);
+                    return currency;
                 });
 
             FieldAsync<CurrencyType>(

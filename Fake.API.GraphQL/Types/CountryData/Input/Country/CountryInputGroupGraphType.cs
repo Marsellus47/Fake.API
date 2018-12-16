@@ -19,6 +19,17 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
                 resolve: async (context) =>
                 {
                     var country = context.GetArgument<Country>("country");
+                    var rawCountry = context.Arguments["country"] as IDictionary<string, object>;
+                    if(rawCountry.ContainsKey("languages"))
+                    {
+                        var languages = rawCountry["languages"] as List<object>;
+                        country.CountryLanguages = new List<CountryLanguage>();
+                        country.CountryLanguages.AddRange(languages.Select(language => new CountryLanguage
+                        {
+                            Country = country,
+                            Language = new Language { Code = (string)language }
+                        }));
+                    }
                     await countryRepository.InsertAsync(country);
                     return country;
                 });
@@ -29,7 +40,8 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
                 resolve: async (context) =>
                 {
                     var country = context.GetArgument<Country>("country");
-                    return await countryRepository.UpdateAsync(country);
+                    await countryRepository.UpdateAsync(country);
+                    return country;
                 });
 
             FieldAsync<CountryType>(

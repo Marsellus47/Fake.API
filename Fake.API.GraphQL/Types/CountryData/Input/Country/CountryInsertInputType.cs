@@ -24,6 +24,7 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
             Field<NonNullGraphType<StringGraphType>>(nameof(Country.Iso).Camelize());
             Field<IntGraphType>(nameof(Country.Population).Camelize());
             Field<NonNullGraphType<IntGraphType>>(nameof(Country.CurrencyId).Camelize());
+            Field<ListGraphType<StringGraphType>>("languages");
         }
     }
 }

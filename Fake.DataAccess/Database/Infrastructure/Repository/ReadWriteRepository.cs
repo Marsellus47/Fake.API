@@ -22,14 +22,13 @@ namespace Fake.DataAccess.Database.Infrastructure.Repository
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
             if (!DbSet.Any(x => x.Id == entity.Id))
-                return null;
+                return;
 
             DbSet.Update(entity);
             await DbContext.SaveChangesAsync();
-            return entity;
         }
 
         public async Task<TEntity> PartiallyUpdateAsync(IDictionary<string, object> values)
