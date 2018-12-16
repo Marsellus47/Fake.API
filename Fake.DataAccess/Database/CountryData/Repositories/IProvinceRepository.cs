@@ -1,9 +1,9 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
+using Fake.DataAccess.Database.Infrastructure.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
-using Fake.DataAccess.Database.Infrastructure.Repository;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {

@@ -11,6 +11,8 @@ namespace Fake.API.GraphQL.Types.CountryData.Input
             Field<CountryInputGroupGraphType>("country", resolve: context => new { });
             Field<StateInputGroupGraphType>("state", resolve: context => new { });
             Field<ProvinceInputGroupGraphType>("province", resolve: context => new { });
+            Field<CommunityInputGroupGraphType>("community", resolve: context => new { });
+            Field<PlaceInputGroupGraphType>("place", resolve: context => new { });
         }
     }
 }

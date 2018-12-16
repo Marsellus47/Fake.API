@@ -68,6 +68,16 @@ namespace Fake.API.Extensions
             services.AddScoped<ProvinceInsertInputType>();
             services.AddScoped<ProvinceUpdateInputType>();
             services.AddScoped<ProvincePartialUpdateInputType>();
+
+            services.AddScoped<CommunityInputGroupGraphType>();
+            services.AddScoped<CommunityInsertInputType>();
+            services.AddScoped<CommunityUpdateInputType>();
+            services.AddScoped<CommunityPartialUpdateInputType>();
+
+            services.AddScoped<PlaceInputGroupGraphType>();
+            services.AddScoped<PlaceInsertInputType>();
+            services.AddScoped<PlaceUpdateInputType>();
+            services.AddScoped<PlacePartialUpdateInputType>();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class PlaceRepository : ReadOnlyRepository<Place>, IPlaceRepository
+    public class PlaceRepository : ReadWriteRepository<Place>, IPlaceRepository
     {
         public PlaceRepository(CountryDataContext countryDataContext)
             : base(countryDataContext) { }
