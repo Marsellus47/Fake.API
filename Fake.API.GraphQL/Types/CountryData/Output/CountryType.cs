@@ -4,7 +4,7 @@ using GraphQL.DataLoader;
 using GraphQL.Types;
 using System.Collections.Generic;
 
-namespace Fake.API.GraphQL.Types.CountryData
+namespace Fake.API.GraphQL.Types.CountryData.Output
 {
     public class CountryType : ObjectGraphType<Country>
     {
@@ -23,11 +23,11 @@ namespace Fake.API.GraphQL.Types.CountryData
             Field(c => c.Continent);
             Field(c => c.Area);
             Field(c => c.Capital);
-            Field(c => c.Fips);
+            Field(c => c.Fips, nullable: true);
             Field(c => c.IsoNumeric, type: typeof(IntGraphType));
             Field(c => c.Iso3);
             Field(c => c.Iso);
-            Field(c => c.Population, type: typeof(IntGraphType));
+            Field(c => c.Population, nullable: true, type: typeof(IntGraphType));
             Field<CurrencyType, Currency>()
                 .Name("currency")
                 .ResolveAsync(context =>

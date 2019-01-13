@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Fake.DataAccess.Database.Infrastructure.Model;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Fake.DataAccess.Database.CountryData.Models
 {
-    public class State
+    public class State : Entity
     {
-        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+
         public string Code { get; set; }
+
         public List<Province> Provinces { get; set; }
 
         public int CountryId { get; set; }

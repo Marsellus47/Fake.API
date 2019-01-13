@@ -1,18 +1,10 @@
-﻿using Fake.API.GraphQL.Infrastructure.Validation;
-using Fake.API.GraphQL.Types.CountryData;
-using Fake.API.GraphQL.Types;
-using Fake.DataAccess.Database.CountryData.Repositories;
+﻿using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
-using GraphQL.DataLoader;
-using GraphQL.Execution;
-using GraphQL.Http;
 using GraphQL.Server.Ui.GraphiQL;
 using GraphQL.Server;
 using GraphQL.Types;
-using GraphQL.Validation;
-using GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Fake.API.Extensions;
 
 namespace Fake.API
 {
@@ -35,33 +28,7 @@ namespace Fake.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region GraphQL
-
-            services.AddGraphQL(options => options.ExposeExceptions = true);
-
-            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-            services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
-            services.AddSingleton<IDocumentWriter, DocumentWriter>();
-            services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
-            services.AddSingleton<IDocumentExecutionListener, DataLoaderDocumentListener>();
-
-            services.AddScoped<GraphQL.Infrastructure.GraphQLQuery>();
-            services.AddScoped<ISchema, GraphQL.Infrastructure.GraphQLSchema>();
-            services.AddSingleton<IValidationRule, ArgumentValueLowerThanOrEqual>();
-            services.AddSingleton<IValidationRule, ArgumentValueHigherThanOrEqual>();
-
-            services.AddScoped<RandomGroupGraphType>();
-
-            services.AddScoped<CountryDataGroupGraphType>();
-            services.AddScoped<CommunityType>();
-            services.AddScoped<CountryType>();
-            services.AddScoped<CurrencyType>();
-            services.AddScoped<LanguageType>();
-            services.AddScoped<PlaceType>();
-            services.AddScoped<ProvinceType>();
-            services.AddScoped<StateType>();
-
-            #endregion
+            services.AddFakeApiGraphQL();
 
             #region Data access
 

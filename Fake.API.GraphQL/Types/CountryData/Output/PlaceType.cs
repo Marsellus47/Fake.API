@@ -3,7 +3,7 @@ using Fake.DataAccess.Database.CountryData.Repositories;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 
-namespace Fake.API.GraphQL.Types.CountryData
+namespace Fake.API.GraphQL.Types.CountryData.Output
 {
     public class PlaceType : ObjectGraphType<Place>
     {

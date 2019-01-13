@@ -2,11 +2,11 @@
 using Fake.DataAccess.Database.CountryData.Repositories;
 using GraphQL.Types;
 
-namespace Fake.API.GraphQL.Types.CountryData
+namespace Fake.API.GraphQL.Types.CountryData.Output
 {
-    public class CountryDataGroupGraphType : ObjectGraphType
+    public class CountryDataOutputGroupGraphType : ObjectGraphType
     {
-        public CountryDataGroupGraphType(
+        public CountryDataOutputGroupGraphType(
             ICountryRepository countryRepository,
             ICurrencyRepository currencyRepository,
             ILanguageRepository languageRepository,

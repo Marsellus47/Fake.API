@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public class CurrencyRepository : ReadOnlyRepository<Currency>, ICurrencyRepository
+    public class CurrencyRepository : ReadWriteRepository<Currency>, ICurrencyRepository
     {
         public CurrencyRepository(CountryDataContext countryDataContext)
             : base(countryDataContext) { }

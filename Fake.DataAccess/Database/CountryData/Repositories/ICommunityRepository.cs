@@ -1,4 +1,5 @@
 ﻿using Fake.DataAccess.Database.CountryData.Models;
+using Fake.DataAccess.Database.Infrastructure.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +7,7 @@ using System.Threading;
 
 namespace Fake.DataAccess.Database.CountryData.Repositories
 {
-    public interface ICommunityRepository
+    public interface ICommunityRepository : IReadWriteRepository<Community>
     {
         Task<IEnumerable<Community>> GetCommunitiesAsync();
         Task<IDictionary<int, Community>> GetCommunitiesAsync(IEnumerable<int> communityIds, CancellationToken token);

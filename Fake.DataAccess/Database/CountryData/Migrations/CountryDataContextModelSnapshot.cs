@@ -45,35 +45,47 @@ namespace Fake.DataAccess.Database.CountryData.Migrations
 
                     b.Property<double>("Area");
 
-                    b.Property<string>("Capital");
+                    b.Property<string>("Capital")
+                        .IsRequired();
 
-                    b.Property<string>("Continent");
+                    b.Property<string>("Continent")
+                        .IsRequired();
 
                     b.Property<int>("CurrencyId");
 
                     b.Property<string>("Fips");
 
-                    b.Property<string>("Iso");
+                    b.Property<string>("Iso")
+                        .IsRequired();
 
-                    b.Property<string>("Iso3");
+                    b.Property<string>("Iso3")
+                        .IsRequired();
 
                     b.Property<int>("IsoNumeric");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
-                    b.Property<string>("PhonePrefix");
+                    b.Property<string>("PhonePrefix")
+                        .IsRequired();
 
                     b.Property<long>("Population");
 
-                    b.Property<string>("PostCodeFormat");
+                    b.Property<string>("PostCodeFormat")
+                        .IsRequired();
 
-                    b.Property<string>("PostCodeRegex");
+                    b.Property<string>("PostCodeRegex")
+                        .IsRequired();
 
-                    b.Property<string>("TopLevelDomain");
+                    b.Property<string>("TopLevelDomain")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
                     b.HasIndex("CurrencyId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Country");
                 });
@@ -97,11 +109,16 @@ namespace Fake.DataAccess.Database.CountryData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Code");
+                    b.Property<string>("Code")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.ToTable("Currency");
                 });
@@ -112,9 +129,13 @@ namespace Fake.DataAccess.Database.CountryData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Code");
+                    b.Property<string>("Code")
+                        .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.ToTable("Language");
                 });
@@ -127,11 +148,14 @@ namespace Fake.DataAccess.Database.CountryData.Migrations
 
                     b.Property<int>("CommunityId");
 
-                    b.Property<string>("LatLong");
+                    b.Property<string>("LatLong")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
-                    b.Property<string>("PostCode");
+                    b.Property<string>("PostCode")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -169,11 +193,13 @@ namespace Fake.DataAccess.Database.CountryData.Migrations
 
                     b.Property<int>("CountryId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("CountryId", "Name")
+                        .IsUnique();
 
                     b.ToTable("State");
                 });
@@ -189,7 +215,7 @@ namespace Fake.DataAccess.Database.CountryData.Migrations
             modelBuilder.Entity("Fake.DataAccess.Database.CountryData.Models.Country", b =>
                 {
                     b.HasOne("Fake.DataAccess.Database.CountryData.Models.Currency", "Currency")
-                        .WithMany()
+                        .WithMany("Countries")
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
