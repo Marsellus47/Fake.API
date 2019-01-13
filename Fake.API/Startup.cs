@@ -2,7 +2,6 @@
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
-using GraphQL.Server.Ui.GraphiQL;
 using GraphQL.Server;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
@@ -61,7 +60,6 @@ namespace Fake.API
             }
 
             app.UseGraphQL<ISchema>("/graphql");
-            app.UseGraphiQLServer(new GraphiQLOptions());
 
             app.UseMvc();
         }
