@@ -1,4 +1,5 @@
-﻿using Fake.DataAccess.Database.CountryData.Repositories;
+﻿using Fake.API.Extensions;
+using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Fake.API.Extensions;
+using Fake.API.Auth;
 
 namespace Fake.API
 {
@@ -48,6 +49,8 @@ namespace Fake.API
 
             services.AddScoped<IRandomScalarProvider, RandomScalarProvider>();
 
+            services.AddFakeApiAuth();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -58,6 +61,8 @@ namespace Fake.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseIdentityServer();
 
             app.UseGraphQL<ISchema>("/graphql");
 
