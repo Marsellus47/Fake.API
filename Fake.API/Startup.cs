@@ -1,4 +1,5 @@
-﻿using Fake.API.Extensions;
+﻿using Fake.API.Auth;
+using Fake.API.Extensions;
 using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
@@ -12,7 +13,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Fake.API.Auth;
 
 namespace Fake.API
 {
@@ -29,6 +29,7 @@ namespace Fake.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddFakeApiGraphQL();
+            services.AddFakeApiAuth();
 
             #region Data access
 
@@ -49,9 +50,7 @@ namespace Fake.API
 
             services.AddScoped<IRandomScalarProvider, RandomScalarProvider>();
 
-            services.AddFakeApiAuth();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +61,7 @@ namespace Fake.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseIdentityServer();
 
             app.UseGraphQL<ISchema>("/graphql");

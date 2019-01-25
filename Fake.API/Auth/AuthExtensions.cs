@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Fake.API.Auth
 {
@@ -7,11 +8,20 @@ namespace Fake.API.Auth
         public static void AddFakeApiAuth(this IServiceCollection services)
         {
             services.AddIdentityServer()
-                .AddInMemoryClients(Clients.Get())
-                .AddInMemoryIdentityResources(Resources.GetIdentityResources())
-                .AddInMemoryApiResources(Resources.GetApiResources())
-                .AddTestUsers(Users.Get())
-                .AddDeveloperSigningCredential();
+                .AddDeveloperSigningCredential()
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients());
+
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:62095";
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "fake.api";
+                });
+
+            services.AddAuthorization();
         }
     }
 }
