@@ -7,21 +7,18 @@ namespace Fake.API.Auth
     {
         public static void AddFakeApiAuth(this IServiceCollection services)
         {
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients());
-
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:62095";
+                    options.Authority = "http://localhost:51641";
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "fake.api";
                 });
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("SuperAdmin", policy => policy.RequireClaim("role", "SuperAdminRole"));
+            });
         }
     }
 }
