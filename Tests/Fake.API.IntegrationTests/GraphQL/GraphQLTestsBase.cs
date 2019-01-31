@@ -1,4 +1,5 @@
 ﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.Common.Extensions;
 using FluentAssertions;
 using GraphQL.Client.Http;
 using GraphQL.Common.Response;
@@ -39,5 +40,8 @@ namespace Fake.API.IntegrationTests.GraphQL
             string errorMessage = $"{fieldName.Camelize()} cannot be null when listed, omit {fieldName.Camelize()} if you don't want to update it";
             response.Errors.Should().Contain(error => error.Message.IndexOf(errorMessage, StringComparison.InvariantCultureIgnoreCase) >= 0);
         }
+
+        protected readonly Func<long, long, long> RandomNumber = (min, max)
+            => new System.Random().NextLong(min, max);
     }
 }
