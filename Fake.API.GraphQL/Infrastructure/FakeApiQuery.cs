@@ -8,7 +8,7 @@ namespace Fake.API.GraphQL.Infrastructure
     {
         public FakeApiQuery()
         {
-            Field<RandomGroupGraphType>("random", resolve: context => new { });
+            Field<RandomGroupGraphType>("random", resolve: context => new { }).RequirePermission("");
             Field<CountryDataOutputGroupGraphType>("countryData", resolve: context => new { });
         }
     }

@@ -1,8 +1,9 @@
-﻿using Fake.DataAccess.Database.CountryData.Repositories;
+﻿using Fake.API.Auth;
+using Fake.API.Extensions;
+using Fake.DataAccess.Database.CountryData.Repositories;
 using Fake.DataAccess.Database.CountryData;
 using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
-using GraphQL.Server.Ui.GraphiQL;
 using GraphQL.Server;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Fake.API.Extensions;
+using IdentityServer4.AccessTokenValidation;
 
 namespace Fake.API
 {
@@ -28,7 +29,11 @@ namespace Fake.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<IdentityServerAuthenticationOptions>(Configuration.GetSection("IdentityServer"));
+
             services.AddFakeApiGraphQL();
+            services.AddFakeApiAuth();
 
             #region Data access
 
@@ -49,19 +54,20 @@ namespace Fake.API
 
             services.AddScoped<IRandomScalarProvider, RandomScalarProvider>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseGraphQL<ISchema>("/graphql");
-            app.UseGraphiQLServer(new GraphiQLOptions());
 
             app.UseMvc();
         }

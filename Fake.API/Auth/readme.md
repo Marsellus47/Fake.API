@@ -1,0 +1,12 @@
+﻿### How to authorize
+- Run projects API and IdentityServer
+- Get token by Postman in Authorization / OAuth 2.0 and filling following information
+  - Token Name - anything
+  - Grant Type - Implicit
+  - Callback URL - https://www.getpostman.com/oauth2/callback
+  - Auth URL - http://localhost:51641/connect/authorize
+  - Client ID - FakeAPIPostmanClient
+  - Scope - fake.api
+  - State - nothing
+  - Client Authentication - Send as Basic Auth header
+  - Request Token + username/password of user from Identity server in-memory configuration

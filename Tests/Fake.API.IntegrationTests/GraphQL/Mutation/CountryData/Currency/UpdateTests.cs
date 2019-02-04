@@ -1,23 +1,25 @@
-﻿using Fake.TestCore;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
 using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 using Xunit;
 using ModelCurrency = Fake.DataAccess.Database.CountryData.Models.Currency;
 
 namespace Fake.API.IntegrationTests.GraphQL.Mutation.CountryData.Currency
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class UpdateTests : GraphQLTestsBase
     {
-        public UpdateTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public UpdateTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldUpdateCurrencyWithCorrectData()
         {
             // Arrange
-            var client = GetGraphQLClient();
+            var client = GetGraphQLClient()
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string code = "code";
@@ -66,7 +68,8 @@ mutation myMutation($id:ID! $code:String! $name:String!) {
         public async Task ShouldNotUpdateCurrencyWithoutId()
         {
             // Arrange
-            var client = GetGraphQLClient(false);
+            var client = GetGraphQLClient(false)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const string code = "code";
             const string name = "name";
@@ -107,7 +110,8 @@ mutation myMutation($code:String! $name:String!) {
         public async Task ShouldNotUpdateCurrencyWithoutCode()
         {
             // Arrange
-            var client = GetGraphQLClient(false);
+            var client = GetGraphQLClient(false)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string name = "name";
@@ -148,7 +152,8 @@ mutation myMutation($id:ID! $name:String!) {
         public async Task ShouldNotUpdateCurrencyWithoutName()
         {
             // Arrange
-            var client = GetGraphQLClient(false);
+            var client = GetGraphQLClient(false)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string code = "code";

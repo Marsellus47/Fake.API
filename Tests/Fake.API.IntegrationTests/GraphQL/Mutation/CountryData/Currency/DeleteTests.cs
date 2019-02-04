@@ -1,22 +1,24 @@
-﻿using FluentAssertions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 using Xunit;
-using ModelCurrency = Fake.DataAccess.Database.CountryData.Models.Currency;
 
 namespace Fake.API.IntegrationTests.GraphQL.Mutation.CountryData.Currency
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class DeleteTests : GraphQLTestsBase
     {
-        public DeleteTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public DeleteTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldDeleteExistingCurrency()
         {
             // Arrange
-            var client = GetGraphQLClient(true);
+            var client = GetGraphQLClient(true)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
 
@@ -50,7 +52,8 @@ mutation myMutation($id:ID!) {
         public async Task ShouldNotDeleteMissingCurrency()
         {
             // Arrange
-            var client = GetGraphQLClient(false);
+            var client = GetGraphQLClient(false)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
 

@@ -352,7 +352,7 @@ namespace Fake.API.GraphQL.Types
                 name: "EnumerationElement",
                 description: "Select random item from the list of items",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<ListGraphType<StringGraphType>>> { Name = "items", Description = "List of items to choose from" }
+                    new QueryArgument<NonNullGraphType<ListGraphType<NonNullGraphType<StringGraphType>>>> { Name = "items", Description = "List of items to choose from" }
                     ),
                 resolve: ctx =>
                 {
