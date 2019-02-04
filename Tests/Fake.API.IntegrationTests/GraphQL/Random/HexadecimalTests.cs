@@ -1,16 +1,18 @@
-﻿using FluentAssertions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Globalization;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Fake.API.IntegrationTests.GraphQL.Random
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class HexadecimalTests : RandomTestsBase
     {
-        public HexadecimalTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public HexadecimalTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldGetHexadecimalNumber()
@@ -19,7 +21,7 @@ namespace Fake.API.IntegrationTests.GraphQL.Random
             string query = "query { random { hexadecimal } }";
 
             // Act
-            var response = await Client.SendQueryAsync(query);
+            var response = await AuthorizedClient.SendQueryAsync(query);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -34,7 +36,7 @@ namespace Fake.API.IntegrationTests.GraphQL.Random
             string query = "query { random { hexadecimal } }";
 
             // Act
-            var response = await Client.SendQueryAsync(query);
+            var response = await AuthorizedClient.SendQueryAsync(query);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -64,7 +66,7 @@ query myQuery($minValue:Int) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -94,7 +96,7 @@ query myQuery($maxValue:Int) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -126,7 +128,7 @@ query myQuery($minValue:Int, $maxValue:Int) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();

@@ -1,23 +1,26 @@
-﻿using Fake.TestCore;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using Fake.TestCore;
 using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 using Xunit;
 using ModelCurrency = Fake.DataAccess.Database.CountryData.Models.Currency;
 
 namespace Fake.API.IntegrationTests.GraphQL.Mutation.CountryData.Currency
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class PartialUpdateTests : GraphQLTestsBase
     {
-        public PartialUpdateTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public PartialUpdateTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldPartiallyUpdateCurrencyWithCorrectData()
         {
             // Arrange
-            var client = GetGraphQLClient();
+            var client = GetGraphQLClient()
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string code = "code";
@@ -66,7 +69,8 @@ mutation myMutation($id:ID! $code:String $name:String) {
         public async Task ShouldNotPartiallyUpdateCurrencyWithoutId()
         {
             // Arrange
-            var client = GetGraphQLClient(false);
+            var client = GetGraphQLClient(false)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const string code = "code";
             const string name = "name";
@@ -107,7 +111,8 @@ mutation myMutation($code:String $name:String) {
         public async Task ShouldPartiallyUpdateCurrencyWithoutCode()
         {
             // Arrange
-            var client = GetGraphQLClient(true);
+            var client = GetGraphQLClient(true)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string name = "name";
@@ -153,7 +158,8 @@ mutation myMutation($id:ID! $name:String) {
         public async Task ShouldNotPartiallyUpdateCurrencyWithNullCode()
         {
             // Arrange
-            var client = GetGraphQLClient(true);
+            var client = GetGraphQLClient(true)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string name = "name";
@@ -197,7 +203,8 @@ mutation myMutation($id:ID! $name:String $code:String) {
         public async Task ShouldPartiallyUpdateCurrencyWithoutName()
         {
             // Arrange
-            var client = GetGraphQLClient(true);
+            var client = GetGraphQLClient(true)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string code = "code";
@@ -243,7 +250,8 @@ mutation myMutation($id:ID! $code:String) {
         public async Task ShouldNotPartiallyUpdateCurrencyWithNullName()
         {
             // Arrange
-            var client = GetGraphQLClient(true);
+            var client = GetGraphQLClient(true)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const int id = 1;
             const string name = null;

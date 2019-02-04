@@ -1,15 +1,17 @@
-﻿using FluentAssertions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Fake.API.IntegrationTests.GraphQL.Random
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class StringTests : RandomTestsBase
     {
-        public StringTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public StringTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldGetLengthBetweenDefaultMinAndMax()
@@ -18,7 +20,7 @@ namespace Fake.API.IntegrationTests.GraphQL.Random
             string query = "query { random { string } }";
 
             // Act
-            var response = await Client.SendQueryAsync(query);
+            var response = await AuthorizedClient.SendQueryAsync(query);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -48,7 +50,7 @@ query myQuery($minValue:Int) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -78,7 +80,7 @@ query myQuery($maxValue:Int) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -110,7 +112,7 @@ query myQuery($minValue:Int, $maxValue:Int) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -125,7 +127,7 @@ query myQuery($minValue:Int, $maxValue:Int) {
             string query = "query { random { string } }";
 
             // Act
-            var response = await Client.SendQueryAsync(query);
+            var response = await AuthorizedClient.SendQueryAsync(query);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -155,7 +157,7 @@ query myQuery($minValue:String) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -185,7 +187,7 @@ query myQuery($maxValue:String) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -217,7 +219,7 @@ query myQuery($minValue:String, $maxValue:String) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();

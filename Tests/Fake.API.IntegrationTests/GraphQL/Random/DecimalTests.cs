@@ -1,16 +1,18 @@
-﻿using Fake.Common.Extensions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using Fake.Common.Extensions;
 using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Fake.API.IntegrationTests.GraphQL.Random
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class DecimalTests : RandomTestsBase
     {
-        public DecimalTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public DecimalTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldGetBetweenDefaultMinAndMax()
@@ -19,7 +21,7 @@ namespace Fake.API.IntegrationTests.GraphQL.Random
             string query = "query { random { decimal } }";
 
             // Act
-            var response = await Client.SendQueryAsync(query);
+            var response = await AuthorizedClient.SendQueryAsync(query);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -50,7 +52,7 @@ query myQuery($minValue:Float) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -81,7 +83,7 @@ query myQuery($maxValue:Float) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -114,7 +116,7 @@ query myQuery($minValue:Float, $maxValue:Float) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();

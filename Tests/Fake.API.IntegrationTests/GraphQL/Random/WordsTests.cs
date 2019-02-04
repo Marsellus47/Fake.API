@@ -1,16 +1,18 @@
-﻿using FluentAssertions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Fake.API.IntegrationTests.GraphQL.Random
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class WordsTests : RandomTestsBase
     {
-        public WordsTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public WordsTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldFailWithoutCount()
@@ -19,7 +21,7 @@ namespace Fake.API.IntegrationTests.GraphQL.Random
             string query = "query { random { words } }";
 
             // Act
-            var response = await Client.SendQueryAsync(query);
+            var response = await AuthorizedClient.SendQueryAsync(query);
 
             // Assert
             response.Errors.Should().NotBeNull();
@@ -48,7 +50,7 @@ query myQuery($count:Int!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -78,7 +80,7 @@ query myQuery($count:Int!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -106,7 +108,7 @@ query myQuery($count:Int!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();

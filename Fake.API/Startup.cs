@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IdentityServer4.AccessTokenValidation;
 
 namespace Fake.API
 {
@@ -28,6 +29,9 @@ namespace Fake.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<IdentityServerAuthenticationOptions>(Configuration.GetSection("IdentityServer"));
+
             services.AddFakeApiGraphQL();
             services.AddFakeApiAuth();
 

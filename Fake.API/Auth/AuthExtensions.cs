@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Fake.API.Auth
 {
@@ -7,12 +9,14 @@ namespace Fake.API.Auth
     {
         public static void AddFakeApiAuth(this IServiceCollection services)
         {
+            var identityServerOptions = services.BuildServiceProvider().GetRequiredService<IOptions<IdentityServerAuthenticationOptions>>().Value;
+
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:51641";
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "fake.api";
+                    options.Authority = identityServerOptions.Authority;
+                    options.RequireHttpsMetadata = identityServerOptions.RequireHttpsMetadata;
+                    options.ApiName = identityServerOptions.ApiName;
                 });
 
             services.AddAuthorization(options =>

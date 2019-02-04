@@ -11,6 +11,7 @@ using GraphQL.Server;
 using GraphQL.Types;
 using GraphQL.Validation;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 
 namespace Fake.API.Extensions
 {
@@ -18,7 +19,8 @@ namespace Fake.API.Extensions
     {
         public static void AddFakeApiGraphQL(this IServiceCollection services)
         {
-            services.AddGraphQL(options => options.ExposeExceptions = true);
+            services.AddGraphQL(options => options.ExposeExceptions = true)
+                .AddUserContextBuilder(context => new UserContext { User = context.User });
 
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
@@ -31,6 +33,7 @@ namespace Fake.API.Extensions
             services.AddScoped<FakeApiMutation>();
             services.AddSingleton<IValidationRule, ArgumentValueLowerThanOrEqual>();
             services.AddSingleton<IValidationRule, ArgumentValueHigherThanOrEqual>();
+            services.AddSingleton<IValidationRule, RequiresAuthValidationRule>();
 
             services.AddScoped<RandomGroupGraphType>();
 
@@ -78,6 +81,10 @@ namespace Fake.API.Extensions
             services.AddScoped<PlaceInsertInputType>();
             services.AddScoped<PlaceUpdateInputType>();
             services.AddScoped<PlacePartialUpdateInputType>();
+
+#if DEBUG
+            IdentityModelEventSource.ShowPII = true;
+#endif
         }
     }
 }

@@ -1,16 +1,18 @@
-﻿using FluentAssertions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Fake.API.IntegrationTests.GraphQL.Random
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class WeightedTests : RandomTestsBase
     {
-        public WeightedTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public WeightedTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         private IEnumerable<string> Items => new[] { "one", "two", "three", "four", "five" };
         private IEnumerable<float> Weights => new[] { 0F, 0F, 1F, 0F, 0F };
@@ -35,7 +37,7 @@ query myQuery($weights:[Float!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().NotBeNull();
@@ -62,7 +64,7 @@ query myQuery($items:[String!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().NotBeNull();
@@ -90,7 +92,7 @@ query myQuery($items:[String!]!, $weights:[Float!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -119,7 +121,7 @@ query myQuery($items:[String!]!, $weights:[Float!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -148,7 +150,7 @@ query myQuery($items:[String!]!, $weights:[Float!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -178,7 +180,7 @@ query myQuery($items:[String!]!, $weights:[Float!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();

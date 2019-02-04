@@ -1,22 +1,25 @@
-﻿using FluentAssertions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 using Xunit;
 using ModelCurrency = Fake.DataAccess.Database.CountryData.Models.Currency;
 
 namespace Fake.API.IntegrationTests.GraphQL.Mutation.CountryData.Currency
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class InsertTests : GraphQLTestsBase
     {
-        public InsertTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public InsertTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         [Fact]
         public async Task ShouldInsertCurrencyWithCorrectData()
         {
             // Arrange
-            var client = GetGraphQLClient(false);
+            var client = GetGraphQLClient(false)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const string code = "code";
             const string name = "name";
@@ -62,7 +65,8 @@ mutation myMutation($code:String! $name:String!) {
         public async Task ShouldNotInsertCurrencyWithoutCode()
         {
             // Arrange
-            var client = GetGraphQLClient(false);
+            var client = GetGraphQLClient(false)
+                .WithAuthorization(IdentityServerSetup.Instance.GetAccessTokenForUser("user", "password").Result);
 
             const string name = "name";
 

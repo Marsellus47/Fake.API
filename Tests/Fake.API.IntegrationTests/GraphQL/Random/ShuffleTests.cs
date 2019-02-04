@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+﻿using Fake.API.IntegrationTests.Infrastructure;
+using Fake.API.IntegrationTests.Infrastructure.IdentityServer;
+using FluentAssertions;
 using GraphQL.Common.Request;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +9,11 @@ using Xunit;
 
 namespace Fake.API.IntegrationTests.GraphQL.Random
 {
+    [Collection(WebHostHelper.IntegrationTestsWithIdentityServerCollectionName)]
     public class ShuffleTests : RandomTestsBase
     {
-        public ShuffleTests(WebApplicationFactory<Startup> factory)
-            : base(factory) { }
+        public ShuffleTests(IdentityServerAuthenticationHostFixture hostFixture)
+            : base(hostFixture) { }
 
         private IEnumerable<string> Items => new[] { "one", "two", "three", "four", "five" };
         public string FormattedItems => $"[{string.Join(", ", Items.Select(value => $"\"{value}\""))}]";
@@ -23,7 +25,7 @@ namespace Fake.API.IntegrationTests.GraphQL.Random
             string query = "query { random { shuffle } }";
 
             // Act
-            var response = await Client.SendQueryAsync(query);
+            var response = await AuthorizedClient.SendQueryAsync(query);
 
             // Assert
             response.Errors.Should().NotBeNull();
@@ -50,7 +52,7 @@ query myQuery($items:[String!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
@@ -78,7 +80,7 @@ query myQuery($items:[String!]!) {
             };
 
             // Act
-            var response = await Client.SendQueryAsync(request);
+            var response = await AuthorizedClient.SendQueryAsync(request);
 
             // Assert
             response.Errors.Should().BeNull();
