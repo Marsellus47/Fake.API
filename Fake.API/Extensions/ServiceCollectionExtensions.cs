@@ -1,6 +1,6 @@
 ﻿using Fake.API.GraphQL.Infrastructure;
 using Fake.API.GraphQL.Infrastructure.Validation;
-using Fake.API.GraphQL.Types;
+using Fake.API.GraphQL.Types.Random.Output;
 using Fake.API.GraphQL.Types.CountryData.Input;
 using Fake.API.GraphQL.Types.CountryData.Output;
 using GraphQL;
@@ -35,7 +35,7 @@ namespace Fake.API.Extensions
             services.AddSingleton<IValidationRule, ArgumentValueHigherThanOrEqual>();
             services.AddSingleton<IValidationRule, RequiresAuthValidationRule>();
 
-            services.AddScoped<RandomGroupGraphType>();
+            services.AddScoped<RandomOutputGroupGraphType>();
 
             services.AddScoped<CountryDataOutputGroupGraphType>();
             services.AddScoped<CommunityType>();

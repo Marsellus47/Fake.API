@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace Fake.API.GraphQL.Types
+namespace Fake.API.GraphQL.Types.Random.Output
 {
-    public class RandomGroupGraphType : ObjectGraphType
+    public class RandomOutputGroupGraphType : ObjectGraphType
     {
         private const short MIN_COUNT = 1;
         private const short MAX_COUNT = 1000;
 
-        public RandomGroupGraphType(IRandomScalarProvider randomScalarProvider)
+        public RandomOutputGroupGraphType(IRandomScalarProvider randomScalarProvider)
         {
             Name = "Random";
             Description = "Random value generator";
