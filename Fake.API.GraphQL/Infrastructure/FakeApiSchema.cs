@@ -10,6 +10,7 @@ namespace Fake.API.GraphQL.Infrastructure
         {
             Query = resolver.Resolve<FakeApiQuery>();
             Mutation = resolver.Resolve<FakeApiMutation>();
+            Subscription = resolver.Resolve<FakeApiSubscription>();
         }
     }
 }

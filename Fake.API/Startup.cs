@@ -6,6 +6,7 @@ using Fake.DataAccess.Interfaces.Random;
 using Fake.DataAccess.Random;
 using GraphQL.Server;
 using GraphQL.Types;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityServer4.AccessTokenValidation;
+using Microsoft.IdentityModel.Logging;
 
 namespace Fake.API
 {
@@ -55,6 +56,10 @@ namespace Fake.API
             services.AddScoped<IRandomScalarProvider, RandomScalarProvider>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+#if DEBUG
+            IdentityModelEventSource.ShowPII = true;
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +72,8 @@ namespace Fake.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseWebSockets();
+            app.UseGraphQLWebSockets<ISchema>("/graphql");
             app.UseGraphQL<ISchema>("/graphql");
 
             app.UseMvc();
