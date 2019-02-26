@@ -86,6 +86,8 @@ namespace Fake.API.Extensions
             services.AddScoped<PlaceInsertInputType>();
             services.AddScoped<PlaceUpdateInputType>();
             services.AddScoped<PlacePartialUpdateInputType>();
+
+            services.AddScoped<RandomType>();
         }
     }
 }
