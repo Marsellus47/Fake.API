@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using GraphQL.Server.Ui.Playground;
 
 namespace Fake.API
 {
@@ -75,6 +76,7 @@ namespace Fake.API
             app.UseWebSockets();
             app.UseGraphQLWebSockets<ISchema>("/graphql");
             app.UseGraphQL<ISchema>("/graphql");
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
 
             app.UseMvc();
         }
